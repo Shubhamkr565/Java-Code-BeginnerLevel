@@ -1,0 +1,264 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive;background:#FEFBEF;border:1px solid #D4C9A0;border-radius:3px;padding:40px 40px 40px 80px;position:relative;line-height:1.8}
+.margin-line{position:absolute;left:65px;top:0;bottom:0;width:2px;background:#F4AAAA;pointer-events:none}
+.ruled-line{position:absolute;left:0;right:0;height:1px;background:#C5D8F0;pointer-events:none}
+.title-badge{display:inline-block;background:#1B4F72;color:#fff;font-size:19px;font-weight:700;padding:6px 22px;border-radius:2px;letter-spacing:1px;margin-bottom:4px;transform:rotate(-0.5deg);font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive}
+.chapter-tag{display:inline-block;background:#A93226;color:#fff;font-size:11px;padding:3px 12px;border-radius:10px;margin-left:10px;vertical-align:middle;font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive}
+.subject-tag{font-size:13px;color:#888;font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive;margin-bottom:22px;display:block}
+.section-head{font-size:16px;font-weight:700;color:#1A3A6B;border-bottom:2.5px solid #1A3A6B;padding-bottom:2px;margin:26px 0 10px;display:flex;align-items:center;gap:8px;font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive}
+.star{color:#F5A623;font-size:18px}
+.callout{background:#FFF8DC;border-left:4px solid #F5A623;padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;font-size:14px;color:#5A4010}
+.callout strong{color:#B45309}
+.callout.blue{background:#EFF6FF;border-left-color:#3B82F6;color:#1E3A5F}
+.callout.blue strong{color:#1D4ED8}
+.callout.red{background:#FFF0F0;border-left-color:#E85D24;color:#7B1D1D}
+.callout.red strong{color:#C0392B}
+.callout.green{background:#EDFBF3;border-left-color:#22A45D;color:#0B4D27}
+.callout.green strong{color:#065F46}
+.code-block{background:#1E2535;color:#E8EAF0;padding:14px 18px;border-radius:6px;font-family:'Courier New',monospace;font-size:12.5px;line-height:1.7;margin:10px 0;border-left:4px solid #4A90D9;overflow-x:auto}
+.code-block .kw{color:#79B8FF}.code-block .ty{color:#85E89D}.code-block .cm{color:#6A9955;font-style:italic}.code-block .st{color:#F97583}.code-block .nm{color:#FFAB70}.code-block .cl{color:#b5cea8}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.feature-card{background:#fff;border:1.5px solid #B8D0F0;border-radius:8px;padding:11px 14px}
+.feature-icon{font-size:18px;margin-right:6px}
+.feature-title{font-size:13.5px;font-weight:700;color:#1A3A6B;display:flex;align-items:center;gap:4px}
+.feature-desc{font-size:12.5px;color:#555;margin-top:3px;line-height:1.6}
+.lim-row{display:flex;gap:10px;margin:7px 0;align-items:flex-start;font-size:14px;color:#2C2C2A}
+.lim-num{background:#E85D24;color:#fff;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-family:'Courier New',monospace}
+.lim-text strong{color:#A93226}
+.vs-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.vs-table th{background:#1B4F72;color:#fff;padding:8px 12px;font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive;font-weight:700}
+.vs-table th:first-child{border-radius:6px 0 0 0}
+.vs-table th:last-child{border-radius:0 6px 0 0}
+.vs-table td{padding:8px 12px;border-bottom:1px solid #E2E8F0;color:#333;vertical-align:top}
+.vs-table tr:nth-child(even) td{background:#F8F9FF}
+.vs-table td:first-child{font-weight:600;color:#1A3A6B;width:32%}
+.vs-table .bad{color:#C0392B;font-weight:600}
+.vs-table .good{color:#065F46;font-weight:600}
+.interface-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.iface-card{border-radius:8px;padding:12px 14px;font-size:13px}
+.iface-card .iface-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.iface-card .iface-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;margin-bottom:6px;font-family:'Courier New',monospace}
+.iface-list{font-size:12.5px;color:inherit;list-style:none;padding:0}
+.iface-list li{padding:2px 0;display:flex;gap:5px}
+.iface-list li::before{content:'→';flex-shrink:0}
+.ic-list{background:#EFF6FF;border:1.5px solid #93C5FD}.ic-list .iface-name{color:#1D4ED8}.ic-list .iface-badge{background:#DBEAFE;color:#1D4ED8}
+.ic-set{background:#EDFBF3;border:1.5px solid #6EE7B7}.ic-set .iface-name{color:#065F46}.ic-set .iface-badge{background:#D1FAE5;color:#065F46}
+.ic-queue{background:#FFF7ED;border:1.5px solid #FCD34D}.ic-queue .iface-name{color:#92400E}.ic-queue .iface-badge{background:#FEF3C7;color:#92400E}
+.note-box{background:#F0F4FF;border:1.5px dashed #4A90D9;border-radius:6px;padding:10px 14px;margin:12px 0;font-size:13.5px;color:#1A3A6B}
+.note-box strong{color:#1D4ED8}
+.page-number{text-align:center;color:#B0A080;font-size:13px;margin-top:28px}
+</style>
+<div class="page" id="page">
+<div class="margin-line"></div>
+<div id="rules"></div>
+
+<div class="title-badge">📓 Java Collection Framework</div><span class="chapter-tag">Chapter 2</span><br>
+<span class="subject-tag">Collection Framework — Overview, Array vs Collection, Interfaces &nbsp;|&nbsp; CS Fundamentals</span>
+
+<!-- WHAT IS IT -->
+<div class="section-head"><span class="star">★</span> What is Collection Framework?</div>
+<div class="callout blue">
+  <strong>Definition:</strong> A set of <strong>classes &amp; interfaces</strong> in Java that provide ready-made, reusable <strong>Data Structures</strong> to store and manage groups of objects — like a well-stocked toolbox for data storage!
+</div>
+<div class="two-col" style="margin-top:10px">
+  <div class="feature-card">
+    <div class="feature-title">📦 Container / Bag</div>
+    <div class="feature-desc">Each collection class acts like a container that can hold multiple objects under one variable name.</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-title">🛠 Ready-made DSA</div>
+    <div class="feature-desc">Backed by standard data structures — no need to write sorting, searching, or insertion logic from scratch.</div>
+  </div>
+</div>
+
+<!-- ARRAY VS COLLECTION TABLE -->
+<div class="section-head"><span class="star">★</span> Array vs Collection Framework</div>
+<table class="vs-table">
+  <thead><tr><th>Feature</th><th>Array</th><th>Collection</th></tr></thead>
+  <tbody>
+    <tr><td>Size</td><td class="bad">Fixed — cannot grow/shrink</td><td class="good">Growable dynamically</td></tr>
+    <tr><td>Data Types</td><td class="bad">Homogeneous only<br><span style="font-size:11px;font-weight:400">(Object[] is a workaround)</span></td><td class="good">Homo + Heterogeneous</td></tr>
+    <tr><td>Methods</td><td class="bad">No built-in methods<br><span style="font-size:11px;font-weight:400">write all logic manually</span></td><td class="good">Rich built-in methods</td></tr>
+    <tr><td>Primitives</td><td class="good">Supported ✓</td><td class="bad">Objects only (auto-boxing)</td></tr>
+    <tr><td>Performance</td><td class="good">Faster (contiguous memory)</td><td style="color:#555">Overhead for flexibility</td></tr>
+  </tbody>
+</table>
+
+<!-- LIMITATIONS OF ARRAY -->
+<div class="section-head"><span class="star">★</span> Limitations of Array (Why We Need Collections)</div>
+<div class="lim-row"><span class="lim-num">1</span><span class="lim-text"><strong>Fixed Size:</strong> Once declared, the size cannot increase or decrease. You're stuck with what you allocated.</span></div>
+<div class="lim-row"><span class="lim-num">2</span><span class="lim-text"><strong>No Ready-made Methods:</strong> Even printing elements requires a manual <code style="font-size:12px">for</code> loop. No insert, delete, or search helpers. The only built-in variable is <code style="font-size:12px">length</code>.</span></div>
+<div class="lim-row"><span class="lim-num">3</span><span class="lim-text"><strong>Homogeneous Data:</strong> Only same-type elements. <code style="font-size:12px">Object[]</code> is a workaround, but then you must <em>downcast</em> to access specific methods.</span></div>
+
+<div class="code-block"><span class="cm">// Array of Student objects — fixed size!</span>
+<span class="ty">Student</span>[] students = <span class="kw">new</span> <span class="ty">Student</span>[<span class="nm">5</span>];
+students[<span class="nm">0</span>] = <span class="kw">new</span> <span class="ty">Student</span>(<span class="nm">10</span>, <span class="st">"S1"</span>, <span class="nm">780</span>);
+
+<span class="cm">// Object[] workaround for mixed types — but needs downcasting!</span>
+<span class="ty">Object</span>[] objs = <span class="kw">new</span> <span class="ty">Object</span>[<span class="nm">3</span>];
+objs[<span class="nm">0</span>] = <span class="kw">new</span> <span class="ty">Student</span>();   objs[<span class="nm">1</span>] = <span class="kw">new</span> <span class="ty">Employee</span>();  objs[<span class="nm">2</span>] = <span class="kw">new</span> <span class="ty">Product</span>();
+((<span class="ty">Student</span>) objs[<span class="nm">0</span>]).getMarks();  <span class="cm">// ← must downcast every time</span></div>
+
+<!-- FEATURES -->
+<div class="section-head"><span class="star">★</span> Features of Collection Framework</div>
+<div class="two-col">
+  <div class="feature-card">
+    <div class="feature-title">📈 Growable</div>
+    <div class="feature-desc">Collections resize automatically. No need to specify or manage capacity manually.</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-title">🎭 Heterogeneous</div>
+    <div class="feature-desc">Can hold both same-type and mixed-type elements in a single collection.</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-title">⚙️ Ready-made Methods</div>
+    <div class="feature-desc">Built on standard DSA — add, remove, sort, search and more are all available out of the box.</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-title">📦 Objects Only</div>
+    <div class="feature-desc">Primitives are not supported directly. Java uses <strong>autoboxing</strong> (int → Integer) automatically.</div>
+  </div>
+</div>
+<div class="note-box" style="margin-top:6px">📌 <strong>Package Note:</strong> Almost all Collection classes live in <code style="font-size:12px">java.util</code> package.</div>
+
+<!-- HIERARCHY DIAGRAM -->
+<div class="section-head"><span class="star">★</span> Collection Framework — Top-Level Hierarchy</div>
+
+<svg width="100%" viewBox="0 0 640 290" role="img">
+  <title>Collection Framework top-level hierarchy</title>
+  <desc>Shows Collection Framework split into Normal Collection (single objects) and Map (key-value pairs) at the root level, with List, Set, and Queue under Collection.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Root: Collection Framework -->
+  <rect x="200" y="16" width="240" height="46" rx="8" fill="#1B4F72" stroke="#154360" stroke-width="1.5"/>
+  <text x="320" y="35" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="14" fill="#fff" font-weight="700">Collection Framework</text>
+  <text x="320" y="53" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#AED6F1">java.util package</text>
+
+  <!-- Branch lines from root -->
+  <line x1="270" y1="62" x2="160" y2="108" stroke="#888" stroke-width="1.5" marker-end="url(#ah)"/>
+  <line x1="370" y1="62" x2="490" y2="108" stroke="#888" stroke-width="1.5" marker-end="url(#ah)"/>
+
+  <!-- Left: Collection Interface -->
+  <rect x="60" y="110" width="200" height="52" rx="8" fill="#1A5276" stroke="#154360" stroke-width="1.5"/>
+  <text x="160" y="131" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="14" fill="#fff" font-weight="700">Collection</text>
+  <text x="160" y="149" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#AED6F1">«interface» — single objects</text>
+
+  <!-- Right: Map Interface -->
+  <rect x="380" y="110" width="200" height="52" rx="8" fill="#6E2C00" stroke="#5D2305" stroke-width="1.5"/>
+  <text x="480" y="131" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="14" fill="#fff" font-weight="700">Map</text>
+  <text x="480" y="149" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#F0B27A">«interface» — key-value pairs</text>
+
+  <!-- IMPORTANT note for Map -->
+  <rect x="390" y="172" width="180" height="26" rx="5" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="480" y="189" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#92400E">⚠ Does NOT extend Collection!</text>
+
+  <!-- Branch lines from Collection -->
+  <line x1="100" y1="162" x2="74" y2="210" stroke="#888" stroke-width="1.5" marker-end="url(#ah)"/>
+  <line x1="160" y1="162" x2="190" y2="210" stroke="#888" stroke-width="1.5" marker-end="url(#ah)"/>
+  <line x1="210" y1="162" x2="304" y2="210" stroke="#888" stroke-width="1.5" marker-end="url(#ah)"/>
+
+  <!-- List -->
+  <rect x="24" y="212" width="120" height="56" rx="8" fill="#1A5276" stroke="#4A90D9" stroke-width="2"/>
+  <text x="84" y="234" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="14" fill="#fff" font-weight="700">List</text>
+  <text x="84" y="249" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#AED6F1">indexed + duplicates</text>
+  <text x="84" y="263" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#7FB3D3">ArrayList, LinkedList</text>
+
+  <!-- Set -->
+  <rect x="154" y="212" width="120" height="56" rx="8" fill="#145A32" stroke="#27AE60" stroke-width="2"/>
+  <text x="214" y="234" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="14" fill="#fff" font-weight="700">Set</text>
+  <text x="214" y="249" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#A9DFBF">unique elements only</text>
+  <text x="214" y="263" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#7DCEA0">HashSet, TreeSet</text>
+
+  <!-- Queue -->
+  <rect x="284" y="212" width="120" height="56" rx="8" fill="#6E2C00" stroke="#E67E22" stroke-width="2"/>
+  <text x="344" y="234" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="14" fill="#fff" font-weight="700">Queue</text>
+  <text x="344" y="249" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#F0B27A">FIFO / priority order</text>
+  <text x="344" y="263" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#E59866">PriorityQueue, Deque</text>
+
+  <!-- Map implementations note -->
+  <text x="480" y="215" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#9CA3AF">HashMap, TreeMap,</text>
+  <text x="480" y="229" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#9CA3AF">LinkedHashMap</text>
+</svg>
+
+<!-- INTERFACES DETAIL -->
+<div class="section-head"><span class="star">★</span> Main Interfaces — When to Use Which?</div>
+<div class="interface-row">
+  <div class="iface-card ic-list">
+    <div class="iface-name">List</div>
+    <span class="iface-badge">java.util.List</span>
+    <ul class="iface-list">
+      <li>Index-based ordering</li>
+      <li>Duplicates allowed ✓</li>
+      <li>Insertion order kept</li>
+      <li>Use: shopping cart, playlist</li>
+    </ul>
+  </div>
+  <div class="iface-card ic-set">
+    <div class="iface-name">Set</div>
+    <span class="iface-badge">java.util.Set</span>
+    <ul class="iface-list">
+      <li>No duplicates allowed ✗</li>
+      <li>No guaranteed order (HashSet)</li>
+      <li>Sorted order (TreeSet)</li>
+      <li>Use: unique usernames, tags</li>
+    </ul>
+  </div>
+  <div class="iface-card ic-queue">
+    <div class="iface-name">Queue</div>
+    <span class="iface-badge">java.util.Queue</span>
+    <ul class="iface-list">
+      <li>FIFO order by default</li>
+      <li>Priority-based processing</li>
+      <li>peek / poll / offer methods</li>
+      <li>Use: task queue, print jobs</li>
+    </ul>
+  </div>
+</div>
+
+<!-- COLLECTION INTERFACE -->
+<div class="section-head"><span class="star">★</span> Collection Interface — The Root</div>
+<div class="callout green">
+  <strong>Root Interface</strong> of the entire Collection Framework (except Map). Defines the <strong>common contract</strong> all collection classes must follow — like a master blueprint.
+</div>
+
+<div class="two-col" style="margin-top:8px">
+  <div class="feature-card" style="border-color:#F4AAAA">
+    <div class="feature-title" style="color:#A93226">⚠ Important Note</div>
+    <div class="feature-desc">No <strong>concrete class</strong> directly implements the <code style="font-size:11.5px">Collection</code> interface. It's always implemented through sub-interfaces like <code style="font-size:11.5px">List</code>, <code style="font-size:11.5px">Set</code>, or <code style="font-size:11.5px">Queue</code>.</div>
+  </div>
+  <div class="feature-card" style="border-color:#7DD4A3">
+    <div class="feature-title" style="color:#065F46">✓ Common Methods Defined</div>
+    <div class="feature-desc"><code style="font-size:11.5px">add()</code>, <code style="font-size:11.5px">remove()</code>, <code style="font-size:11.5px">size()</code>, <code style="font-size:11.5px">contains()</code>, <code style="font-size:11.5px">isEmpty()</code>, <code style="font-size:11.5px">clear()</code>, <code style="font-size:11.5px">iterator()</code> — usable across ALL collection types.</div>
+  </div>
+</div>
+
+<div class="note-box" style="margin-top:12px">
+  📌 <strong>Coming Up Next:</strong> We'll deep-dive into <strong>List</strong> implementations (ArrayList, LinkedList, Vector, Stack), then move to <strong>Set</strong>, <strong>Queue</strong>, and finally <strong>Map</strong>.
+</div>
+
+<div class="page-number">— Page 2 of N · Collection Framework Overview ·</div>
+</div>
+
+<script>
+const page = document.getElementById('page');
+const lineHeight = 32;
+const rulesContainer = document.getElementById('rules');
+function addRules(){
+  const total = Math.ceil(page.scrollHeight / lineHeight) + 10;
+  rulesContainer.innerHTML = '';
+  for(let i = 0; i < total; i++){
+    const d = document.createElement('div');
+    d.className = 'ruled-line';
+    d.style.top = (i * lineHeight + 10) + 'px';
+    rulesContainer.appendChild(d);
+  }
+}
+addRules();
+setTimeout(addRules, 300);
+</script>

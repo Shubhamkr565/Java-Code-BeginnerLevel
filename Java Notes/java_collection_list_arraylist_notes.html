@@ -1,0 +1,362 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive;background:#FEFBEF;border:1px solid #D4C9A0;border-radius:3px;padding:40px 40px 40px 80px;position:relative;line-height:1.8}
+.margin-line{position:absolute;left:65px;top:0;bottom:0;width:2px;background:#F4AAAA;pointer-events:none}
+.ruled-line{position:absolute;left:0;right:0;height:1px;background:#C5D8F0;pointer-events:none}
+.title-badge{display:inline-block;background:#145A32;color:#fff;font-size:19px;font-weight:700;padding:6px 22px;border-radius:2px;letter-spacing:1px;margin-bottom:4px;transform:rotate(-0.5deg);font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive}
+.chapter-tag{display:inline-block;background:#A93226;color:#fff;font-size:11px;padding:3px 12px;border-radius:10px;margin-left:10px;vertical-align:middle}
+.subject-tag{font-size:13px;color:#888;margin-bottom:20px;display:block}
+.section-head{font-size:16px;font-weight:700;color:#1A3A6B;border-bottom:2.5px solid #1A3A6B;padding-bottom:2px;margin:26px 0 10px;display:flex;align-items:center;gap:8px}
+.star{color:#F5A623;font-size:18px}
+.sub-head{font-size:14px;font-weight:700;color:#555;margin:14px 0 6px;padding-left:4px;border-left:3px solid #F5A623}
+.callout{border-left:4px solid #F5A623;padding:9px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:13.5px}
+.callout.blue{background:#EFF6FF;border-color:#3B82F6;color:#1E3A5F}
+.callout.blue strong{color:#1D4ED8}
+.callout.amber{background:#FFF8DC;border-color:#F5A623;color:#5A4010}
+.callout.amber strong{color:#B45309}
+.callout.green{background:#EDFBF3;border-color:#22A45D;color:#0B4D27}
+.callout.green strong{color:#065F46}
+.callout.red{background:#FFF0F0;border-color:#E85D24;color:#7B1D1D}
+.callout.red strong{color:#C0392B}
+.code-block{background:#1E2535;color:#E8EAF0;padding:12px 16px;border-radius:6px;font-family:'Courier New',monospace;font-size:12px;line-height:1.75;margin:10px 0;border-left:4px solid #4A90D9;overflow-x:auto}
+.code-block .kw{color:#79B8FF}.code-block .ty{color:#85E89D}.code-block .cm{color:#6A9955;font-style:italic}.code-block .st{color:#F97583}.code-block .nm{color:#FFAB70}.code-block .an{color:#C678DD}
+.methods-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.method-group{background:#fff;border:1.5px solid #B8D0F0;border-radius:8px;padding:12px 14px}
+.mg-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;padding:3px 8px;border-radius:4px;display:inline-block}
+.mg-blue .mg-title{background:#DBEAFE;color:#1D4ED8}
+.mg-green .mg-title{background:#D1FAE5;color:#065F46}
+.mg-amber .mg-title{background:#FEF3C7;color:#92400E}
+.mg-purple .mg-title{background:#EDE9FE;color:#5B21B6}
+.method-item{display:flex;gap:8px;margin:5px 0;align-items:flex-start;font-size:12.5px}
+.method-item code{background:#F1F5F9;color:#1A3A6B;padding:1px 5px;border-radius:3px;font-size:11.5px;white-space:nowrap;flex-shrink:0}
+.method-item .mdesc{color:#555;line-height:1.4;font-size:12px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.info-card{background:#fff;border:1.5px solid #D1D5DB;border-radius:8px;padding:12px 14px}
+.ic-title{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.note-box{background:#F0F4FF;border:1.5px dashed #4A90D9;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13px;color:#1A3A6B}
+.note-box strong{color:#1D4ED8}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:8px;font-family:'Courier New',monospace;vertical-align:middle;margin-left:4px}
+.tag-new{background:#D1FAE5;color:#065F46}
+.tag-18{background:#FEF3C7;color:#92400E}
+.tag-21{background:#EDE9FE;color:#5B21B6}
+.vs-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.vs-card{border-radius:8px;padding:12px 14px;font-size:13px}
+.vs-before{background:#FFF0F0;border:1.5px solid #F4AAAA}
+.vs-after{background:#EDFBF3;border:1.5px solid #7DD4A3}
+.vs-head{font-size:13px;font-weight:700;margin-bottom:6px}
+.iteration-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+.iter-card{background:#fff;border:1.5px solid #D1D5DB;border-radius:8px;padding:10px 12px}
+.iter-num{display:inline-block;background:#1B4F72;color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px;font-family:'Courier New',monospace;text-align:center;line-height:20px;margin-right:4px}
+.iter-title{font-size:12.5px;font-weight:700;color:#1A3A6B}
+.iter-desc{font-size:12px;color:#666;margin-top:3px}
+.page-number{text-align:center;color:#B0A080;font-size:13px;margin-top:28px}
+</style>
+
+<div class="page" id="page">
+<div class="margin-line"></div>
+<div id="rules"></div>
+
+<div class="title-badge">📓 Java Collection Framework</div><span class="chapter-tag">Chapter 3</span><br>
+<span class="subject-tag">Collection Methods · Iterable · List · ArrayList · Autoboxing · Generics</span>
+
+<!-- ====== COLLECTION INTERFACE METHODS ====== -->
+<div class="section-head"><span class="star">★</span> Collection Interface — All Methods</div>
+<div class="methods-grid">
+  <div class="method-group mg-blue">
+    <span class="mg-title mg-blue">🔵 Basic Operations</span>
+    <div class="method-item"><code>size()</code><span class="mdesc">→ int. Count of elements in collection</span></div>
+    <div class="method-item"><code>isEmpty()</code><span class="mdesc">→ boolean. True if no elements</span></div>
+    <div class="method-item"><code>contains(obj)</code><span class="mdesc">→ boolean. Search for element</span></div>
+    <div class="method-item"><code>add(obj)</code><span class="mdesc">→ boolean. Most used — adds element</span></div>
+    <div class="method-item"><code>remove(obj)</code><span class="mdesc">→ boolean. Removes first occurrence</span></div>
+    <div class="method-item"><code>clear()</code><span class="mdesc">→ void. Removes ALL elements</span></div>
+    <div class="method-item"><code>toArray()</code><span class="mdesc">→ Object[]. Converts to plain array</span></div>
+    <div class="method-item"><code>toArray(T[])</code><span class="mdesc">→ T[]. Typed array conversion</span></div>
+    <div class="method-item"><code>iterator()</code><span class="mdesc">→ Iterator. From Iterable interface</span></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="method-group mg-green">
+      <span class="mg-title mg-green">🟢 Bulk Operations</span>
+      <div class="method-item"><code>containsAll(col)</code><span class="mdesc">Does our collection contain all elements of col?</span></div>
+      <div class="method-item"><code>addAll(col)</code><span class="mdesc">Copy all elements from col into ours</span></div>
+      <div class="method-item"><code>removeAll(col)</code><span class="mdesc">Remove all elements that are in col</span></div>
+      <div class="method-item"><code>retainAll(col)</code><span class="mdesc">Keep ONLY elements that are in col (removes the rest)</span></div>
+      <div class="method-item"><code>equals(obj)</code><span class="mdesc">Compare two collections (from Object)</span></div>
+      <div class="method-item"><code>hashCode()</code><span class="mdesc">Hash of collection object (from Object)</span></div>
+    </div>
+    <div class="method-group mg-amber">
+      <span class="mg-title mg-amber">🟡 Java 8+ Functional</span>
+      <div class="method-item"><code>removeIf(pred)</code><span class="mdesc">Remove elements matching Predicate</span></div>
+      <div class="method-item"><code>spliterator()</code><span class="mdesc">For parallel traversal</span></div>
+      <div class="method-item"><code>stream()</code><span class="mdesc">Sequential Stream pipeline</span></div>
+      <div class="method-item"><code>parallelStream()</code><span class="mdesc">Parallel Stream pipeline</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== ITERABLE ====== -->
+<div class="section-head"><span class="star">★</span> Iterable Interface <span class="tag tag-new">java 1.5</span></div>
+<div class="two-col">
+  <div class="info-card" style="border-color:#4A90D9">
+    <div class="ic-title" style="color:#1D4ED8">📦 java.lang.Iterable</div>
+    <div style="font-size:12.5px;color:#555;line-height:1.6">Introduced in <strong>Java 1.5</strong>. Collection extends Iterable since 1.5.<br>Lives in <code style="font-size:11.5px">java.lang</code> package.</div>
+    <div style="margin-top:8px;font-size:12.5px">
+      <span style="color:#C0392B;font-weight:700">1 abstract method:</span><br>
+      <code style="font-size:12px;background:#EFF6FF;padding:2px 6px;border-radius:3px">public abstract Iterator iterator();</code>
+    </div>
+  </div>
+  <div class="info-card" style="border-color:#7DD4A3">
+    <div class="ic-title" style="color:#065F46">🔗 Iterator (java.util)</div>
+    <div style="font-size:12.5px;color:#555">The return type of <code style="font-size:11.5px">iterator()</code> is the <strong>Iterator</strong> interface from <code style="font-size:11.5px">java.util</code>.</div>
+    <div style="margin-top:8px;font-size:12.5px;color:#555">
+      <strong>2 default methods in Iterable:</strong><br>
+      <code style="font-size:11px;background:#EDFBF3;padding:2px 5px;border-radius:3px">forEach(Consumer)</code><br>
+      <code style="font-size:11px;background:#EDFBF3;padding:2px 5px;border-radius:3px">spliterator()</code>
+    </div>
+  </div>
+</div>
+
+<!-- ====== LIST INTERFACE ====== -->
+<div class="section-head"><span class="star">★</span> List Interface</div>
+<div class="callout blue"><strong>Child of Collection.</strong> Preserves <strong>insertion order</strong>, allows <strong>duplicates</strong>, and provides <strong>index-based</strong> (zero-based) access to elements.</div>
+
+<div class="methods-grid">
+  <div class="method-group mg-blue">
+    <span class="mg-title mg-blue">🔵 Core List Methods</span>
+    <div class="method-item"><code>get(index)</code><span class="mdesc">→ Object. Fetch element at index</span></div>
+    <div class="method-item"><code>set(index, obj)</code><span class="mdesc">→ Object (overridden). Replace element</span></div>
+    <div class="method-item"><code>remove(index)</code><span class="mdesc">→ Object (removed). Remove by index</span></div>
+    <div class="method-item"><code>indexOf(obj)</code><span class="mdesc">→ int. First occurrence index</span></div>
+    <div class="method-item"><code>lastIndexOf(obj)</code><span class="mdesc">→ int. Last occurrence index</span></div>
+    <div class="method-item"><code>subList(from,to)</code><span class="mdesc">→ List. Slice of the list</span></div>
+  </div>
+  <div class="method-group mg-purple">
+    <span class="mg-title mg-purple">🟣 Java 21+ New Methods</span>
+    <div class="method-item"><code>addFirst(obj)</code><span class="mdesc">Insert at beginning of list</span></div>
+    <div class="method-item"><code>addLast(obj)</code><span class="mdesc">Insert at end of list</span></div>
+    <div class="method-item"><code>getFirst()</code><span class="mdesc">→ Object. Retrieve first element</span></div>
+    <div class="method-item"><code>getLast()</code><span class="mdesc">→ Object. Retrieve last element</span></div>
+    <div class="method-item"><code>removeFirst()</code><span class="mdesc">Remove &amp; return first element</span></div>
+    <div class="method-item"><code>removeLast()</code><span class="mdesc">Remove &amp; return last element</span></div>
+    <div class="method-item"><code>reversed()</code><span class="mdesc">→ List. Returns reversed view</span></div>
+    <div class="method-item"><code>of(Object...)</code><span class="mdesc">Static factory — immutable list</span></div>
+  </div>
+</div>
+
+<!-- ====== ARRAYLIST ====== -->
+<div class="section-head"><span class="star">★</span> ArrayList</div>
+<div class="two-col">
+  <div class="callout green" style="margin:0"><strong>Best for:</strong> frequent <strong>retrieval by index</strong>. Backed by a resizable array. Duplicates ✓, null ✓ (multiple times)</div>
+  <div class="callout amber" style="margin:0"><strong>Default capacity:</strong> <code style="font-size:12px">10</code> when created with <code style="font-size:12px">new ArrayList()</code>. Grows automatically when full.</div>
+</div>
+
+<div style="margin:14px 0 8px;font-size:14.5px;font-weight:700;color:#1A3A6B;text-decoration:underline;text-underline-offset:4px">📊 ArrayList Capacity Growth Diagram</div>
+
+<svg width="100%" viewBox="0 0 640 200" role="img">
+  <title>ArrayList capacity growth visualization</title>
+  <desc>Shows ArrayList growing from capacity 10 to 16 to 25 using the 1.5x formula</desc>
+  <defs>
+    <marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Stage 1: cap=10 -->
+  <text x="50" y="22" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#1A3A6B" font-weight="700">Initial</text>
+  <text x="50" y="36" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#555">capacity=10</text>
+  <!-- 10 cells: filled 10 -->
+  <rect x="10" y="44" width="80" height="26" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1"/>
+  <text x="50" y="62" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#1D4ED8">10 slots used</text>
+  <rect x="10" y="78" width="80" height="14" rx="3" fill="#FEE2E2" stroke="#EF4444" stroke-width="1"/>
+  <text x="50" y="90" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#EF4444">FULL!</text>
+
+  <!-- Arrow 1 -->
+  <line x1="100" y1="72" x2="154" y2="72" stroke="#888" stroke-width="1.5" marker-end="url(#ah3)"/>
+  <text x="127" y="64" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#065F46">resize</text>
+
+  <!-- Stage 2: cap=16 -->
+  <text x="210" y="22" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#1A3A6B" font-weight="700">After Growth</text>
+  <text x="210" y="36" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#555">capacity=16</text>
+  <rect x="158" y="44" width="104" height="26" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1"/>
+  <text x="210" y="62" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#1D4ED8">10 slots used</text>
+  <rect x="158" y="78" width="104" height="14" rx="3" fill="#D1FAE5" stroke="#22A45D" stroke-width="1"/>
+  <text x="210" y="90" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#065F46">6 empty</text>
+
+  <!-- Arrow 2 -->
+  <line x1="274" y1="72" x2="328" y2="72" stroke="#888" stroke-width="1.5" marker-end="url(#ah3)"/>
+  <text x="301" y="64" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#065F46">resize</text>
+
+  <!-- Stage 3: cap=25 -->
+  <text x="400" y="22" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#1A3A6B" font-weight="700">After Growth</text>
+  <text x="400" y="36" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#555">capacity=25</text>
+  <rect x="332" y="44" width="136" height="26" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1"/>
+  <text x="400" y="62" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#1D4ED8">16 slots used</text>
+  <rect x="332" y="78" width="136" height="14" rx="3" fill="#D1FAE5" stroke="#22A45D" stroke-width="1"/>
+  <text x="400" y="90" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#065F46">9 empty</text>
+
+  <!-- Formula box -->
+  <rect x="480" y="40" width="152" height="62" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="556" y="58" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#92400E" font-weight="700">Growth Formula</text>
+  <text x="556" y="76" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#1A3A6B">old + (old &gt;&gt; 1)</text>
+  <text x="556" y="93" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#555">≈ 1.5× growth</text>
+
+  <!-- annotation: 10→16 -->
+  <text x="50" y="118" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#888">10 + (10&gt;&gt;1) = 15</text>
+  <text x="210" y="118" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#888">16 + (16&gt;&gt;1) = 24→25</text>
+  <text x="400" y="118" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#888">25 + (25&gt;&gt;1) = 37...</text>
+
+  <!-- capacity management methods -->
+  <rect x="24" y="136" width="592" height="52" rx="8" fill="#F8F9FF" stroke="#B8D0F0" stroke-width="1.5"/>
+  <text x="44" y="154" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#1A3A6B" font-weight="700">Capacity Management:</text>
+  <text x="208" y="154" font-family="'Courier New',monospace" font-size="11" fill="#1D4ED8">new ArrayList(1000)</text>
+  <text x="208" y="171" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#555">→ starts with capacity 1000</text>
+  <text x="370" y="154" font-family="'Courier New',monospace" font-size="11" fill="#065F46">ensureCapacity(500)</text>
+  <text x="370" y="171" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#555">→ grow to at least 500</text>
+  <text x="540" y="154" font-family="'Courier New',monospace" font-size="11" fill="#A93226">trimToSize()</text>
+  <text x="540" y="171" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#555">→ shrink to fit</text>
+</svg>
+
+<!-- AUTOBOXING -->
+<div class="section-head"><span class="star">★</span> Autoboxing &amp; Autounboxing <span class="tag tag-new">java 1.5</span></div>
+<div class="callout amber"><strong>Why needed?</strong> Collections store only Objects — not primitives. Before Java 1.5, developers had to manually convert. Java 1.5 introduced <strong>autoboxing</strong> (auto-wrapping) to do this silently.</div>
+
+<div class="vs-wrap">
+  <div class="vs-card vs-before">
+    <div class="vs-head" style="color:#A93226">❌ Before Java 1.5 (Manual)</div>
+    <div class="code-block" style="margin:0;border-left-color:#E85D24;font-size:11.5px"><span class="kw">int</span> i = <span class="nm">10</span>;
+<span class="cm">// Boxing (manual)</span>
+<span class="ty">Integer</span> i1 = Integer.valueOf(i);
+<span class="cm">// Unboxing (manual)</span>
+<span class="kw">int</span> x = i1.intValue();</div>
+  </div>
+  <div class="vs-card vs-after">
+    <div class="vs-head" style="color:#065F46">✓ Java 1.5+ (Automatic)</div>
+    <div class="code-block" style="margin:0;border-left-color:#22A45D;font-size:11.5px"><span class="kw">int</span> i = <span class="nm">10</span>;
+<span class="cm">// Autoboxing  ↓</span>
+<span class="ty">Integer</span> i1 = i;
+<span class="cm">// Autounboxing ↓</span>
+<span class="kw">int</span> x = i1;</div>
+  </div>
+</div>
+
+<div style="background:#F8F9FF;border:1.5px solid #B8D0F0;border-radius:8px;padding:10px 16px;margin:8px 0;font-size:13px">
+  <strong style="color:#1A3A6B">8 Primitives → 8 Wrapper Classes:</strong>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;font-size:12px">
+    <span><code style="font-size:11.5px">int</code> → <code style="font-size:11.5px">Integer</code></span>
+    <span><code style="font-size:11.5px">byte</code> → <code style="font-size:11.5px">Byte</code></span>
+    <span><code style="font-size:11.5px">char</code> → <code style="font-size:11.5px">Character</code></span>
+    <span><code style="font-size:11.5px">boolean</code> → <code style="font-size:11.5px">Boolean</code></span>
+    <span><code style="font-size:11.5px">long</code> → <code style="font-size:11.5px">Long</code></span>
+    <span><code style="font-size:11.5px">float</code> → <code style="font-size:11.5px">Float</code></span>
+    <span><code style="font-size:11.5px">double</code> → <code style="font-size:11.5px">Double</code></span>
+    <span><code style="font-size:11.5px">short</code> → <code style="font-size:11.5px">Short</code></span>
+  </div>
+</div>
+
+<!-- GENERICS / TYPE SAFETY -->
+<div class="section-head"><span class="star">★</span> Type Safety &amp; Generics <span class="tag tag-new">java 1.5</span></div>
+<div class="callout red"><strong>Problem with raw ArrayList:</strong> Any object can be added anywhere → must downcast every time → risk of <code style="font-size:12px">ClassCastException</code> at runtime!</div>
+
+<div class="vs-wrap">
+  <div class="vs-card vs-before">
+    <div class="vs-head" style="color:#A93226">❌ Type-Unsafe (No Generics)</div>
+    <div class="code-block" style="margin:0;border-left-color:#E85D24;font-size:11.5px"><span class="ty">ArrayList</span> al = <span class="kw">new</span> <span class="ty">ArrayList</span>();
+al.add(<span class="nm">10</span>);     <span class="cm">// int, ok</span>
+al.add(<span class="st">"hello"</span>); <span class="cm">// String, ok (no error!)</span>
+<span class="cm">// Must downcast every get:</span>
+<span class="ty">Integer</span> x = (<span class="ty">Integer</span>) al.get(<span class="nm">0</span>);
+<span class="cm">// ClassCastException if wrong!</span></div>
+  </div>
+  <div class="vs-card vs-after">
+    <div class="vs-head" style="color:#065F46">✓ Type-Safe (With Generics)</div>
+    <div class="code-block" style="margin:0;border-left-color:#22A45D;font-size:11.5px"><span class="ty">ArrayList</span>&lt;<span class="ty">String</span>&gt; al = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
+al.add(<span class="st">"delhi"</span>);    <span class="cm">// ✓ OK</span>
+al.add(<span class="nm">10</span>);           <span class="cm">// ✗ Compile error!</span>
+<span class="cm">// No downcast needed:</span>
+<span class="ty">String</span> s = al.get(<span class="nm">0</span>);  <span class="cm">// Direct ✓</span></div>
+  </div>
+</div>
+
+<div class="note-box">
+  📌 <strong>Diamond Operator &lt;&gt;</strong> — skip repeating the type on the right side:<br>
+  <code style="font-size:12px">ArrayList&lt;Student&gt; al = new ArrayList&lt;&gt;();</code> &nbsp;←&nbsp; Java infers the type automatically<br><br>
+  ⚠️ <strong>ArrayList&lt;Object&gt;</strong> is equivalent to a <em>type-unsafe</em> collection — it defeats the purpose of generics!
+</div>
+
+<!-- HOW GENERICS CHANGE ARRAYLIST INTERNALS -->
+<div class="sub-head">How Generics Changed ArrayList Internals</div>
+<div class="vs-wrap">
+  <div class="info-card" style="border-color:#F4AAAA">
+    <div class="ic-title" style="color:#A93226;font-size:12.5px">Before Generics</div>
+    <div class="code-block" style="margin:4px 0 0;font-size:11px;border-left-color:#E85D24"><span class="kw">public class</span> <span class="ty">ArrayList</span> {
+  <span class="kw">public boolean</span> add(<span class="ty">Object</span> obj){...}
+  <span class="kw">public</span> <span class="ty">Object</span> get(<span class="kw">int</span> index){...}
+}</div>
+  </div>
+  <div class="info-card" style="border-color:#7DD4A3">
+    <div class="ic-title" style="color:#065F46;font-size:12.5px">After Generics (Java 1.5+)</div>
+    <div class="code-block" style="margin:4px 0 0;font-size:11px;border-left-color:#22A45D"><span class="kw">public class</span> <span class="ty">ArrayList</span>&lt;<span class="ty">T</span>&gt; {
+  <span class="kw">public boolean</span> add(<span class="ty">T</span> t){...}
+  <span class="kw">public</span> <span class="ty">T</span> get(<span class="kw">int</span> index){...}
+}</div>
+  </div>
+</div>
+
+<!-- ITERATION APPROACHES -->
+<div class="section-head"><span class="star">★</span> 6 Ways to Iterate a List</div>
+<div class="iteration-grid">
+  <div class="iter-card">
+    <span class="iter-num">1</span><span class="iter-title">for loop</span>
+    <div class="iter-desc">Classic index loop with <code style="font-size:11px">get(i)</code></div>
+  </div>
+  <div class="iter-card">
+    <span class="iter-num">2</span><span class="iter-title">for-each</span>
+    <div class="iter-desc">Enhanced for, clean syntax, no index</div>
+  </div>
+  <div class="iter-card">
+    <span class="iter-num">3</span><span class="iter-title">Iterator</span>
+    <div class="iter-desc"><code style="font-size:11px">hasNext()</code> + <code style="font-size:11px">next()</code></div>
+  </div>
+  <div class="iter-card">
+    <span class="iter-num">4</span><span class="iter-title">ListIterator</span>
+    <div class="iter-desc">Bidirectional — forward &amp; backward</div>
+  </div>
+  <div class="iter-card">
+    <span class="iter-num">5</span><span class="iter-title">forEach()</span>
+    <div class="iter-desc">Lambda-based, from Iterable (Java 8+)</div>
+  </div>
+  <div class="iter-card">
+    <span class="iter-num">6</span><span class="iter-title">Stream API</span>
+    <div class="iter-desc">Functional pipeline, Java 8+</div>
+  </div>
+</div>
+
+<div class="code-block"><span class="cm">// for-each (most common)</span>
+<span class="kw">for</span> (<span class="ty">Student</span> s : students) { System.out.println(s.getName()); }
+
+<span class="cm">// forEach with lambda (Java 8+)</span>
+students.forEach(s -> System.out.println(s.getName()));
+
+<span class="cm">// Stream API</span>
+students.stream().filter(s -> s.getMarks() > <span class="nm">700</span>).forEach(System.out::println);</div>
+
+<div class="page-number">— Page 3 of N · Collection Methods · List · ArrayList · Generics ·</div>
+</div>
+
+<script>
+const page = document.getElementById('page');
+const rulesContainer = document.getElementById('rules');
+function addRules(){
+  const h = page.scrollHeight;
+  rulesContainer.innerHTML='';
+  for(let i=0;i<Math.ceil(h/32)+10;i++){
+    const d=document.createElement('div');
+    d.className='ruled-line';
+    d.style.top=(i*32+10)+'px';
+    rulesContainer.appendChild(d);
+  }
+}
+addRules();
+setTimeout(addRules,400);
+</script>

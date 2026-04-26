@@ -1,0 +1,250 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  .nb{font-family:'Patrick Hand',cursive;background:transparent;max-width:720px;margin:0 auto;padding:1rem 0 2rem}
+  .page{background:#fffef5;border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:2rem 2.5rem 2.5rem;position:relative;margin-bottom:1.5rem}
+  .page::before{content:'';position:absolute;left:56px;top:0;bottom:0;width:1px;background:rgba(220,100,100,0.25)}
+  .lines{background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(100,140,220,0.12) 31px,rgba(100,140,220,0.12) 32px);background-position:0 48px;min-height:200px;padding-top:4px}
+  .title{font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:#1a3a6e;border-bottom:2.5px solid #e8c23a;padding-bottom:6px;margin-bottom:1.2rem;padding-left:20px}
+  .sub{font-family:'Caveat',cursive;font-size:21px;font-weight:700;color:#c0392b;margin:1.4rem 0 0.5rem;padding-left:20px;display:flex;align-items:center;gap:8px}
+  .sub::before{content:'✦';font-size:14px;color:#e8c23a}
+  h4{font-family:'Caveat',cursive;font-size:16px;font-weight:600;color:#1a3a6e;margin:0.8rem 0 0.3rem;padding-left:20px}
+  ul{padding-left:36px;margin:0.4rem 0 0.8rem}
+  li{font-size:15px;color:var(--color-text-primary);line-height:1.8;list-style:none;position:relative;padding-left:20px}
+  li::before{content:'→';position:absolute;left:0;color:#c0392b;font-size:13px}
+  .note{background:#fff9c4;border-left:3px solid #e8c23a;border-radius:0 4px 4px 0;padding:8px 14px;margin:0.8rem 0 0.8rem 20px;font-size:14px;color:#5a4500}
+  .note strong{font-family:'Caveat',cursive;font-size:15px;color:#8a6000}
+  .badge{display:inline-block;background:#ffeaea;color:#c0392b;font-family:'Caveat',cursive;font-size:13px;padding:1px 8px;border-radius:3px;border:1px solid #f5b7b1;margin:0 3px}
+  .badge.g{background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7}
+  .badge.b{background:#e3f2fd;color:#0d47a1;border-color:#90caf9}
+  code{font-family:monospace;font-size:13px;background:#f0f0f0;padding:1px 5px;border-radius:3px;color:#6d2d8e}
+  .codeblock{background:#2b2b2b;color:#f8f8f2;border-radius:6px;padding:12px 16px;margin:0.6rem 0 0.6rem 20px;font-family:monospace;font-size:12.5px;line-height:1.7;overflow-x:auto}
+  .codeblock .kw{color:#66d9e8}
+  .codeblock .ty{color:#ffb74d}
+  .codeblock .cm{color:#888;font-style:italic}
+  .codeblock .st{color:#a5d6a7}
+  .diagram{margin:1rem 0 1rem 20px;font-family:monospace;font-size:12.5px;line-height:1.6;color:var(--color-text-primary);background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:12px 16px}
+  .rule{background:#fff3e0;border-left:3px solid #e67e22;border-radius:0 4px 4px 0;padding:8px 14px;margin:0.8rem 0 0.8rem 20px;font-size:14px;color:#4a2800}
+  .rule strong{font-family:'Caveat',cursive;font-size:15px;color:#a94000}
+  .table-wrap{overflow-x:auto;margin:0.5rem 0 0.8rem 20px}
+  table{border-collapse:collapse;font-size:13px;width:100%}
+  th{background:#1a3a6e;color:#fff;padding:6px 12px;font-family:'Caveat',cursive;font-size:14px;text-align:left}
+  td{padding:5px 12px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.6}
+  tr:nth-child(even) td{background:rgba(100,140,220,0.05)}
+  .valid{color:#1b5e20;font-weight:600}
+  .invalid{color:#c0392b;font-weight:600}
+  .pq{background:#f3e5f5;border-left:3px solid #9c27b0;border-radius:0 4px 4px 0;padding:10px 16px;margin:0.6rem 0 0.6rem 20px}
+  .pq .qtitle{font-family:'Caveat',cursive;font-size:16px;color:#6a0080;font-weight:700;margin-bottom:6px}
+  .pq ol{padding-left:20px}
+  .pq ol li{font-size:14px;color:var(--color-text-primary);line-height:1.9}
+  .pq ol li::before{content:none}
+  .pq ol li{list-style:decimal}
+  .task{background:#e8f5e9;border-left:3px solid #2e7d32;border-radius:0 4px 4px 0;padding:10px 16px;margin:1rem 0 0.5rem 20px}
+  .task .ttitle{font-family:'Caveat',cursive;font-size:16px;color:#1b5e20;font-weight:700;margin-bottom:6px}
+  .pg{font-family:'Caveat',cursive;font-size:12px;color:var(--color-text-secondary);text-align:right;margin-top:1rem}
+</style>
+
+<div class="nb">
+
+<div class="page">
+<div class="lines">
+<div class="title">☕ Java Generics — Revisited</div>
+
+<div class="sub">What are Generics?</div>
+<ul>
+  <li>Introduced in <strong>Java 5</strong> — allows <em>reusable, type-safe</em> code.</li>
+  <li>Write <strong>one class / method</strong> that works with <em>any</em> type.</li>
+  <li><code>&lt;T&gt;, &lt;E&gt;, &lt;K,V&gt;</code> are just <strong>placeholders</strong> for types.</li>
+  <li>No need to write separate classes for String, Integer, Employee, etc.</li>
+</ul>
+
+<div class="note"><strong>⚠ Important:</strong> Generics work only with <strong>Reference Types</strong> (String, Integer…). Primitives (int, double) are NOT allowed directly → use wrapper classes.</div>
+
+<div class="note"><strong>🔑 Key:</strong> Provides <strong>compile-time</strong> type safety — NOT runtime safety (due to type erasure).</div>
+
+<div class="sub">Problem Without Generics</div>
+<ul>
+  <li>Had to use <code>Object</code> and do <strong>manual downcasting</strong>.</li>
+  <li>Caused: <span class="badge">No type safety</span> <span class="badge">ClassCastException</span> <span class="badge">Messy code</span></li>
+</ul>
+
+<div class="diagram">
+Without Generics (error-prone):
+ MyGen gen = new MyGen();
+ gen.add("Hello");
+ String s = (String) gen.get();   ← manual cast needed!
+ gen.add(new Integer(5));
+ String bad = (String) gen.get(); ← ClassCastException at RUNTIME!
+</div>
+
+<div class="sub">Solution — Generic Class</div>
+
+<div class="codeblock"><span class="kw">public class</span> <span class="ty">MyGen</span>&lt;<span class="ty">T</span>&gt; {
+    <span class="kw">private</span> <span class="ty">T</span> obj;
+    <span class="kw">void</span> add(<span class="ty">T</span> obj) { <span class="kw">this</span>.obj = obj; }
+    <span class="ty">T</span>    get()      { <span class="kw">return</span> obj; }
+}</div>
+
+<div class="codeblock"><span class="cm">// Usage — no casting needed!</span>
+<span class="ty">MyGen</span>&lt;<span class="ty">String</span>&gt;  g1 = <span class="kw">new</span> <span class="ty">MyGen</span>&lt;&gt;();  g1.add(<span class="st">"Hello"</span>);
+<span class="ty">MyGen</span>&lt;<span class="ty">Integer</span>&gt; g2 = <span class="kw">new</span> <span class="ty">MyGen</span>&lt;&gt;();  g2.add(20);
+<span class="ty">String</span> s = g1.get();   <span class="cm">// ✔ exact type back, no cast</span></div>
+
+<div class="pg">pg 1</div>
+</div>
+</div>
+
+<div class="page">
+<div class="lines">
+<div class="title">☕ Generics — Advantages</div>
+
+<div class="table-wrap">
+<table>
+<tr><th>#</th><th>Advantage</th><th>Why it matters</th></tr>
+<tr><td>1</td><td>✔ Type Safety</td><td>Compiler blocks wrong types at compile time</td></tr>
+<tr><td>2</td><td>✔ No Downcasting</td><td>Get exact type back — no ClassCastException</td></tr>
+<tr><td>3</td><td>✔ Code Reusability</td><td>Write once, use with any type</td></tr>
+<tr><td>4</td><td>✔ Early Bug Detection</td><td>Errors caught at compile time, not runtime</td></tr>
+<tr><td>5</td><td>✔ Cleaner Code</td><td>More readable, less boilerplate</td></tr>
+</table>
+</div>
+
+<div class="sub">Bounded Types (Constraints)</div>
+<ul>
+  <li>Use <code>extends</code> keyword to limit which types are accepted.</li>
+</ul>
+
+<div class="diagram">
+UNBOUNDED            BOUNDED (class)         BOUNDED (interface)
+─────────────        ──────────────────      ────────────────────────
+class Test&lt;T&gt;        class Test&lt;T extends    class Test&lt;T extends
+                      Number&gt;                 Runnable&gt;
+  ↓ accepts           ↓ accepts               ↓ accepts
+  Any type            Number or subtypes      Runnable implementations
+                     (Integer, Float…)       (classes that implement it)
+</div>
+
+<h4>✦ Example with class hierarchy:</h4>
+<div class="codeblock"><span class="ty">Payment</span>       <span class="cm">← parent</span>
+  ↳ <span class="ty">CashPayment</span>  <span class="cm">← child</span>
+  ↳ <span class="ty">CardPayment</span>  <span class="cm">← child</span>
+
+<span class="kw">class</span> <span class="ty">Bill</span>&lt;<span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Payment</span>&gt; { }
+
+<span class="ty">Bill</span>&lt;<span class="ty">Payment</span>&gt;     bill = <span class="kw">new</span> <span class="ty">Bill</span>&lt;&gt;(); <span class="cm">// ✔</span>
+<span class="ty">Bill</span>&lt;<span class="ty">CashPayment</span>&gt; bill = <span class="kw">new</span> <span class="ty">Bill</span>&lt;&gt;(); <span class="cm">// ✔</span>
+<span class="cm">// Bill&lt;Integer&gt;  bill = new Bill&lt;&gt;(); // ✘ Invalid</span></span></div>
+
+<div class="rule"><strong>⚠ Rules for Bounded Types:</strong><br>
+✘ <code>implements</code> keyword NOT allowed at class level — use <code>extends</code> for both class and interface.<br>
+✘ <code>super</code> keyword NOT allowed at class level for type parameters.
+</div>
+
+<div class="sub">Multiple Bounds (using &amp;)</div>
+<ul>
+  <li>Type must satisfy <strong>all</strong> conditions.</li>
+  <li>Syntax: <code>&lt;T extends ClassType &amp; InterfaceType&gt;</code></li>
+</ul>
+
+<div class="codeblock"><span class="kw">class</span> <span class="ty">Test</span>&lt;<span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Number</span> &amp; <span class="ty">Serializable</span>&gt; { }
+<span class="cm">// Integer → ✔ (subclass of Number AND implements Serializable)</span>
+<span class="cm">// String  → ✘ (NOT a subclass of Number)</span></span></div>
+
+<div class="table-wrap">
+<table>
+<tr><th>Combination</th><th>Valid?</th><th>Rule</th></tr>
+<tr><td><code>&lt;T extends Number &amp; Thread&gt;</code></td><td class="invalid">✘ Invalid</td><td>Two class types not allowed</td></tr>
+<tr><td><code>&lt;T extends Runnable &amp; Serializable&gt;</code></td><td class="valid">✔ Valid</td><td>Two interface types — allowed</td></tr>
+<tr><td><code>&lt;T extends Number &amp; Runnable&gt;</code></td><td class="valid">✔ Valid</td><td>Class first, then interface ✔</td></tr>
+<tr><td><code>&lt;T extends Runnable &amp; Number&gt;</code></td><td class="invalid">✘ Invalid</td><td>Interface before class — wrong order</td></tr>
+</table>
+</div>
+
+<div class="note"><strong>✦ Order Rule:</strong> Always write <code>Class</code> before <code>Interface</code> when using <code>&amp;</code>.</div>
+
+<div class="pg">pg 2</div>
+</div>
+</div>
+
+<div class="page">
+<div class="lines">
+<div class="title">☕ Generic Methods</div>
+
+<ul>
+  <li>Can declare generic methods inside <em>any</em> class (generic or not).</li>
+  <li>Type parameter <code>&lt;E&gt;</code> must be declared <strong>before the return type</strong>.</li>
+</ul>
+
+<div class="diagram">
+Syntax:
+  public static  &lt;E&gt;  void   fun1(E e) { ... }
+                  ↑       ↑
+           type param   return type
+           (before return type!)
+</div>
+
+<h4>✦ Generic method — any type:</h4>
+<div class="codeblock"><span class="kw">public static</span> &lt;<span class="ty">E</span>&gt; <span class="kw">void</span> fun1(<span class="ty">E</span> e) {
+    System.out.println(e);
+}
+<span class="cm">// Works with any type:</span>
+fun1(10);          <span class="cm">// Integer</span>
+fun1(<span class="st">"Hello"</span>);    <span class="cm">// String</span>
+fun1(<span class="kw">new</span> <span class="ty">A</span>());   <span class="cm">// Custom class</span></span></div>
+
+<h4>✦ Generic method — key-value pair:</h4>
+<div class="codeblock"><span class="kw">public static</span> &lt;<span class="ty">K</span>, <span class="ty">V</span>&gt; <span class="kw">void</span> print(<span class="ty">K</span> key, <span class="ty">V</span> value) {
+    System.out.println(key + <span class="st">"==="</span> + value);
+}
+<span class="cm">// print("Name", "Alice")  or  print(1, 99.5) — both work</span></span></div>
+
+<h4>✦ Generic printArray — one method for any array type:</h4>
+<div class="codeblock"><span class="kw">public static</span> &lt;<span class="ty">E</span>&gt; <span class="kw">void</span> printArray(<span class="ty">E</span>[] arr) {
+    <span class="kw">for</span>(<span class="ty">E</span> e : arr)
+        System.out.println(e);
+}
+
+<span class="ty">Integer</span>[] nums  = {10, 20, 30};
+<span class="ty">String</span>[]  cities = {<span class="st">"Delhi"</span>, <span class="st">"Pune"</span>};
+
+printArray(nums);    <span class="cm">// ✔</span>
+printArray(cities);  <span class="cm">// ✔</span></span></div>
+
+<div class="note"><strong>⚠ Remember:</strong> Primitives not allowed in generic methods — use <code>Integer[]</code>, not <code>int[]</code>.</div>
+
+<div class="diagram">
+Hierarchy with Generic Methods:
+  Employee[]   → printArray(employees)   ✔
+  Developer[]  → printArray(developers)  ✔  (Developer extends Employee)
+  Manager[]    → printArray(managers)    ✔  (Manager extends Employee)
+
+  int[]        → printArray(ints)        ✘  (primitives not allowed)
+</div>
+
+<div class="sub">Practice Questions</div>
+<div class="pq">
+  <div class="qtitle">✏ Try These:</div>
+  <ol>
+    <li>What is the difference between <code>MyGen&lt;Object&gt;</code> and <code>MyGen&lt;T&gt;</code>? Why is the generic version safer?</li>
+    <li>Is <code>class Test&lt;T extends String &amp; Number&gt;</code> valid? Explain why or why not.</li>
+    <li>Write a generic method <code>findMax(T a, T b)</code> that returns the larger of two <code>Comparable</code> values. What bound would you use?</li>
+  </ol>
+</div>
+
+<div class="sub">Student Task 🎯</div>
+<div class="task">
+  <div class="ttitle">Mini Challenge:</div>
+  <ul>
+    <li>Create a generic class <code>Pair&lt;K, V&gt;</code> that stores two values of potentially different types.</li>
+    <li>Add methods <code>getKey()</code> and <code>getValue()</code>.</li>
+    <li>In <code>main()</code>, create: <code>Pair&lt;String, Integer&gt;</code> for <em>("Alice", 95)</em> and <code>Pair&lt;Integer, Boolean&gt;</code> for <em>(1, true)</em>.</li>
+    <li><strong>Bonus:</strong> Add a method <code>swap()</code> that returns a new <code>Pair&lt;V, K&gt;</code>.</li>
+  </ul>
+</div>
+
+<div class="pg">pg 3</div>
+</div>
+</div>
+
+</div>

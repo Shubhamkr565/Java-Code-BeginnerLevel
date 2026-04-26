@@ -1,0 +1,389 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  .nb{font-family:'Patrick Hand',cursive;background:transparent;max-width:720px;margin:0 auto;padding:1rem 0 2rem}
+  .page{background:#fffef5;border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:2rem 2.5rem 2.5rem;position:relative;margin-bottom:1.5rem}
+  .page::before{content:'';position:absolute;left:56px;top:0;bottom:0;width:1px;background:rgba(220,100,100,0.25)}
+  .lines{background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(100,140,220,0.12) 31px,rgba(100,140,220,0.12) 32px);background-position:0 48px;min-height:200px;padding-top:4px}
+  .title{font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:#1a3a6e;border-bottom:2.5px solid #e8c23a;padding-bottom:6px;margin-bottom:1.2rem;padding-left:20px}
+  .sub{font-family:'Caveat',cursive;font-size:21px;font-weight:700;color:#c0392b;margin:1.4rem 0 0.5rem;padding-left:20px;display:flex;align-items:center;gap:8px}
+  .sub::before{content:'✦';font-size:14px;color:#e8c23a}
+  h4{font-family:'Caveat',cursive;font-size:16px;font-weight:600;color:#1a3a6e;margin:0.8rem 0 0.3rem;padding-left:20px}
+  ul{padding-left:36px;margin:0.4rem 0 0.8rem}
+  li{font-size:15px;color:var(--color-text-primary);line-height:1.8;list-style:none;position:relative;padding-left:20px}
+  li::before{content:'→';position:absolute;left:0;color:#c0392b;font-size:13px}
+  .note{background:#fff9c4;border-left:3px solid #e8c23a;border-radius:0 4px 4px 0;padding:8px 14px;margin:0.8rem 0 0.8rem 20px;font-size:14px;color:#5a4500}
+  .note strong{font-family:'Caveat',cursive;font-size:15px;color:#8a6000}
+  .badge{display:inline-block;font-family:'Caveat',cursive;font-size:13px;padding:1px 8px;border-radius:3px;margin:0 3px}
+  .badge.r{background:#ffeaea;color:#c0392b;border:1px solid #f5b7b1}
+  .badge.g{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7}
+  .badge.b{background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9}
+  .badge.o{background:#fff3e0;color:#a94000;border:1px solid #ffcc80}
+  code{font-family:monospace;font-size:13px;background:#f0f0f0;padding:1px 5px;border-radius:3px;color:#6d2d8e}
+  .codeblock{background:#2b2b2b;color:#f8f8f2;border-radius:6px;padding:12px 16px;margin:0.6rem 0 0.6rem 20px;font-family:monospace;font-size:12.5px;line-height:1.7;overflow-x:auto}
+  .kw{color:#66d9e8}.ty{color:#ffb74d}.cm{color:#888;font-style:italic}.st{color:#a5d6a7}.ok{color:#69f0ae}.er{color:#ff5252}
+  .diagram{margin:0.8rem 0 0.8rem 20px;font-family:monospace;font-size:12.5px;line-height:1.7;color:var(--color-text-primary);background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:12px 16px}
+  .rule{background:#fff3e0;border-left:3px solid #e67e22;border-radius:0 4px 4px 0;padding:8px 14px;margin:0.8rem 0 0.8rem 20px;font-size:14px;color:#4a2800}
+  .rule strong{font-family:'Caveat',cursive;font-size:15px;color:#a94000}
+  .pecs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0.8rem 0 0.8rem 20px}
+  .pecs-card{border-radius:6px;padding:10px 14px;font-size:14px}
+  .pecs-card.ext{background:#e3f2fd;border:1px solid #90caf9}
+  .pecs-card.sup{background:#fce4ec;border:1px solid #f48fb1}
+  .pecs-card .pt{font-family:'Caveat',cursive;font-size:16px;font-weight:700;margin-bottom:4px}
+  .pecs-card.ext .pt{color:#0d47a1}
+  .pecs-card.sup .pt{color:#880e4f}
+  .table-wrap{overflow-x:auto;margin:0.5rem 0 0.8rem 20px}
+  table{border-collapse:collapse;font-size:13px;width:100%}
+  th{background:#1a3a6e;color:#fff;padding:6px 12px;font-family:'Caveat',cursive;font-size:14px;text-align:left}
+  td{padding:5px 12px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.6;font-size:13px}
+  tr:nth-child(even) td{background:rgba(100,140,220,0.05)}
+  .valid{color:#1b5e20;font-weight:600}.invalid{color:#c0392b;font-weight:600}
+  .pq{background:#f3e5f5;border-left:3px solid #9c27b0;border-radius:0 4px 4px 0;padding:10px 16px;margin:0.6rem 0 0.6rem 20px}
+  .pq .qtitle{font-family:'Caveat',cursive;font-size:16px;color:#6a0080;font-weight:700;margin-bottom:6px}
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0.5rem 0 0.5rem 20px}
+  .qcard{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:10px 12px;font-size:13px}
+  .qcard .qlabel{font-family:'Caveat',cursive;font-size:14px;font-weight:700;color:#c0392b;margin-bottom:4px}
+  .qcard .ans{font-family:'Caveat',cursive;font-size:13px;color:#1b5e20;margin-top:5px;padding-top:5px;border-top:0.5px dashed var(--color-border-tertiary)}
+  .task{background:#e8f5e9;border-left:3px solid #2e7d32;border-radius:0 4px 4px 0;padding:10px 16px;margin:1rem 0 0.5rem 20px}
+  .task .ttitle{font-family:'Caveat',cursive;font-size:16px;color:#1b5e20;font-weight:700;margin-bottom:6px}
+  .analogy{background:#fce4ec;border-left:3px solid #e91e63;border-radius:0 4px 4px 0;padding:10px 16px;margin:0.8rem 0 0.8rem 20px;font-size:14px;color:#4a0020}
+  .analogy strong{font-family:'Caveat',cursive;font-size:15px;color:#880e4f}
+  .pg{font-family:'Caveat',cursive;font-size:12px;color:var(--color-text-secondary);text-align:right;margin-top:1rem}
+</style>
+
+<div class="nb">
+
+<!-- PAGE 4 -->
+<div class="page">
+<div class="lines">
+<div class="title">☕ Covariance & Wildcards in Java</div>
+
+<div class="sub">Covariance — The Basics</div>
+<ul>
+  <li>A superclass reference can hold a subclass object → <em>is-a</em> relationship.</li>
+  <li><strong>Arrays are covariant</strong> in Java — you can assign a subtype array to a supertype array reference.</li>
+</ul>
+
+<div class="codeblock"><span class="ty">String</span>[] fruits = {<span class="st">"Apple"</span>, <span class="st">"Mango"</span>};
+<span class="ty">Object</span>[] objArr = fruits;   <span class="cm">// ✔ Allowed at compile time</span>
+objArr[0] = <span class="kw">new</span> <span class="ty">A</span>();        <span class="cm">// ✘ ArrayStoreException at RUNTIME!</span></div>
+
+<div class="note"><strong>⚠ Heap Pollution:</strong> Arrays allow this at compile time but throw <code>ArrayStoreException</code> at runtime. Compiler cannot catch it!</div>
+
+<div class="sub">Generics are Invariant by Default</div>
+<ul>
+  <li>Generics do <strong>NOT</strong> follow parent-child relationship automatically.</li>
+</ul>
+
+<div class="codeblock"><span class="ty">List</span>&lt;<span class="ty">String</span>&gt;  sList = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
+<span class="ty">List</span>&lt;<span class="ty">Object</span>&gt;  oList = sList;  <span class="cm">// ✘ Compilation Error!</span>
+
+<span class="ty">List</span>&lt;<span class="ty">Employee</span>&gt;  emp = ...;
+printArray(emp);               <span class="cm">// ✔ works</span>
+
+<span class="ty">List</span>&lt;<span class="ty">Developer</span>&gt; dev = ...;
+printArray(dev);               <span class="cm">// ✘ Error — even though Developer extends Employee</span></span></div>
+
+<div class="diagram">
+Arrays (Covariant)          Generics (Invariant by default)
+────────────────────        ──────────────────────────────────
+Object[]  ← String[]  ✔    List&lt;Object&gt; ← List&lt;String&gt;  ✘
+ runtime check needed        compile-time error — SAFE!
+</div>
+
+<div class="sub">Wildcards — Making Generics Flexible</div>
+<ul>
+  <li>Use wildcards (<code>?</code>) to allow collections to behave like covariant/contravariant types.</li>
+</ul>
+
+<div class="pecs">
+  <div class="pecs-card ext">
+    <div class="pt">? extends T</div>
+    <div><strong>Producer</strong> — reads/gets values</div>
+    <div style="margin-top:5px;font-family:monospace;font-size:12px">Upper Bound Wildcard</div>
+    <div style="margin-top:4px;font-size:13px">→ Covariance</div>
+  </div>
+  <div class="pecs-card sup">
+    <div class="pt">? super T</div>
+    <div><strong>Consumer</strong> — writes/puts values</div>
+    <div style="margin-top:5px;font-family:monospace;font-size:12px">Lower Bound Wildcard</div>
+    <div style="margin-top:4px;font-size:13px">→ Contravariance</div>
+  </div>
+</div>
+
+<div class="rule"><strong>✦ PECS Principle:</strong><br>
+<strong>P</strong>roducer <strong>E</strong>xtends — if you only READ from a source, use <code>? extends T</code><br>
+<strong>C</strong>onsumer <strong>S</strong>uper — if you only WRITE to a destination, use <code>? super T</code>
+</div>
+
+<div class="pg">pg 4</div>
+</div>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page">
+<div class="lines">
+<div class="title">☕ Upper Bound &amp; Lower Bound Wildcards</div>
+
+<div class="sub">1. Upper Bound — ? extends T</div>
+<ul>
+  <li>Accepts <strong>T or any subtype</strong> of T.</li>
+  <li>Use when you want to <strong>read</strong> from the collection.</li>
+  <li>Writing is <strong>NOT</strong> allowed (except <code>null</code>).</li>
+</ul>
+
+<div class="codeblock"><span class="kw">public static void</span> printArray(<span class="ty">List</span>&lt;? <span class="kw">extends</span> <span class="ty">Employee</span>&gt; list) {
+    <span class="kw">for</span>(<span class="ty">Employee</span> e : list)
+        System.out.println(e);    <span class="cm">// ✔ Reading OK</span>
+
+    <span class="cm">// list.add(new Employee());  // ✘ Cannot add!</span>
+    list.add(<span class="kw">null</span>);              <span class="cm">// ✔ Only null allowed</span>
+}
+
+<span class="cm">// Valid calls:</span>
+printArray(<span class="kw">new</span> <span class="ty">ArrayList</span>&lt;<span class="ty">Employee</span>&gt;());   <span class="cm">// ✔</span>
+printArray(<span class="kw">new</span> <span class="ty">ArrayList</span>&lt;<span class="ty">Developer</span>&gt;());  <span class="cm">// ✔</span>
+printArray(<span class="kw">new</span> <span class="ty">ArrayList</span>&lt;<span class="ty">Manager</span>&gt;());    <span class="cm">// ✔</span></span></div>
+
+<div class="note"><strong>Why can't we add?</strong> <code>?</code> could be <code>List&lt;Developer&gt;</code> or <code>List&lt;Manager&gt;</code> — we can't safely add a <code>Developer</code> to a <code>List&lt;Manager&gt;</code>!</div>
+
+<div class="diagram">
+? extends Employee:
+        Object
+          |
+       Employee   ← upper bound (max)
+       /       \
+  Developer   Manager
+      ↑           ↑
+  can read     can read
+  both into Employee reference
+</div>
+
+<div class="sub">2. Lower Bound — ? super T</div>
+<ul>
+  <li>Accepts <strong>T or any supertype</strong> of T.</li>
+  <li>Use when you want to <strong>write</strong> to the collection.</li>
+  <li>Reading is restricted — only <code>Object</code> type allowed on reads.</li>
+</ul>
+
+<div class="codeblock"><span class="kw">public static void</span> addNumbers(<span class="ty">List</span>&lt;? <span class="kw">super</span> <span class="ty">Integer</span>&gt; list) {
+    <span class="kw">for</span>(<span class="kw">int</span> i = 1; i &lt;= 10; i++)
+        list.add(i);              <span class="cm">// ✔ Writing OK</span>
+
+    <span class="ty">Object</span> obj = list.get(0);    <span class="cm">// ✔ Only Object allowed on read</span>
+    <span class="cm">// Integer i = list.get(0);  // ✘ Not allowed</span>
+}
+
+<span class="cm">// Valid calls:</span>
+addNumbers(<span class="kw">new</span> <span class="ty">ArrayList</span>&lt;<span class="ty">Integer</span>&gt;()); <span class="cm">// ✔</span>
+addNumbers(<span class="kw">new</span> <span class="ty">ArrayList</span>&lt;<span class="ty">Number</span>&gt;());  <span class="cm">// ✔</span>
+addNumbers(<span class="kw">new</span> <span class="ty">ArrayList</span>&lt;<span class="ty">Object</span>&gt;());  <span class="cm">// ✔</span>
+<span class="cm">// addNumbers(new ArrayList&lt;String&gt;()); // ✘ Invalid</span></span></div>
+
+<div class="diagram">
+? super Integer:
+        Object    ← can store Integer
+          |
+        Number    ← can store Integer
+          |
+        Integer   ← lower bound (T itself)
+          |
+        (no subtypes matter here)
+
+  Write Integer → safe into all above ✔
+  Read → only Object guaranteed ✔
+</div>
+
+<div class="table-wrap">
+<table>
+<tr><th>Wildcard</th><th>Read</th><th>Write</th><th>Use When</th></tr>
+<tr><td><code>? extends T</code></td><td class="valid">✔ as T</td><td class="invalid">✘ (null only)</td><td>Reading / producing values</td></tr>
+<tr><td><code>? super T</code></td><td class="invalid">✔ as Object only</td><td class="valid">✔ T &amp; subtypes</td><td>Writing / consuming values</td></tr>
+<tr><td><code>?</code> (unbounded)</td><td class="invalid">✔ as Object only</td><td class="invalid">✘ (null only)</td><td>Object methods / size/clear</td></tr>
+</table>
+</div>
+
+<div class="rule"><strong>⚠ Rule:</strong> You can specify EITHER upper bound OR lower bound — NOT both at the same time.<br>
+<code>&lt;? extends T super X&gt;</code> → Invalid!</div>
+
+<div class="pg">pg 5</div>
+</div>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page">
+<div class="lines">
+<div class="title">☕ Unbounded Wildcard &amp; List&lt;?&gt; vs List&lt;T&gt;</div>
+
+<div class="sub">Unbounded Wildcard — List&lt;?&gt;</div>
+<ul>
+  <li><code>?</code> means <em>any type</em> — you don't care what's inside.</li>
+  <li>Use when method only needs <code>Object</code> class methods (<code>toString()</code>, <code>equals()</code>).</li>
+  <li>Or when using type-independent operations: <code>size()</code>, <code>clear()</code>, <code>isEmpty()</code>.</li>
+</ul>
+
+<div class="codeblock"><span class="kw">public static void</span> fun1(<span class="ty">List</span>&lt;?&gt; list) {
+    <span class="kw">for</span>(<span class="ty">Object</span> obj : list)
+        System.out.println(obj.toString()); <span class="cm">// ✔ Object methods ok</span>
+    <span class="cm">// list.add(10);     // ✘ Cannot add</span>
+    list.add(<span class="kw">null</span>);       <span class="cm">// ✔ Only null</span>
+}
+
+<span class="kw">public static void</span> fun2(<span class="ty">List</span>&lt;?&gt; list) {
+    System.out.println(list.size());  <span class="cm">// ✔ No type needed</span>
+    list.clear();                     <span class="cm">// ✔ No type needed</span>
+    <span class="cm">// list.add(list.get(0));        // ✘ Not allowed</span>
+}</span></div>
+
+<div class="sub">List&lt;?&gt; vs List&lt;T&gt; — Side by Side</div>
+
+<div class="table-wrap">
+<table>
+<tr><th>Feature</th><th>List&lt;?&gt;</th><th>List&lt;T&gt;</th></tr>
+<tr><td>Knows the type?</td><td>No — unknown type</td><td>Yes — exact type at call time</td></tr>
+<tr><td>Read as</td><td>Object only</td><td>T directly</td></tr>
+<tr><td>Add element</td><td>Only null</td><td>list.add(list.get(0)) ✔</td></tr>
+<tr><td>Return type</td><td>Cannot return T</td><td>Can return T</td></tr>
+<tr><td>Use case</td><td>Read-only, size/clear</td><td>Swap, process, transform</td></tr>
+</table>
+</div>
+
+<div class="codeblock"><span class="cm">// List&lt;T&gt; — type known, full operations allowed:</span>
+<span class="kw">public static</span> &lt;<span class="ty">T</span>&gt; <span class="kw">void</span> swap(<span class="ty">List</span>&lt;<span class="ty">T</span>&gt; list, <span class="kw">int</span> i, <span class="kw">int</span> j) {
+    <span class="ty">T</span> temp = list.get(i);
+    list.set(i, list.get(j));
+    list.set(j, temp);        <span class="cm">// ✔ Works — T is known</span>
+}
+<span class="cm">// Cannot do this with List&lt;?&gt; — compiler doesn't know the type!</span></span></div>
+
+<div class="note"><strong>✦ T is decided at call time:</strong> <code>fun(List&lt;String&gt;)</code> → T = String &nbsp;|&nbsp; <code>fun(List&lt;Integer&gt;)</code> → T = Integer</div>
+
+<div class="sub">Quick Quiz Bank</div>
+<div class="qgrid">
+  <div class="qcard">
+    <div class="qlabel">Q1. list.add(null) + list.add("Hi") on List&lt;?&gt;?</div>
+    <div>A. Both compile &nbsp; B. Only null &nbsp; C. Only "Hi" &nbsp; D. None</div>
+    <div class="ans">✔ Answer: B — only null fits all unknown types</div>
+  </div>
+  <div class="qcard">
+    <div class="qlabel">Q2. fun(List&lt;? extends Number&gt;) — adding 10?</div>
+    <div>A. OK &nbsp; B. Runtime &nbsp; C. Compile error &nbsp; D. Integer only</div>
+    <div class="ans">✔ Answer: C — list could be List&lt;Double&gt;, adding Integer breaks safety</div>
+  </div>
+  <div class="qcard">
+    <div class="qlabel">Q3. fun(List&lt;? super Integer&gt;) — valid calls?</div>
+    <div>A. ArrayList&lt;Integer&gt; &nbsp; B. ArrayList&lt;Number&gt; &nbsp; C. ArrayList&lt;Object&gt; &nbsp; D. All</div>
+    <div class="ans">✔ Answer: D — all are supertypes of Integer</div>
+  </div>
+  <div class="qcard">
+    <div class="qlabel">Q4. Two fun1(List&lt;Integer&gt;) and fun1(List&lt;String&gt;) — valid overloads?</div>
+    <div>A. Yes &nbsp; B. Runtime error &nbsp; C. Compile error &nbsp; D. Works fine</div>
+    <div class="ans">✔ Answer: C — Type Erasure makes both identical after compilation</div>
+  </div>
+  <div class="qcard">
+    <div class="qlabel">Q5. From List&lt;? super Integer&gt;: Object obj = list.get(0) vs Integer i = list.get(0)?</div>
+    <div>A. Both valid &nbsp; B. Only Object &nbsp; C. Only Integer &nbsp; D. None</div>
+    <div class="ans">✔ Answer: B — compiler only guarantees Object</div>
+  </div>
+  <div class="qcard">
+    <div class="qlabel">Q6. Fill blank: void print(List&lt;? ___ Number&gt; list) — read only needed</div>
+    <div>A. super &nbsp; B. extends &nbsp; C. T &nbsp; D. Object</div>
+    <div class="ans">✔ Answer: B — extends for read/producer</div>
+  </div>
+</div>
+
+<div class="pg">pg 6</div>
+</div>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page">
+<div class="lines">
+<div class="title">☕ Type Erasure in Java</div>
+
+<div class="sub">What is Type Erasure?</div>
+<ul>
+  <li>The process of <strong>removing generic type info at compile time</strong>.</li>
+  <li>JVM does <strong>not understand</strong> generics — compiler converts to non-generic code.</li>
+  <li>Ensures <strong>backward compatibility</strong> with pre-Java 5 code.</li>
+</ul>
+
+<div class="note"><strong>🔑 Key:</strong> No generic information exists at runtime — only at compile time.</div>
+
+<div class="sub">How It Works — 3 Cases</div>
+
+<div class="codeblock"><span class="cm">// Case 1: Unbounded type</span>
+<span class="kw">class</span> <span class="ty">Box</span>&lt;<span class="ty">T</span>&gt;      { <span class="ty">T</span> value; }
+<span class="cm">// After erasure:</span>
+<span class="kw">class</span> <span class="ty">Box</span>          { <span class="ty">Object</span> value; }   <span class="cm">// T → Object</span>
+
+<span class="cm">// Case 2: Bounded type</span>
+<span class="kw">class</span> <span class="ty">Box</span>&lt;<span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Number</span>&gt; { <span class="ty">T</span> value; }
+<span class="cm">// After erasure:</span>
+<span class="kw">class</span> <span class="ty">Box</span>                    { <span class="ty">Number</span> value; }  <span class="cm">// T → Number (upper bound)</span>
+
+<span class="cm">// Case 3: Generic list usage</span>
+<span class="ty">List</span>&lt;<span class="ty">String</span>&gt; list = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
+list.add(<span class="st">"Hello"</span>);
+<span class="cm">// After erasure:</span>
+<span class="ty">List</span> list = <span class="kw">new</span> <span class="ty">ArrayList</span>();
+list.add(<span class="st">"Hello"</span>);</span></div>
+
+<div class="diagram">
+COMPILE TIME               |   RUNTIME (JVM)
+───────────────────────    |   ──────────────────────
+Box&lt;String&gt;  → type label  |   Box → no label (just Box)
+Box&lt;Integer&gt; → type label  |   Box → no label (just Box)
+                            |
+Compiler adds casts        |   Casts are already there:
+ String s = list.get(0)   |    String s = (String)list.get(0)
+</div>
+
+<div class="sub">Key Effects of Type Erasure</div>
+
+<h4>1. Method Overloading Restriction</h4>
+<div class="codeblock"><span class="kw">void</span> fun1(<span class="ty">List</span>&lt;<span class="ty">Integer</span>&gt; list) { }
+<span class="kw">void</span> fun1(<span class="ty">List</span>&lt;<span class="ty">String</span>&gt;  list) { }  <span class="cm">// ✘ Compile Error!</span>
+<span class="cm">// After erasure: both become void fun1(List list) — same signature!</span></span></div>
+
+<h4>2. Compiler Inserts Casts Automatically</h4>
+<div class="codeblock"><span class="ty">List</span>&lt;<span class="ty">String</span>&gt; list = <span class="ty">List</span>.of(<span class="st">"Java"</span>, <span class="st">"Python"</span>);
+<span class="ty">String</span> s = list.get(0);
+<span class="cm">// Internally becomes:</span>
+<span class="ty">String</span> s = (<span class="ty">String</span>) list.get(0);  <span class="cm">// cast added by compiler</span></span></div>
+
+<div class="rule"><strong>⚠ Generics = Compile-time safety ONLY.</strong><br>
+At runtime, all type info is erased. JVM just sees raw types.</div>
+
+<div class="analogy">
+  <strong>🎁 Gift Box Analogy:</strong><br>
+  At compile time → box has a label (<em>"This is a String box"</em>)<br>
+  At runtime → label is removed → just a box, contents are Object
+</div>
+
+<div class="sub">Practice Questions</div>
+<div class="pq">
+  <div class="qtitle">✏ Think &amp; Answer:</div>
+  <ul style="list-style:none;padding-left:0">
+    <li style="padding-left:0;margin-bottom:10px"><span style="color:#c0392b;font-weight:700">Q1.</span> Can you have both <code>? extends T</code> and <code>? super T</code> in the same wildcard? Why?</li>
+    <li style="padding-left:0;margin-bottom:10px"><span style="color:#c0392b;font-weight:700">Q2.</span> Why does <code>List&lt;String&gt;</code> not pass where <code>List&lt;Object&gt;</code> is expected? Explain with type erasure.</li>
+    <li style="padding-left:0;margin-bottom:10px"><span style="color:#c0392b;font-weight:700">Q3.</span> Write a method using PECS principle: copy all elements from <code>List&lt;? extends Number&gt;</code> into <code>List&lt;? super Number&gt;</code>.</li>
+  </ul>
+</div>
+
+<div class="task">
+  <div class="ttitle">Mini Task 🎯</div>
+  <ul>
+    <li>Create method <code>copyList(List&lt;? extends T&gt; src, List&lt;? super T&gt; dest)</code>.</li>
+    <li>Copy all elements from <code>src</code> into <code>dest</code> using a for-each loop.</li>
+    <li>Test with: <code>List&lt;Integer&gt;</code> → <code>List&lt;Number&gt;</code> and verify it works.</li>
+    <li><strong>Bonus:</strong> Why does replacing <code>? extends T</code> with <code>?</code> in <code>src</code> cause a compile error in the loop?</li>
+  </ul>
+</div>
+
+<div class="pg">pg 7</div>
+</div>
+</div>
+
+</div>

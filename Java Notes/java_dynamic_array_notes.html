@@ -1,0 +1,224 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.page{font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive;background:#FEFBEF;border:1px solid #D4C9A0;border-radius:3px;padding:40px 40px 40px 80px;position:relative;line-height:1.8}
+.margin-line{position:absolute;left:65px;top:0;bottom:0;width:2px;background:#F4AAAA;pointer-events:none}
+.ruled-line{position:absolute;left:0;right:0;height:1px;background:#C5D8F0;pointer-events:none}
+.title-badge{display:inline-block;background:#3B5998;color:#fff;font-size:19px;font-weight:700;padding:6px 22px;border-radius:2px;letter-spacing:1px;margin-bottom:4px;transform:rotate(-0.5deg);font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive}
+.subject-tag{font-size:13px;color:#888;font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive;margin-bottom:20px;display:block}
+.section-head{font-size:17px;font-weight:700;color:#1A3A6B;border-bottom:2.5px solid #1A3A6B;padding-bottom:2px;margin:24px 0 10px;display:flex;align-items:center;gap:8px;font-family:'Segoe Script','Bradley Hand ITC','Comic Sans MS',cursive}
+.star{color:#F5A623;font-size:18px}
+.bullet-row{display:flex;align-items:flex-start;gap:10px;margin:5px 0;font-size:15px;color:#2C2C2A}
+.bullet-dot{color:#E85D24;font-size:20px;line-height:1.2;flex-shrink:0}
+.callout{background:#FFF8DC;border-left:4px solid #F5A623;padding:10px 14px;border-radius:0 6px 6px 0;margin:14px 0;font-size:14px;color:#5A4010}
+.callout strong{color:#B45309}
+.code-block{background:#1E2535;color:#E8EAF0;padding:14px 18px;border-radius:6px;font-family:'Courier New',monospace;font-size:12.5px;line-height:1.7;margin:12px 0;border-left:4px solid #4A90D9;overflow-x:auto}
+.code-block .kw{color:#79B8FF}.code-block .ty{color:#85E89D}.code-block .cm{color:#6A9955;font-style:italic}.code-block .st{color:#F97583}.code-block .nm{color:#FFAB70}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.method-card{background:#fff;border:1.5px solid #B8D0F0;border-radius:6px;padding:10px 14px}
+.method-name{font-size:14px;font-weight:700;color:#1A5276;font-family:'Courier New',monospace}
+.method-desc{font-size:12px;color:#555;margin-top:3px}
+.highlight-box{background:#EAF4FF;border:1.5px solid #4A90D9;border-radius:6px;padding:12px 16px;margin:12px 0;font-size:14px;color:#1A3A6B}
+.vs-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.vs-card{border-radius:6px;padding:12px 16px;font-size:13.5px}
+.vs-card ul{list-style:none;padding:0}
+.vs-card ul li{padding:2px 0;display:flex;gap:6px}
+.vs-card ul li::before{content:'•';flex-shrink:0}
+.vs-bad{background:#FFF0F0;border:1.5px solid #F4AAAA;color:#7B1D1D}
+.vs-bad ul li::before{color:#E85D24}
+.vs-good{background:#EDFBF3;border:1.5px solid #7DD4A3;color:#0B4D27}
+.vs-good ul li::before{color:#22A45D}
+.vs-head{font-size:14px;font-weight:700;margin-bottom:6px}
+.page-number{text-align:center;color:#B0A080;font-size:13px;margin-top:24px}
+.underline-pen{border-bottom:2px solid #E85D24;display:inline}
+</style>
+<div class="page" id="page">
+<div class="margin-line"></div>
+<div id="rules"></div>
+
+<div class="title-badge">📓 Java Collection Framework</div><br>
+<span class="subject-tag">Chapter 1: Arrays &amp; Dynamic Arrays &nbsp;|&nbsp; CS Fundamentals</span>
+
+<div class="section-head"><span class="star">★</span> What is an Array?</div>
+<p style="font-size:14.5px;color:#333;margin-bottom:8px">A <span class="underline-pen">fundamental data structure</span> that stores multiple values of the <em>same type</em> under a single variable name. Each value is accessed directly by its <strong>index</strong>.</p>
+
+<div class="vs-row" style="margin-top:10px">
+<div class="vs-card vs-bad">
+  <div class="vs-head">⚠ Limitations</div>
+  <ul>
+    <li>Fixed size — cannot grow or shrink</li>
+    <li>Homogeneous — same data type only</li>
+    <li>Only 1 built-in variable: <code style="font-size:11px">length</code></li>
+  </ul>
+</div>
+<div class="vs-card vs-good">
+  <div class="vs-head">✓ Strengths</div>
+  <ul>
+    <li>Direct O(1) access via index</li>
+    <li>Memory-contiguous (fast cache)</li>
+    <li>Simple & lightweight structure</li>
+  </ul>
+</div>
+</div>
+
+<div class="code-block"><span class="kw">int</span>[] arr = {<span class="nm">10</span>, <span class="nm">20</span>, <span class="nm">30</span>, <span class="nm">40</span>, <span class="nm">50</span>};  <span class="cm">// Fixed size = 5</span>
+arr[<span class="nm">0</span>] → <span class="nm">10</span>,  arr[<span class="nm">4</span>] → <span class="nm">50</span>  <span class="cm">// Direct access by index</span></div>
+
+<div class="section-head"><span class="star">★</span> Dynamic Array — The Problem it Solves</div>
+
+<div class="callout"><strong>Problem:</strong> Normal arrays have fixed capacity. If you add too many elements, you run out of space!<br><strong>Solution:</strong> A <em>Dynamic Array</em> automatically <strong>doubles its capacity</strong> when full — just like Java's <code>ArrayList</code>.</div>
+
+<!-- DIAGRAM -->
+<div style="margin:16px 0 8px;font-size:15px;font-weight:700;color:#1A3A6B;text-decoration:underline;text-underline-offset:4px">📊 How Array Resizing Works:</div>
+
+<svg width="100%" viewBox="0 0 640 310" role="img">
+  <title>Dynamic Array resizing diagram</title>
+  <desc>Shows three stages: array full, new double-capacity array created, old elements copied and new element added</desc>
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- STAGE 1: Array Full -->
+  <text x="24" y="30" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="13" fill="#1A3A6B" font-weight="700">Step 1: Array is FULL</text>
+  <!-- cells -->
+  <rect x="24" y="40" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="76" y="40" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="128" y="40" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="180" y="40" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <text x="50" y="67" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">10</text>
+  <text x="102" y="67" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">20</text>
+  <text x="154" y="67" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">30</text>
+  <text x="206" y="67" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">40</text>
+  <text x="50" y="95" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">[0]</text>
+  <text x="102" y="95" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">[1]</text>
+  <text x="154" y="95" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">[2]</text>
+  <text x="206" y="95" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">[3]</text>
+  <!-- FULL badge -->
+  <rect x="238" y="44" width="64" height="22" rx="11" fill="#FEE2E2" stroke="#EF4444" stroke-width="1"/>
+  <text x="270" y="59" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#EF4444" font-weight="700">⚠ FULL!</text>
+  <!-- add arrow -->
+  <text x="326" y="54" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#7C3AED">+ add 50?</text>
+  <path d="M342 65 L342 82" stroke="#7C3AED" stroke-width="2" fill="none" marker-end="url(#arr2)"/>
+  <!-- STAGE 2: Double capacity -->
+  <text x="24" y="115" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="13" fill="#1A3A6B" font-weight="700">Step 2: Create new array — DOUBLE the size (capacity × 2)</text>
+  <rect x="24" y="125" width="52" height="44" rx="4" fill="#FEF9C3" stroke="#EAB308" stroke-width="1.5"/>
+  <rect x="76" y="125" width="52" height="44" rx="4" fill="#FEF9C3" stroke="#EAB308" stroke-width="1.5"/>
+  <rect x="128" y="125" width="52" height="44" rx="4" fill="#FEF9C3" stroke="#EAB308" stroke-width="1.5"/>
+  <rect x="180" y="125" width="52" height="44" rx="4" fill="#FEF9C3" stroke="#EAB308" stroke-width="1.5"/>
+  <rect x="232" y="125" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="284" y="125" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="336" y="125" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="388" y="125" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <!-- copy arrows -->
+  <line x1="50" y1="84" x2="50" y2="123" stroke="#22A45D" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <line x1="102" y1="84" x2="102" y2="123" stroke="#22A45D" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <line x1="154" y1="84" x2="154" y2="123" stroke="#22A45D" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <line x1="206" y1="84" x2="206" y2="123" stroke="#22A45D" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <text x="50" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">10</text>
+  <text x="102" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">20</text>
+  <text x="154" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">30</text>
+  <text x="206" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">40</text>
+  <text x="258" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <text x="310" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <text x="362" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <text x="414" y="152" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <text x="280" y="100" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#22A45D">copy old data</text>
+  <!-- brace for new space -->
+  <path d="M232 172 L232 182 L388 182 L388 172" fill="none" stroke="#7C3AED" stroke-width="1.2"/>
+  <text x="310" y="196" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#7C3AED">new empty slots</text>
+
+  <!-- STAGE 3: Add element -->
+  <text x="24" y="218" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="13" fill="#1A3A6B" font-weight="700">Step 3: Add new element → arr[size++] = 50</text>
+  <rect x="24" y="228" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="76" y="228" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="128" y="228" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="180" y="228" width="52" height="44" rx="4" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="232" y="228" width="52" height="44" rx="4" fill="#D1FAE5" stroke="#22A45D" stroke-width="2"/>
+  <rect x="284" y="228" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="336" y="228" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <rect x="388" y="228" width="52" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="50" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">10</text>
+  <text x="102" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">20</text>
+  <text x="154" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">30</text>
+  <text x="206" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#1D4ED8" font-weight="600">40</text>
+  <text x="258" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="15" fill="#065F46" font-weight="700">50</text>
+  <text x="310" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <text x="362" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <text x="414" y="255" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#9CA3AF">__</text>
+  <!-- new element label -->
+  <text x="258" y="284" text-anchor="middle" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="11" fill="#065F46">✓ Added!</text>
+  <!-- size / capacity labels -->
+  <text x="460" y="248" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#555">size = 5</text>
+  <text x="460" y="266" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="12" fill="#555">capacity = 8</text>
+  <!-- legend -->
+  <rect x="460" y="284" width="12" height="12" rx="2" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1"/>
+  <text x="476" y="294" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#555">old data</text>
+  <rect x="536" y="284" width="12" height="12" rx="2" fill="#D1FAE5" stroke="#22A45D" stroke-width="1"/>
+  <text x="552" y="294" font-family="'Segoe Script','Comic Sans MS',cursive" font-size="10" fill="#555">new</text>
+</svg>
+
+<div class="section-head" style="margin-top:20px"><span class="star">★</span> Key Code — MyDynamicArray.java</div>
+
+<div class="highlight-box">
+  <strong>Core Concept:</strong> <code style="font-size:12px">if (size == arr.length) → create newArr[arr.length * 2] → copy → arr = newArr</code>
+</div>
+
+<div class="code-block"><span class="kw">public void</span> <span class="nm">add</span>(<span class="ty">int</span> data) {
+    <span class="kw">if</span> (size == arr.length) {          <span class="cm">// Array is full?</span>
+        <span class="ty">int</span>[] newArr = <span class="kw">new</span> <span class="ty">int</span>[arr.length * <span class="nm">2</span>]; <span class="cm">// Double size</span>
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="nm">0</span>; i &lt; size; i++)
+            newArr[i] = arr[i];           <span class="cm">// Copy old data</span>
+        arr = newArr;                      <span class="cm">// Switch reference</span>
+    }
+    arr[size++] = data;                    <span class="cm">// Add element</span>
+}</div>
+
+<div class="section-head"><span class="star">★</span> Methods at a Glance</div>
+<div class="method-grid">
+  <div class="method-card">
+    <div class="method-name">add(int data)</div>
+    <div class="method-desc">Adds element; doubles array if full</div>
+  </div>
+  <div class="method-card">
+    <div class="method-name">remove(int index)</div>
+    <div class="method-desc">Shifts elements left; decrements size</div>
+  </div>
+  <div class="method-card">
+    <div class="method-name">get(int index)</div>
+    <div class="method-desc">Returns element; throws if out of bounds</div>
+  </div>
+  <div class="method-card">
+    <div class="method-name">size() / capacity()</div>
+    <div class="method-desc">Returns used slots / total array length</div>
+  </div>
+  <div class="method-card">
+    <div class="method-name">clear()</div>
+    <div class="method-desc">Resets size to 0 (data stays in memory)</div>
+  </div>
+  <div class="method-card">
+    <div class="method-name">isEmpty() / display()</div>
+    <div class="method-desc">Checks if empty / prints all elements</div>
+  </div>
+</div>
+
+<div class="callout" style="margin-top:18px">
+  <strong>Remember:</strong> Java's <code>ArrayList</code> works <em>exactly</em> this way internally — it starts small and grows by ~50% each time. That's why inserting at the end is <em>amortized O(1)</em>!
+</div>
+
+<div class="page-number">— Page 1 of 1 · Arrays &amp; Dynamic Arrays ·</div>
+</div>
+
+<script>
+const page = document.getElementById('page');
+const lineHeight = 32;
+const total = Math.ceil(page.offsetHeight / lineHeight) + 40;
+const rulesContainer = document.getElementById('rules');
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'ruled-line';
+  d.style.top = (i * lineHeight + 10) + 'px';
+  rulesContainer.appendChild(d);
+}
+</script>
