@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Java Collection Framework – Topper Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #fdf9f0;
+  --paper: #fffef9;
+  --ink: #1a1a2e;
+  --blue: #1565c0;
+  --lightblue: #e3f0ff;
+  --green: #2e7d32;
+  --lightgreen: #e8f5e9;
+  --red: #b71c1c;
+  --lightred: #ffebee;
+  --yellow: #f9a825;
+  --lightyellow: #fffde7;
+  --purple: #6a1b9a;
+  --lightpurple: #f3e5f5;
+  --orange: #e65100;
+  --lightorange: #fff3e0;
+  --teal: #00695c;
+  --lightteal: #e0f2f1;
+  --rule: #ddd;
+  --code-bg: #1e1e2e;
+  --code-fg: #cdd6f4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  font-family: 'Nunito', sans-serif;
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* Notebook lines background */
+.notebook-page {
+  background: var(--paper);
+  background-image: repeating-linear-gradient(transparent, transparent 31px, #e8e0d0 31px, #e8e0d0 32px);
+  border-left: 4px solid #f0a0a0;
+  margin: 24px auto;
+  max-width: 960px;
+  padding: 40px 48px 48px 64px;
+  border-radius: 4px;
+  box-shadow: 2px 4px 20px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+/* Red margin line */
+.notebook-page::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 52px;
+  width: 2px; height: 100%;
+  background: rgba(240,80,80,0.2);
+}
+
+/* ====== HEADINGS ====== */
+h1 {
+  font-family: 'Caveat', cursive;
+  font-size: 2.8em;
+  color: var(--blue);
+  text-align: center;
+  border-bottom: 3px solid var(--blue);
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3em;
+  text-align: center;
+  color: #666;
+  margin-bottom: 32px;
+}
+
+h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.9em;
+  color: var(--blue);
+  background: var(--lightblue);
+  border-left: 5px solid var(--blue);
+  padding: 6px 14px;
+  margin: 36px 0 14px;
+  border-radius: 0 8px 8px 0;
+}
+
+h3 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.5em;
+  color: var(--green);
+  border-bottom: 2px dashed var(--green);
+  margin: 24px 0 10px;
+  padding-bottom: 2px;
+}
+
+h4 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.25em;
+  color: var(--purple);
+  margin: 18px 0 8px;
+}
+
+/* ====== TEXT STYLES ====== */
+p { margin-bottom: 8px; }
+
+ul, ol { padding-left: 22px; margin-bottom: 10px; }
+li { margin-bottom: 4px; }
+
+.star { color: var(--yellow); font-style: normal; }
+.warn { color: var(--red); font-style: normal; }
+.bolt { color: var(--orange); font-style: normal; }
+
+strong { color: var(--blue); }
+
+/* ====== HIGHLIGHT BOXES ====== */
+.box {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  border-left: 5px solid;
+}
+.box-blue   { background: var(--lightblue);   border-color: var(--blue);   }
+.box-green  { background: var(--lightgreen);  border-color: var(--green);  }
+.box-red    { background: var(--lightred);    border-color: var(--red);    }
+.box-yellow { background: var(--lightyellow); border-color: var(--yellow); }
+.box-purple { background: var(--lightpurple); border-color: var(--purple); }
+.box-orange { background: var(--lightorange); border-color: var(--orange); }
+.box-teal   { background: var(--lightteal);   border-color: var(--teal);   }
+
+.box-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15em;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* ====== CODE ====== */
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 12px 0;
+  line-height: 1.6;
+}
+code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  background: #e8eaf6;
+  color: #5c35a0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+pre code { background: none; color: inherit; padding: 0; }
+
+/* ====== DIAGRAM BOXES ====== */
+.diagram {
+  background: #f8f8ff;
+  border: 2px solid #9e9e9e;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  color: #333;
+  margin: 14px 0;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+/* ====== TABLE ====== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 14px;
+}
+th {
+  background: var(--blue);
+  color: #fff;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1em;
+  padding: 8px 14px;
+  text-align: left;
+}
+td {
+  padding: 7px 14px;
+  border-bottom: 1px solid #ddd;
+}
+tr:nth-child(even) td { background: #f5f5f5; }
+tr:hover td { background: var(--lightblue); }
+
+/* ====== BADGE ====== */
+.badge {
+  display: inline-block;
+  background: var(--blue);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-right: 6px;
+}
+.badge-green  { background: var(--green);  }
+.badge-red    { background: var(--red);    }
+.badge-purple { background: var(--purple); }
+.badge-orange { background: var(--orange); }
+.badge-teal   { background: var(--teal);   }
+
+/* ====== STICKY NOTE ====== */
+.sticky {
+  background: #fff9c4;
+  border: 1px solid #f9d835;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1em;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.1);
+  transform: rotate(-0.5deg);
+}
+
+/* ====== Q&A CARD ====== */
+.qa {
+  background: #fff;
+  border: 2px solid #90caf9;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 12px 0;
+}
+.qa .q {
+  font-weight: 700;
+  color: var(--blue);
+  font-family: 'Caveat', cursive;
+  font-size: 1.15em;
+  margin-bottom: 6px;
+}
+.qa .a { color: #333; }
+
+/* ====== PRACTICE ====== */
+.practice {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border: 2px dashed var(--green);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 18px 0;
+}
+.practice-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 10px;
+}
+
+/* ====== TWO COLUMN ====== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 14px 0;
+}
+@media(max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ====== TOC ====== */
+.toc {
+  background: var(--lightyellow);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 32px;
+}
+.toc-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.toc ol { padding-left: 20px; }
+.toc a { color: var(--blue); text-decoration: none; font-weight: 600; }
+.toc a:hover { text-decoration: underline; }
+
+/* ====== SECTION DIVIDER ====== */
+.divider {
+  text-align: center;
+  margin: 24px 0 4px;
+  font-size: 18px;
+  color: #bbb;
+  letter-spacing: 6px;
+}
+
+/* ====== COMPARISON ====== */
+.vs-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: start;
+  margin: 14px 0;
+}
+.vs-label {
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #666;
+  padding-top: 16px;
+}
+
+/* ====== TIMELINE ====== */
+.timeline { margin: 14px 0 14px 12px; }
+.tl-item { display: flex; gap: 16px; margin-bottom: 10px; }
+.tl-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.tl-dot-green { background: var(--green); }
+.tl-dot-orange { background: var(--orange); }
+
+/* ====== PRINT ====== */
+@media print {
+  body { background: white; }
+  .notebook-page {
+    box-shadow: none;
+    background-image: none;
+    border: none;
+    padding: 20px;
+    margin: 0;
+    max-width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="notebook-page">
+
+<!-- HEADER -->
+<h1>☕ Java Collection Framework</h1>
+<p class="subtitle">Topper Notes · Complete Revision Guide · Simple · Visual · Clear</p>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">📋 Table of Contents</div>
+  <ol>
+    <li><a href="#arrays">Arrays – Quick Recap</a></li>
+    <li><a href="#dynamic">Dynamic Array (Custom)</a></li>
+    <li><a href="#framework">What is Collection Framework?</a></li>
+    <li><a href="#hierarchy">Framework Hierarchy</a></li>
+    <li><a href="#arraysvscol">Array vs Collection</a></li>
+    <li><a href="#collection-iface">Collection Interface & Methods</a></li>
+    <li><a href="#list">List Interface</a></li>
+    <li><a href="#arraylist">ArrayList Deep Dive</a></li>
+    <li><a href="#autobox">Autoboxing & Autounboxing</a></li>
+    <li><a href="#typesafe">Type-Safe Collections & Generics Intro</a></li>
+    <li><a href="#iterator">Iterator Interface</a></li>
+    <li><a href="#listiterator">ListIterator Interface</a></li>
+    <li><a href="#polymorphic">Polymorphic References</a></li>
+    <li><a href="#fixedlists">Fixed Lists (Arrays.asList & List.of)</a></li>
+    <li><a href="#toarray">Collection → Array Conversion</a></li>
+    <li><a href="#collections">Collections Utility Class</a></li>
+    <li><a href="#generics">Generics – Deep Dive</a></li>
+    <li><a href="#bounded">Bounded Types</a></li>
+    <li><a href="#genmethods">Generic Methods</a></li>
+    <li><a href="#covariance">Covariance</a></li>
+    <li><a href="#wildcards">Wildcards (?, extends, super)</a></li>
+    <li><a href="#typeerasure">Type Erasure</a></li>
+    <li><a href="#practice">Practice Questions</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     1. ARRAYS
+══════════════════════════════════════════════════ -->
+<h2 id="arrays">1. 📦 Arrays – Quick Recap</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ What is an Array?</div>
+  A container to store <strong>multiple values of the same type</strong> in a single variable, with direct access via index.
+</div>
+
+<h3>Key Characteristics</h3>
+<ul>
+  <li>🔒 <strong>Fixed Size</strong> – Cannot grow or shrink after declaration</li>
+  <li>🔢 <strong>Homogeneous</strong> – Same data type only (use <code>Object[]</code> as workaround)</li>
+  <li>⚡ <strong>Index-based</strong> – Direct access in O(1)</li>
+  <li>📏 Only one built-in non-static variable: <code>length</code></li>
+</ul>
+
+<pre><code>int[] arr = {10, 20, 30, 40, 50};
+//           [0]  [1]  [2]  [3]  [4]   ← indices</code></pre>
+
+<div class="diagram">
+  Memory Layout of int[] arr:
+  ┌────┬────┬────┬────┬────┐
+  │ 10 │ 20 │ 30 │ 40 │ 50 │
+  └────┴────┴────┴────┴────┘
+    [0]  [1]  [2]  [3]  [4]
+      Fixed size = 5 (cannot change)</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     2. DYNAMIC ARRAY
+══════════════════════════════════════════════════ -->
+<h2 id="dynamic">2. 🔄 Dynamic Array (Custom Implementation)</h2>
+
+<div class="qa">
+  <div class="q">Q: What is a Dynamic Array?</div>
+  <div class="a">An array that <strong>automatically increases its size</strong> when full. Real-world example: <code>ArrayList</code>.</div>
+</div>
+
+<div class="diagram">
+  CONCEPT: When array is full → create bigger array → copy data → add new element
+
+  Step 1: Initial capacity = 2
+  ┌────┬────┐
+  │  1 │  2 │  ← Full!
+  └────┴────┘
+
+  Step 2: Double capacity → copy → add
+  ┌────┬────┬────┬────┐
+  │  1 │  2 │  3 │    │
+  └────┴────┴────┴────┘
+   (old data copied)   (new element added)</div>
+
+<h3>Custom MyDynamicArray – Key Methods</h3>
+<table>
+  <tr><th>Method</th><th>What it does</th></tr>
+  <tr><td><code>add(data)</code></td><td>If full → double capacity, then add</td></tr>
+  <tr><td><code>remove(index)</code></td><td>Shift elements left, size--</td></tr>
+  <tr><td><code>get(index)</code></td><td>Return element at index</td></tr>
+  <tr><td><code>size()</code></td><td>Current number of elements</td></tr>
+  <tr><td><code>capacity()</code></td><td>Total allocated space</td></tr>
+  <tr><td><code>clear()</code></td><td>Reset size to 0</td></tr>
+  <tr><td><code>isEmpty()</code></td><td>Returns <code>size == 0</code></td></tr>
+</table>
+
+<div class="sticky">❗ Growth formula: <code>newCapacity = oldCapacity * 2</code> (in custom class)<br>
+ArrayList uses: <code>newCapacity = old + (old &gt;&gt; 1)</code> → approximately 1.5×</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     3. WHAT IS COLLECTION FRAMEWORK
+══════════════════════════════════════════════════ -->
+<h2 id="framework">3. 🏗️ What is Collection Framework?</h2>
+
+<div class="qa">
+  <div class="q">Q: What is a Framework?</div>
+  <div class="a">A <strong>ready-made, reusable, semi-implemented architecture</strong> that provides common functionality. You just plug in your own logic.</div>
+</div>
+
+<div class="box box-orange">
+  <div class="box-title">🚗 Real-Life Analogy</div>
+  A car manufacturer gives you: engine, chassis, wheels (framework).<br>
+  You just <strong>drive it</strong> (add your business logic)!
+</div>
+
+<div class="box box-green">
+  <div class="box-title">⭐ Collection Framework = Ready-made Data Structures</div>
+  Before Collection Framework → developers had to code Array, Stack, Queue, LinkedList, Searching, Sorting <em>themselves</em>.<br><br>
+  After Collection Framework → <strong>all ready-made!</strong> Just use them.
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     4. HIERARCHY
+══════════════════════════════════════════════════ -->
+<h2 id="hierarchy">4. 🌳 Collection Framework Hierarchy</h2>
+
+<div class="diagram">
+                    java.lang.Iterable (I)
+                           │
+                    Collection (I)  ◄── Root interface (except Map)
+                    /       |       \
+                  /         |         \
+               List (I)   Set (I)   Queue (I)
+              /    \        |  \       |    \
+         ArrayList LinkedList HashSet TreeSet PriorityQueue
+         Vector     Stack    LinkedHashSet
+
+  ─────────────────────────────────────────────────
+  Separate Root (does NOT extend Collection):
+
+                        Map (I)
+                      /   |    \
+               HashMap  TreeMap  LinkedHashMap
+                  |
+            LinkedHashMap</div>
+
+<div class="two-col">
+  <div class="box box-blue">
+    <div class="box-title">Collection Side</div>
+    Works with <strong>individual objects</strong><br>
+    <code>List</code> → Ordered, duplicates ✅<br>
+    <code>Set</code> → Unique elements only<br>
+    <code>Queue</code> → FIFO / priority order
+  </div>
+  <div class="box box-purple">
+    <div class="box-title">Map Side</div>
+    Works with <strong>key-value pairs</strong><br>
+    Does NOT extend Collection<br>
+    Example: <code>HashMap&lt;String, Integer&gt;</code>
+  </div>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     5. ARRAY vs COLLECTION
+══════════════════════════════════════════════════ -->
+<h2 id="arraysvscol">5. ⚔️ Array vs Collection</h2>
+
+<table>
+  <tr><th>Feature</th><th>Array</th><th>Collection</th></tr>
+  <tr><td>Size</td><td>❌ Fixed</td><td>✅ Growable</td></tr>
+  <tr><td>Data type</td><td>Homogeneous only</td><td>Homogeneous + Heterogeneous</td></tr>
+  <tr><td>Built-in methods</td><td>❌ Only <code>length</code></td><td>✅ Rich method support</td></tr>
+  <tr><td>Primitives</td><td>✅ Supported</td><td>❌ Objects only (use wrappers)</td></tr>
+  <tr><td>Performance</td><td>Faster (direct)</td><td>Slightly slower (overhead)</td></tr>
+  <tr><td>Printing</td><td>Need for-loop</td><td>toString() overridden</td></tr>
+</table>
+
+<h3>Limitations of Array (why we need Collections)</h3>
+<ul>
+  <li>❌ Fixed size – can't resize dynamically</li>
+  <li>❌ No ready-made methods for insert/delete/search</li>
+  <li>❌ Homogeneous only (workaround: <code>Object[]</code>, but needs downcasting)</li>
+</ul>
+
+<div class="box box-green">
+  <div class="box-title">✅ Features of Collection Framework</div>
+  <ul>
+    <li>Growable in nature</li>
+    <li>Can hold homogeneous AND heterogeneous elements</li>
+    <li>Ready-made methods for all operations</li>
+    <li>Based on standard Data Structures</li>
+    <li>⚠️ Does NOT support primitives – only objects</li>
+  </ul>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     6. COLLECTION INTERFACE
+══════════════════════════════════════════════════ -->
+<h2 id="collection-iface">6. 📜 Collection Interface & Key Methods</h2>
+
+<div class="box box-yellow">
+  <div class="box-title">⭐ Collection = Root Interface of Collection Framework</div>
+  No concrete class directly implements <code>Collection</code>.<br>
+  It defines common methods used by ALL collection types.
+</div>
+
+<h3>Iterable Interface (parent of Collection)</h3>
+<ul>
+  <li>Introduced in Java 1.5, belongs to <code>java.lang</code></li>
+  <li>Has 1 abstract method: <code>Iterator iterator()</code></li>
+  <li>+ 2 default methods: <code>forEach()</code>, <code>spliterator()</code></li>
+</ul>
+
+<h3>Important Methods of Collection Interface</h3>
+<table>
+  <tr><th>#</th><th>Method</th><th>What it does</th></tr>
+  <tr><td>1</td><td><code>int size()</code></td><td>Count of elements</td></tr>
+  <tr><td>2</td><td><code>boolean isEmpty()</code></td><td>Is collection empty?</td></tr>
+  <tr><td>3</td><td><code>boolean contains(obj)</code></td><td>Search for element</td></tr>
+  <tr><td>4</td><td><code>Iterator iterator()</code></td><td>Get iterator cursor</td></tr>
+  <tr><td>5</td><td><code>Object[] toArray()</code></td><td>Convert to array</td></tr>
+  <tr><td>6</td><td><code>boolean add(obj)</code></td><td>Add element</td></tr>
+  <tr><td>7</td><td><code>boolean remove(obj)</code></td><td>Remove element</td></tr>
+  <tr><td>8</td><td><code>boolean addAll(col)</code></td><td>Copy all from another collection</td></tr>
+  <tr><td>9</td><td><code>boolean removeAll(col)</code></td><td>Remove all matching elements</td></tr>
+  <tr><td>10</td><td><code>boolean retainAll(col)</code></td><td>Keep ONLY matching elements (remove rest)</td></tr>
+  <tr><td>11</td><td><code>void clear()</code></td><td>Remove ALL elements</td></tr>
+  <tr><td>12</td><td><code>boolean removeIf(predicate)</code></td><td>Java 8+: remove if condition true</td></tr>
+  <tr><td>13</td><td><code>Stream&lt;E&gt; stream()</code></td><td>Java 8+: get Stream</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     7. LIST INTERFACE
+══════════════════════════════════════════════════ -->
+<h2 id="list">7. 📋 List Interface</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ List = Ordered + Duplicates Allowed</div>
+  <ul>
+    <li>Child interface of <code>Collection</code></li>
+    <li>Elements inserted and accessed by <strong>zero-based index</strong></li>
+    <li>Insertion order is <strong>preserved</strong></li>
+    <li>Duplicate elements <strong>allowed</strong></li>
+  </ul>
+</div>
+
+<h3>Extra Methods in List (beyond Collection)</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>get(int index)</code></td><td>Get element at index → O(1) for ArrayList</td></tr>
+  <tr><td><code>set(int index, obj)</code></td><td>Replace element, returns old value</td></tr>
+  <tr><td><code>add(int index, obj)</code></td><td>Insert at specific position</td></tr>
+  <tr><td><code>remove(int index)</code></td><td>Remove by index, returns removed object</td></tr>
+  <tr><td><code>indexOf(obj)</code></td><td>First occurrence index</td></tr>
+  <tr><td><code>lastIndexOf(obj)</code></td><td>Last occurrence index</td></tr>
+  <tr><td><code>subList(from, to)</code></td><td>View of portion (to is exclusive), backed by original</td></tr>
+</table>
+
+<div class="box box-orange">
+  <div class="box-title">⚡ Java 21 – New List Methods!</div>
+  <code>addFirst()</code>, <code>addLast()</code>, <code>getFirst()</code>, <code>getLast()</code>,<br>
+  <code>removeFirst()</code>, <code>removeLast()</code>, <code>reversed()</code>, <code>List.of(...)</code>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     8. ARRAYLIST
+══════════════════════════════════════════════════ -->
+<h2 id="arraylist">8. 🟢 ArrayList Deep Dive</h2>
+
+<div class="box box-green">
+  <div class="box-title">⭐ ArrayList = Dynamic Array implementing List</div>
+  <ul>
+    <li>Best choice when <strong>frequent operation = retrieval by index</strong></li>
+    <li>Duplicates ✅ | Null insertion ✅ (multiple times) | Insertion order ✅</li>
+    <li>Default initial capacity = <strong>10</strong></li>
+  </ul>
+</div>
+
+<h3>Capacity Growth</h3>
+<div class="diagram">
+  Modern Java ArrayList growth (≈1.5× each time):
+  newCapacity = currentCapacity + (currentCapacity >> 1)
+
+  10 → 15 → 22 → 33 → 49 → ...
+
+  Old formula (Java 6 era):
+  newCapacity = (currentCapacity * 3/2) + 1</div>
+
+<h3>Capacity Control Methods</h3>
+<table>
+  <tr><th>Method</th><th>What it does</th></tr>
+  <tr><td><code>new ArrayList(1000)</code></td><td>Create with initial capacity 1000</td></tr>
+  <tr><td><code>ensureCapacity(500)</code></td><td>Guarantee at least 500 capacity (expands if needed)</td></tr>
+  <tr><td><code>trimToSize()</code></td><td>Shrink capacity to match current size (saves memory)</td></tr>
+</table>
+
+<h3>Time Complexity</h3>
+<table>
+  <tr><th>Operation</th><th>Time</th><th>Why</th></tr>
+  <tr><td><code>add(e)</code></td><td>O(1) amortized</td><td>May be O(n) during resize</td></tr>
+  <tr><td><code>add(index, e)</code></td><td>O(n)</td><td>Shift elements right</td></tr>
+  <tr><td><code>get(index)</code></td><td>O(1)</td><td>Direct array access ⚡</td></tr>
+  <tr><td><code>set(index, e)</code></td><td>O(1)</td><td>Direct array write</td></tr>
+  <tr><td><code>remove(Object)</code></td><td>O(n)</td><td>Linear search + shift</td></tr>
+  <tr><td><code>remove(index)</code></td><td>O(n)</td><td>Shift elements left</td></tr>
+  <tr><td><code>contains(o)</code></td><td>O(n)</td><td>Linear search</td></tr>
+</table>
+
+<pre><code>ArrayList al = new ArrayList();  // default capacity = 10
+System.out.println(al);          // []   ← toString() overridden ✅</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     9. AUTOBOXING
+══════════════════════════════════════════════════ -->
+<h2 id="autobox">9. 📦 Autoboxing & Autounboxing</h2>
+
+<div class="box box-yellow">
+  <div class="box-title">⭐ Introduced in Java 1.5</div>
+  Collections accept only <strong>Objects</strong>. Primitives must be wrapped!
+</div>
+
+<div class="diagram">
+  Primitive   →  Wrapper Class
+  ──────────────────────────────
+    int       →  Integer
+    byte      →  Byte
+    char      →  Character
+    boolean   →  Boolean
+    long      →  Long
+    float     →  Float
+    double    →  Double
+    short     →  Short</div>
+
+<div class="two-col">
+  <div class="box box-blue">
+    <div class="box-title">Before Java 1.5 (Manual)</div>
+    <code>int i = 10;</code><br>
+    <code>Integer i1 = Integer.valueOf(i);  // boxing</code><br>
+    <code>int x = i1.intValue();            // unboxing</code>
+  </div>
+  <div class="box box-green">
+    <div class="box-title">Java 1.5+ (Auto)</div>
+    <code>int i = 10;</code><br>
+    <code>Integer i1 = i;   // autoboxing ✅</code><br>
+    <code>int x = i1;       // autounboxing ✅</code>
+  </div>
+</div>
+
+<pre><code>ArrayList al = new ArrayList();
+al.add(10);     // int → autoboxed to Integer
+al.add(true);   // boolean → autoboxed to Boolean
+al.add(10.55);  // double → autoboxed to Double</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     10. TYPE SAFE + GENERICS INTRO
+══════════════════════════════════════════════════ -->
+<h2 id="typesafe">10. 🔒 Type-Safe Collections & Generics Intro</h2>
+
+<div class="box box-red">
+  <div class="box-title">❗ Problem with Type-Unsafe Collection</div>
+  <ul>
+    <li>Can add ANY type → bugs at runtime</li>
+    <li>Every <code>get()</code> needs downcasting → risk of <code>ClassCastException</code></li>
+  </ul>
+</div>
+
+<div class="box box-green">
+  <div class="box-title">✅ Solution: Type-Safe Collection using Generics</div>
+  <pre><code>ArrayList&lt;String&gt; al = new ArrayList&lt;&gt;();
+al.add("Delhi");    // ✅ only String allowed
+// al.add(10);      // ❌ compile-time error!
+String s = al.get(2);  // NO downcasting needed ✅</code></pre>
+</div>
+
+<h3>Benefits of Type-Safe Collections (Generics)</h3>
+<ul>
+  <li>✅ Compile-time type safety – wrong types caught early</li>
+  <li>✅ No downcasting needed</li>
+  <li>✅ Cleaner, readable code</li>
+  <li>✅ No <code>ClassCastException</code> at runtime</li>
+</ul>
+
+<div class="sticky">⭐ Generics introduced in Java 1.5<br>
+<code>ArrayList&lt;T&gt;</code> means: T is a placeholder for any reference type.<br>
+<code>ArrayList&lt;String&gt;</code> → T = String<br>
+<code>ArrayList&lt;Integer&gt;</code> → T = Integer</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     11. ITERATOR
+══════════════════════════════════════════════════ -->
+<h2 id="iterator">11. 🔍 Iterator Interface</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ Universal Cursor (works with List, Set, Queue)</div>
+  Standardized way to access elements from ANY collection.<br>
+  While iterating, you can <strong>read</strong> AND <strong>remove</strong> safely.
+</div>
+
+<h3>Methods</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>boolean hasNext()</code></td><td>Is there a next element?</td></tr>
+  <tr><td><code>E next()</code></td><td>Get next element (moves cursor forward)</td></tr>
+  <tr><td><code>void remove()</code></td><td>Safely remove current element</td></tr>
+</table>
+
+<div class="diagram">
+  Iterator cursor position:
+  
+  Before hasNext():   ↓
+  ┌──────┬──────┬──────┬──────┬──────┐
+  │  a   │  b   │  c   │  d   │  e   │
+  └──────┴──────┴──────┴──────┴──────┘
+  ↑ start                              end ↑
+  
+  Each next() call moves cursor one step right →</div>
+
+<pre><code>Iterator&lt;String&gt; itr = al.iterator();
+while(itr.hasNext()) {
+    String city = itr.next();
+    if(city.equals("chennai")) {
+        itr.remove();  // ✅ Safe removal
+    }
+}</code></pre>
+
+<div class="box box-red">
+  <div class="box-title">❗ Fail-Fast Behavior</div>
+  If you modify a collection <strong>directly</strong> while iterating with enhanced for-loop → <code>ConcurrentModificationException</code>!<br><br>
+  <strong>Safe way:</strong> always use <code>itr.remove()</code> (never <code>list.remove()</code> inside a for-each)
+</div>
+
+<h3>Removing while iterating with normal for-loop – Gotcha!</h3>
+<pre><code>// ❌ PROBLEM: after removing "b", "c" shifts left → skipped!
+for(int i=0; i&lt;al.size(); i++) {
+    if(al.get(i).equals("b")) al.remove(i);
+}
+
+// ✅ Fix 1: Decrement i after remove
+if(al.get(i).equals("b")) { al.remove(i); i--; }
+
+// ✅ Fix 2: Traverse backward
+for(int i=al.size()-1; i&gt;=0; i--) { ... }
+
+// ✅ Fix 3: Use Iterator (best practice)</code></pre>
+
+<h3>Limitations of Iterator</h3>
+<ul>
+  <li>❌ One-direction only (forward)</li>
+  <li>❌ Only read + remove (no add, no set/replace)</li>
+</ul>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     12. LISTITERATOR
+══════════════════════════════════════════════════ -->
+<h2 id="listiterator">12. 🔄 ListIterator Interface</h2>
+
+<div class="box box-purple">
+  <div class="box-title">⭐ Most Powerful Cursor – but List only!</div>
+  <ul>
+    <li>Child of <code>Iterator</code> interface</li>
+    <li><strong>Bi-directional</strong> (forward AND backward)</li>
+    <li>Can <strong>read, remove, replace, add</strong> while iterating</li>
+    <li>⚠️ Works with <strong>List only</strong> (not Set or Queue)</li>
+  </ul>
+</div>
+
+<h3>9 Methods of ListIterator</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>hasNext()</code></td><td>Next element exists?</td></tr>
+  <tr><td><code>next()</code></td><td>Get next element (→)</td></tr>
+  <tr><td><code>nextIndex()</code></td><td>Index of next element</td></tr>
+  <tr><td><code>hasPrevious()</code></td><td>Previous element exists?</td></tr>
+  <tr><td><code>previous()</code></td><td>Get previous element (←)</td></tr>
+  <tr><td><code>previousIndex()</code></td><td>Index of previous element</td></tr>
+  <tr><td><code>remove()</code></td><td>Remove current element</td></tr>
+  <tr><td><code>set(obj)</code></td><td>Replace current element ⭐</td></tr>
+  <tr><td><code>add(obj)</code></td><td>Insert new element ⭐</td></tr>
+</table>
+
+<div class="diagram">
+  Cursor starts BEFORE first element:
+  ↓
+  [a] [b] [c] [d] [e]
+  
+  After full forward pass, cursor is AFTER last element:
+                           ↓
+  [a] [b] [c] [d] [e]
+  
+  Now hasPrevious() works → go backward ←</div>
+
+<pre><code>// Start from end (skip forward pass):
+ListIterator&lt;String&gt; ltr = al.listIterator(al.size());
+
+// Replace while iterating:
+if(s.equals("b")) ltr.set("B");
+
+// Add new element while iterating:
+if(s.equals("b")) ltr.add("X");  // inserts AFTER "b"</code></pre>
+
+<h3>Cursor Comparison</h3>
+<table>
+  <tr><th>Feature</th><th>Iterator</th><th>ListIterator</th></tr>
+  <tr><td>Direction</td><td>Forward only →</td><td>← Both → directions</td></tr>
+  <tr><td>Works with</td><td>All collections</td><td>List only</td></tr>
+  <tr><td>Operations</td><td>Read + Remove</td><td>Read + Remove + Set + Add</td></tr>
+  <tr><td>Get via</td><td><code>col.iterator()</code></td><td><code>list.listIterator()</code></td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     13. POLYMORPHIC REFERENCES
+══════════════════════════════════════════════════ -->
+<h2 id="polymorphic">13. 🔗 Polymorphic References for ArrayList</h2>
+
+<div class="diagram">
+  Reference Types (most flexible → least flexible):
+  
+  Object     ← Only Object class methods (avoid for collections)
+     ↑
+  Collection ← All Collection interface methods
+     ↑
+  List       ← All List methods ← ⭐ RECOMMENDED
+     ↑
+  ArrayList  ← All + ensureCapacity() + trimToSize() + clone()</div>
+
+<table>
+  <tr><th>Reference Type</th><th>Methods Available</th><th>Use When</th></tr>
+  <tr><td><code>Object obj = new ArrayList&lt;&gt;()</code></td><td>Object methods only</td><td>❌ Avoid</td></tr>
+  <tr><td><code>Collection&lt;T&gt; c = new ArrayList&lt;&gt;()</code></td><td>Collection methods</td><td>When just grouping</td></tr>
+  <tr><td><code>List&lt;T&gt; list = new ArrayList&lt;&gt;()</code></td><td>Collection + List methods</td><td>⭐ Best practice!</td></tr>
+  <tr><td><code>ArrayList&lt;T&gt; al = new ArrayList&lt;&gt;()</code></td><td>All + ArrayList-specific</td><td>When you need ensureCapacity/trimToSize</td></tr>
+</table>
+
+<div class="box box-green">
+  <div class="box-title">⭐ Best Practice</div>
+  <code>List&lt;String&gt; list = new ArrayList&lt;&gt;();</code><br><br>
+  <strong>Why?</strong> Loose coupling → can switch to LinkedList, Vector anytime without changing the rest of the code!
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     14. FIXED LISTS
+══════════════════════════════════════════════════ -->
+<h2 id="fixedlists">14. 📌 Fixed Lists – Arrays.asList() vs List.of()</h2>
+
+<div class="two-col">
+  <div class="box box-blue">
+    <div class="box-title">Arrays.asList() – Java 1.2</div>
+    <ul>
+      <li>Fixed size (can't add/remove)</li>
+      <li>CAN modify elements via <code>set()</code> ✅</li>
+      <li>Null values ✅ allowed</li>
+      <li>⚠️ <strong>Backed by original array</strong> – changes reflect both ways!</li>
+    </ul>
+  </div>
+  <div class="box box-purple">
+    <div class="box-title">List.of() – Java 9</div>
+    <ul>
+      <li>Fully <strong>immutable</strong> (no add/remove/set)</li>
+      <li>Null values ❌ (NullPointerException)</li>
+      <li>NOT backed by array – independent copy</li>
+      <li>Thread-safe ✅ | Memory-efficient ✅</li>
+    </ul>
+  </div>
+</div>
+
+<table>
+  <tr><th>Feature</th><th>Arrays.asList()</th><th>List.of()</th></tr>
+  <tr><td>Add / Remove</td><td>❌ No</td><td>❌ No</td></tr>
+  <tr><td>Modify (set)</td><td>✅ Yes</td><td>❌ No</td></tr>
+  <tr><td>Null allowed</td><td>✅ Yes</td><td>❌ No</td></tr>
+  <tr><td>Backed by array</td><td>✅ Yes</td><td>❌ No</td></tr>
+</table>
+
+<div class="box box-orange">
+  <div class="box-title">⚡ Need a modifiable list? Wrap it!</div>
+  <code>List&lt;String&gt; list = new ArrayList&lt;&gt;(Arrays.asList("A","B","C"));</code><br>
+  <code>List&lt;String&gt; list = new ArrayList&lt;&gt;(List.of("A","B","C"));</code>
+</div>
+
+<div class="sticky">❗ Primitive arrays treated as SINGLE element in generics!<br>
+<code>int[] arr = {10,20,30};</code><br>
+<code>List&lt;int[]&gt; list = List.of(arr);</code><br>
+<code>list.size() → 1</code>  (not 3!) Because generics work with objects only.</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     15. COLLECTION → ARRAY
+══════════════════════════════════════════════════ -->
+<h2 id="toarray">15. 🔃 Converting Collection → Array</h2>
+
+<div class="two-col">
+  <div class="box box-yellow">
+    <div class="box-title">Object[] toArray()</div>
+    Returns <code>Object[]</code> → needs downcasting<br><br>
+    <code>Object[] arr = list.toArray();</code><br>
+    <code>String s = (String) arr[0];  // cast ⚠️</code>
+  </div>
+  <div class="box box-green">
+    <div class="box-title">T[] toArray(T[])</div>
+    Type-safe ✅ No casting needed<br><br>
+    <code>String[] arr = list.toArray(new String[0]);</code><br>
+    Best practice: pass <code>new T[0]</code> → JVM creates right size ✅
+  </div>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     16. COLLECTIONS CLASS
+══════════════════════════════════════════════════ -->
+<h2 id="collections">16. 🛠️ Collections Utility Class</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ java.util.Collections – Only Static Methods!</div>
+  Works with List, Set, Queue
+</div>
+
+<table>
+  <tr><th>Method</th><th>What it does</th><th>Example</th></tr>
+  <tr><td><code>sort(list)</code></td><td>Sort ascending</td><td><code>Collections.sort(list)</code></td></tr>
+  <tr><td><code>reverse(list)</code></td><td>Reverse elements</td><td><code>Collections.reverse(list)</code></td></tr>
+  <tr><td><code>max(col)</code></td><td>Find maximum</td><td><code>Collections.max(list)</code></td></tr>
+  <tr><td><code>min(col)</code></td><td>Find minimum</td><td><code>Collections.min(list)</code></td></tr>
+  <tr><td><code>binarySearch(list, key)</code></td><td>Search (must be sorted first!)</td><td>Returns index</td></tr>
+  <tr><td><code>frequency(col, elem)</code></td><td>Count occurrences</td><td><code>frequency(list, "A") → 2</code></td></tr>
+  <tr><td><code>fill(list, val)</code></td><td>Replace all with value</td><td><code>fill(list, 0) → [0,0,0]</code></td></tr>
+  <tr><td><code>disjoint(c1, c2)</code></td><td>No common elements?</td><td>Returns true/false</td></tr>
+  <tr><td><code>swap(list, i, j)</code></td><td>Swap two elements</td><td><code>swap(list, 0, 3)</code></td></tr>
+  <tr><td><code>shuffle(list)</code></td><td>Random order</td><td>Good for card games 🃏</td></tr>
+  <tr><td><code>unmodifiableList(list)</code></td><td>Make it immutable</td><td>Read-only wrapper</td></tr>
+  <tr><td><code>synchronizedList(list)</code></td><td>Thread-safe list</td><td>Multi-threading ✅</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     17. GENERICS DEEP DIVE
+══════════════════════════════════════════════════ -->
+<h2 id="generics">17. 🧬 Generics – Deep Dive</h2>
+
+<div class="box box-purple">
+  <div class="box-title">⭐ What are Generics? (Java 1.5)</div>
+  Write ONE class/method that works with <strong>any data type</strong>.<br>
+  Think of <code>&lt;T&gt;</code> as a placeholder for a type – decided at use-time.
+</div>
+
+<h3>Problem → Solution</h3>
+<div class="two-col">
+  <div class="box box-red">
+    <div class="box-title">❌ Without Generics</div>
+    <pre><code>class MyGen {
+  Object obj;
+  Object get() { return obj; }
+}
+// Need downcasting:
+String s = (String) gen.get(); 
+// Risk: ClassCastException!</code></pre>
+  </div>
+  <div class="box box-green">
+    <div class="box-title">✅ With Generics</div>
+    <pre><code>class MyGen&lt;T&gt; {
+  T obj;
+  T get() { return obj; }
+}
+// No casting needed:
+MyGen&lt;String&gt; g = new MyGen&lt;&gt;();
+String s = g.get();  // ✅ Clean!</code></pre>
+  </div>
+</div>
+
+<h3>Advantages of Generics</h3>
+<ul>
+  <li>✅ <strong>Type safety</strong> at compile time</li>
+  <li>✅ <strong>No downcasting</strong> / ClassCastException</li>
+  <li>✅ <strong>Code reusability</strong> – write once, use for any type</li>
+  <li>✅ <strong>Cleaner code</strong></li>
+  <li>⚠️ Works only with <strong>reference types</strong> (objects, NOT primitives)</li>
+</ul>
+
+<div class="sticky">❗ <code>List&lt;int&gt;</code> → ❌ INVALID<br>
+<code>List&lt;Integer&gt;</code> → ✅ VALID</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     18. BOUNDED TYPES
+══════════════════════════════════════════════════ -->
+<h2 id="bounded">18. 🔒 Bounded Types (Generics Constraints)</h2>
+
+<div class="box box-teal">
+  <div class="box-title">⭐ Use "extends" keyword to restrict type parameter</div>
+</div>
+
+<div class="diagram">
+  UNBOUNDED:    class Test&lt;T&gt;              → Any type allowed
+
+  UPPER BOUND:  class Test&lt;T extends X&gt;   → Only X or subclasses of X
+
+  For Interface: class Test&lt;T extends Runnable&gt; → implementations of Runnable</div>
+
+<h3>Examples</h3>
+<pre><code>class Bill&lt;T extends Payment&gt; { }
+// Valid:   Bill&lt;Payment&gt;, Bill&lt;CashPayment&gt;, Bill&lt;CardPayment&gt;
+// Invalid: Bill&lt;Integer&gt;    ← not related to Payment
+
+class Test&lt;T extends Number&gt; { }
+// Valid:   Test&lt;Number&gt;, Test&lt;Integer&gt;, Test&lt;Float&gt;
+// Invalid: Test&lt;String&gt;    ← String is not a Number</code></pre>
+
+<h3>Multiple Bounds (using &amp;)</h3>
+<pre><code>class Test&lt;T extends Number &amp; Serializable&gt; { }
+// T must extend Number AND implement Serializable</code></pre>
+
+<div class="box box-red">
+  <div class="box-title">❗ Important Rules for Bounded Types</div>
+  <ul>
+    <li>❌ <code>implements</code> NOT allowed → use <code>extends</code> for both class and interface</li>
+    <li>❌ <code>super</code> NOT allowed at class level</li>
+    <li>❌ Two class types together: <code>&lt;T extends Number &amp; Thread&gt;</code> ❌</li>
+    <li>✅ One class + multiple interfaces: <code>&lt;T extends Number &amp; Runnable&gt;</code> ✅</li>
+    <li>✅ Class MUST come BEFORE interface in multiple bounds</li>
+  </ul>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     19. GENERIC METHODS
+══════════════════════════════════════════════════ -->
+<h2 id="genmethods">19. ⚙️ Generic Methods</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ Type parameter declared BEFORE the return type</div>
+</div>
+
+<pre><code>// Generic method – works with any type!
+public static &lt;E&gt; void fun1(E e) {
+    System.out.println(e);
+}
+
+// Call with any type:
+fun1(10);         // E = Integer
+fun1("Hello");    // E = String
+fun1(new A());    // E = A</code></pre>
+
+<pre><code>// Multiple type parameters:
+public static &lt;K, V&gt; void print(K key, V value) {
+    System.out.println(key + " === " + value);
+}
+
+// Generic array printing:
+public static &lt;E&gt; void printArray(E[] arr) {
+    for(E e : arr) System.out.println(e);
+}
+// ⚠️ Primitives not allowed: must use Integer[], not int[]</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     20. COVARIANCE
+══════════════════════════════════════════════════ -->
+<h2 id="covariance">20. 📐 Covariance in Java</h2>
+
+<div class="box box-teal">
+  <div class="box-title">⭐ Covariance = accepting subtypes (is-a relationship)</div>
+</div>
+
+<div class="two-col">
+  <div class="box box-green">
+    <div class="box-title">✅ Arrays ARE Covariant</div>
+    <pre><code>String[] fruits = {"Apple"};
+Object[] obj = fruits; // ✅ allowed</code></pre>
+    <strong>Problem:</strong> ArrayStoreException at runtime (Heap Pollution)
+  </div>
+  <div class="box box-red">
+    <div class="box-title">❌ Generics are INVARIANT (by default)</div>
+    <pre><code>List&lt;String&gt; sList = new ArrayList&lt;&gt;();
+List&lt;Object&gt; oList = sList; // ❌ Compile error!</code></pre>
+    Generics protect you at compile time!
+  </div>
+</div>
+
+<div class="sticky">💡 To make Collections covariant → use Wildcards (next topic!)</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     21. WILDCARDS
+══════════════════════════════════════════════════ -->
+<h2 id="wildcards">21. 🃏 Wildcards – ?, extends, super</h2>
+
+<div class="box box-purple">
+  <div class="box-title">⭐ PECS Principle (Producer Extends, Consumer Super)</div>
+  <strong>Producer</strong> (you read/get values) → use <code>? extends T</code><br>
+  <strong>Consumer</strong> (you write/add values) → use <code>? super T</code>
+</div>
+
+<h3>1. Upper Bound Wildcard – <code>? extends T</code></h3>
+<div class="box box-blue">
+  <div class="box-title">Read-only (Covariance) – "T or any subtype of T"</div>
+  <pre><code>public static void print(List&lt;? extends Employee&gt; list) {
+    for(Employee e : list) { ... }  // ✅ reading OK
+    // list.add(new Employee());   // ❌ Cannot add
+    list.add(null);                // ✅ Only null is ok
+}</code></pre>
+  <strong>Can call with:</strong> <code>List&lt;Employee&gt;</code>, <code>List&lt;Developer&gt;</code>, <code>List&lt;Manager&gt;</code><br>
+  <strong>Cannot add</strong> because compiler doesn't know the exact subtype!
+</div>
+
+<h3>2. Lower Bound Wildcard – <code>? super T</code></h3>
+<div class="box box-green">
+  <div class="box-title">Write-friendly (Contravariance) – "T or any supertype of T"</div>
+  <pre><code>public static void addNumbers(List&lt;? super Integer&gt; list) {
+    for(int i=1; i&lt;=10; i++) list.add(i);  // ✅ write OK
+    Object obj = list.get(0);               // ✅ only Object for read
+    // Integer x = list.get(0);            // ❌ restricted
+}</code></pre>
+  <strong>Can call with:</strong> <code>List&lt;Integer&gt;</code>, <code>List&lt;Number&gt;</code>, <code>List&lt;Object&gt;</code><br>
+  <strong>Cannot read as specific type</strong> – only as <code>Object</code>
+</div>
+
+<h3>3. Unbounded Wildcard – <code>?</code></h3>
+<div class="box box-orange">
+  <div class="box-title">"Any type" – Use when type doesn't matter</div>
+  <pre><code>public static void fun(List&lt;?&gt; list) {
+    System.out.println(list.size()); // ✅ size() doesn't need type
+    list.clear();                    // ✅ clear() doesn't need type
+    for(Object obj : list) { ... }  // ✅ read as Object
+    // list.add("Hello");           // ❌ cannot add
+    list.add(null);                 // ✅ only null
+}</code></pre>
+</div>
+
+<h3>Summary: Wildcard Cheat Sheet</h3>
+<div class="diagram">
+  Wildcard       | Reading       | Writing      | Use Case
+  ─────────────────────────────────────────────────────────
+  List&lt;T&gt;       | T type        | T type       | When you know type exactly
+  List&lt;?&gt;       | Object only   | null only    | Type doesn't matter
+  List&lt;? extends T&gt; | T type   | null only    | Reading (Producer)
+  List&lt;? super T&gt;  | Object only | T & subtypes | Writing (Consumer)</div>
+
+<div class="box box-red">
+  <div class="box-title">❗ Cannot combine both bounds!</div>
+  <code>&lt;? extends Number super Integer&gt;</code> → ❌ INVALID<br>
+  Either upper bound OR lower bound – not both!
+</div>
+
+<h3>List&lt;?&gt; vs List&lt;T&gt; – Key Difference</h3>
+<table>
+  <tr><th>Aspect</th><th>List&lt;?&gt;</th><th>List&lt;T&gt;</th></tr>
+  <tr><td>Type known?</td><td>No – "unknown type"</td><td>Yes – specific type at call time</td></tr>
+  <tr><td>Reading</td><td>As <code>Object</code> only</td><td>As <code>T</code> directly</td></tr>
+  <tr><td>Writing (add)</td><td>Only null</td><td>Add <code>T</code> elements</td></tr>
+  <tr><td>add(list.get(0))</td><td>❌ Not allowed</td><td>✅ Allowed</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     22. TYPE ERASURE
+══════════════════════════════════════════════════ -->
+<h2 id="typeerasure">22. 🧹 Type Erasure</h2>
+
+<div class="box box-teal">
+  <div class="box-title">⭐ What is Type Erasure?</div>
+  Compiler <strong>removes generic type information</strong> at compile time.<br>
+  JVM never sees generics – it only sees raw types!<br><br>
+  <strong>Why?</strong> Java added generics in 1.5 without changing the JVM → backward compatibility!
+</div>
+
+<h3>How Type Erasure Works</h3>
+<table>
+  <tr><th>Source Code (with Generics)</th><th>After Erasure (what JVM sees)</th></tr>
+  <tr><td><code>class Box&lt;T&gt; { T value; }</code></td><td><code>class Box { Object value; }</code></td></tr>
+  <tr><td><code>class Box&lt;T extends Number&gt; { T value; }</code></td><td><code>class Box { Number value; }</code></td></tr>
+  <tr><td><code>List&lt;String&gt; list = new ArrayList&lt;&gt;();</code></td><td><code>List list = new ArrayList();</code></td></tr>
+</table>
+
+<h3>Key Effects of Type Erasure</h3>
+
+<div class="box box-red">
+  <div class="box-title">❌ Effect 1: Cannot Overload with Different Generic Types</div>
+  <pre><code>void fun(List&lt;Integer&gt; list) {}
+void fun(List&lt;String&gt; list)  {} // ❌ Compile error!
+// After erasure, both become: void fun(List list) → CLASH</code></pre>
+</div>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ Effect 2: Compiler Auto-Inserts Casts</div>
+  <pre><code>// Your code:
+String s = slist.get(0);
+
+// Compiler adds cast internally:
+String s = (String) slist.get(0);  // auto-inserted!</code></pre>
+</div>
+
+<div class="sticky">🎁 Gift Box Analogy:<br>
+At <strong>compile time</strong> → box has label (String, Integer)<br>
+At <strong>runtime</strong> → label removed, only box remains (no type info!)</div>
+
+<div class="box box-orange">
+  <div class="box-title">⚡ Key Takeaway</div>
+  Generics provide <strong>compile-time type safety</strong>, NOT runtime safety.<br>
+  At runtime, generics are gone – JVM works with raw types only.
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     PRACTICE QUESTIONS
+══════════════════════════════════════════════════ -->
+<h2 id="practice">23. 📝 Practice Questions</h2>
+
+<div class="practice">
+  <div class="practice-title">🎯 Wildcard MCQs (Predict the Output)</div>
+
+  <div class="qa">
+    <div class="q">Q1: What happens? <code>public void fun(List&lt;?&gt; list) { list.add(null); list.add("Hello"); }</code></div>
+    <div class="a">✅ Answer: <strong>B – Only list.add(null) compiles</strong><br>
+    Reason: <code>?</code> = unknown type. Only <code>null</code> fits all types.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q2: Which calls are valid? <code>void fun(List&lt;? extends Number&gt; list) {}</code><br>
+    A) <code>fun(new ArrayList&lt;Integer&gt;())</code>  B) <code>fun(new ArrayList&lt;Double&gt;())</code>  C) <code>fun(new ArrayList&lt;Object&gt;())</code></div>
+    <div class="a">✅ Answer: <strong>D – Both A and B</strong><br>
+    Reason: Integer and Double extend Number. Object does not extend Number.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q3: <code>public void fun(List&lt;? extends Number&gt; list) { list.add(10); }</code> → what happens?</div>
+    <div class="a">✅ Answer: <strong>C – Compile-time error</strong><br>
+    Reason: List could be List&lt;Double&gt; → can't add Integer to it safely.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q4: <code>void fun(List&lt;? super Integer&gt; list) {}</code> – which are valid?<br>
+    A) ArrayList&lt;Integer&gt;  B) ArrayList&lt;Number&gt;  C) ArrayList&lt;Object&gt;</div>
+    <div class="a">✅ Answer: <strong>D – All of the above</strong><br>
+    All can store Integer.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q5: <code>List&lt;? super Integer&gt; list; ... Integer i = list.get(0);</code> valid?</div>
+    <div class="a">✅ Answer: <strong>B – Only Object obj is valid</strong><br>
+    Compiler only guarantees Object for lower bound reads.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q6: Can you overload? <code>void fun(List&lt;String&gt; list)</code> and <code>void fun(List&lt;Integer&gt; list)</code></div>
+    <div class="a">✅ Answer: <strong>C – Compile-time error</strong><br>
+    Type erasure makes both <code>void fun(List list)</code> → clash!</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q7: Which method compiles?<br>
+    <code>fun1: &lt;T&gt; void f(List&lt;T&gt; l) { l.add(l.get(0)); }</code><br>
+    <code>fun2: void f(List&lt;?&gt; l) { l.add(l.get(0)); }</code></div>
+    <div class="a">✅ Answer: <strong>A – Only fun1</strong><br>
+    T is known at call time → can add. ? is unknown → cannot add.</div>
+  </div>
+</div>
+
+<div class="practice">
+  <div class="practice-title">🏋️ Coding Tasks</div>
+
+  <ol>
+    <li style="margin-bottom:12px"><strong>Task 1:</strong> Create list <code>["A","B","C","B","D"]</code>. Remove ALL "B" elements. (Hint: use <code>removeIf</code> or Iterator)</li>
+    <li style="margin-bottom:12px"><strong>Task 2: Student Management</strong><br>
+    – Store students (roll, name, marks) in a List<br>
+    – Display all students<br>
+    – Find highest marks<br>
+    – Remove students with marks &lt; 400<br>
+    – Convert list to array</li>
+    <li style="margin-bottom:12px"><strong>Task 3: ListIterator Operations</strong><br>
+    List: <code>[a, b, c, d]</code> → Forward print → Backward print → Replace "b" → Add "X" after "c" → Remove "d"</li>
+    <li style="margin-bottom:12px"><strong>Task 4: Generic Pair Class</strong><br>
+    Create <code>Pair&lt;K, V&gt;</code> with <code>getKey()</code> and <code>getValue()</code>.<br>
+    Test with <code>Pair&lt;String, Integer&gt;</code> and <code>Pair&lt;Employee, Double&gt;</code></li>
+    <li style="margin-bottom:12px"><strong>Task 5: Wildcard Method</strong><br>
+    Write <code>printAll(List&lt;?&gt; list)</code> that prints any list.<br>
+    Write <code>addNumbers(List&lt;? super Integer&gt; list)</code> that adds 1-10.<br>
+    Write <code>sumList(List&lt;? extends Number&gt; list)</code> that sums all elements.</li>
+  </ol>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- QUICK REVISION SUMMARY -->
+<h2>⚡ Quick Revision – One-Liners</h2>
+
+<div class="box box-yellow">
+  <ul>
+    <li>⭐ <strong>Collection Framework</strong> = ready-made Data Structures in Java</li>
+    <li>⭐ <strong>List</strong> = ordered + duplicates | <strong>Set</strong> = unique | <strong>Queue</strong> = FIFO</li>
+    <li>⭐ <strong>Map</strong> = key-value pairs (does NOT extend Collection)</li>
+    <li>⭐ <strong>ArrayList</strong> = best for index-based retrieval O(1)</li>
+    <li>⭐ <strong>Growth</strong>: ArrayList ≈ 1.5× | Custom Dynamic Array = 2×</li>
+    <li>⭐ <strong>Iterator</strong> = universal, forward only, read+remove</li>
+    <li>⭐ <strong>ListIterator</strong> = bidirectional, read+remove+set+add, List only</li>
+    <li>⭐ <strong>fail-fast</strong> = ConcurrentModificationException if modified during for-each</li>
+    <li>⭐ <strong>Generics</strong> = type safety at compile time (not runtime)</li>
+    <li>⭐ <strong>Type Erasure</strong> = generics info removed at runtime by JVM</li>
+    <li>⭐ <strong>? extends T</strong> = read (upper bound) | <strong>? super T</strong> = write (lower bound)</li>
+    <li>⭐ <strong>PECS</strong> = Producer Extends, Consumer Super</li>
+    <li>⭐ <strong>Arrays.asList</strong> = fixed-size, mutable elements | <strong>List.of</strong> = fully immutable</li>
+    <li>⭐ <strong>Collections</strong> utility class = sort, shuffle, reverse, max, min, frequency...</li>
+    <li>⭐ <strong>Best practice reference</strong>: <code>List&lt;T&gt; list = new ArrayList&lt;&gt;();</code></li>
+  </ul>
+</div>
+
+<div style="text-align:center; margin-top:32px; font-family:'Caveat',cursive; font-size:1.3em; color:#888;">
+  ✏️ End of Notes · Good Luck! · Java Collections Mastered ☕
+</div>
+
+</div><!-- end notebook-page -->
+</body>
+</html>

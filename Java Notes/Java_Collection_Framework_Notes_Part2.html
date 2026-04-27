@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Java Collection Framework – Part 2 Topper Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #f5f0e8;
+  --paper: #fffef9;
+  --ink: #1a1a2e;
+  --blue: #1565c0;
+  --lightblue: #e3f0ff;
+  --green: #2e7d32;
+  --lightgreen: #e8f5e9;
+  --red: #b71c1c;
+  --lightred: #ffebee;
+  --yellow: #f9a825;
+  --lightyellow: #fffde7;
+  --purple: #6a1b9a;
+  --lightpurple: #f3e5f5;
+  --orange: #e65100;
+  --lightorange: #fff3e0;
+  --teal: #00695c;
+  --lightteal: #e0f2f1;
+  --pink: #ad1457;
+  --lightpink: #fce4ec;
+  --indigo: #283593;
+  --lightindigo: #e8eaf6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  font-family: 'Nunito', sans-serif;
+  color: var(--ink);
+  line-height: 1.75;
+  font-size: 15px;
+}
+.notebook-page {
+  background: var(--paper);
+  background-image: repeating-linear-gradient(transparent, transparent 31px, #e4dcc8 31px, #e4dcc8 32px);
+  border-left: 4px solid #f0a0a0;
+  margin: 24px auto;
+  max-width: 960px;
+  padding: 40px 48px 56px 64px;
+  border-radius: 4px;
+  box-shadow: 2px 4px 24px rgba(0,0,0,0.10);
+  position: relative;
+}
+.notebook-page::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 52px;
+  width: 2px; height: 100%;
+  background: rgba(240,80,80,0.18);
+}
+h1 {
+  font-family: 'Caveat', cursive;
+  font-size: 2.8em;
+  color: var(--blue);
+  text-align: center;
+  border-bottom: 3px solid var(--blue);
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3em;
+  text-align: center;
+  color: #666;
+  margin-bottom: 32px;
+}
+h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.9em;
+  color: var(--blue);
+  background: var(--lightblue);
+  border-left: 5px solid var(--blue);
+  padding: 6px 14px;
+  margin: 36px 0 14px;
+  border-radius: 0 8px 8px 0;
+}
+h3 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.5em;
+  color: var(--green);
+  border-bottom: 2px dashed var(--green);
+  margin: 24px 0 10px;
+  padding-bottom: 2px;
+}
+h4 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.25em;
+  color: var(--purple);
+  margin: 18px 0 8px;
+}
+p { margin-bottom: 8px; }
+ul, ol { padding-left: 22px; margin-bottom: 10px; }
+li { margin-bottom: 4px; }
+strong { color: var(--blue); }
+.box {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  border-left: 5px solid;
+}
+.box-blue   { background: var(--lightblue);   border-color: var(--blue);   }
+.box-green  { background: var(--lightgreen);  border-color: var(--green);  }
+.box-red    { background: var(--lightred);    border-color: var(--red);    }
+.box-yellow { background: var(--lightyellow); border-color: var(--yellow); }
+.box-purple { background: var(--lightpurple); border-color: var(--purple); }
+.box-orange { background: var(--lightorange); border-color: var(--orange); }
+.box-teal   { background: var(--lightteal);   border-color: var(--teal);   }
+.box-pink   { background: var(--lightpink);   border-color: var(--pink);   }
+.box-indigo { background: var(--lightindigo); border-color: var(--indigo); }
+.box-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15em;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 12px 0;
+  line-height: 1.6;
+}
+code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  background: #e8eaf6;
+  color: #5c35a0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.diagram {
+  background: #f8f8ff;
+  border: 2px solid #9e9e9e;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  color: #333;
+  margin: 14px 0;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 14px;
+}
+th {
+  background: var(--blue);
+  color: #fff;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1em;
+  padding: 8px 14px;
+  text-align: left;
+}
+td { padding: 7px 14px; border-bottom: 1px solid #ddd; }
+tr:nth-child(even) td { background: #f5f5f5; }
+tr:hover td { background: var(--lightblue); }
+.sticky {
+  background: #fff9c4;
+  border: 1px solid #f9d835;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1em;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.10);
+  transform: rotate(-0.4deg);
+}
+.qa {
+  background: #fff;
+  border: 2px solid #90caf9;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 12px 0;
+}
+.qa .q {
+  font-weight: 700;
+  color: var(--blue);
+  font-family: 'Caveat', cursive;
+  font-size: 1.15em;
+  margin-bottom: 6px;
+}
+.practice {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border: 2px dashed var(--green);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 18px 0;
+}
+.practice-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 10px;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 14px 0;
+}
+@media(max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin: 14px 0;
+}
+@media(max-width: 740px) { .three-col { grid-template-columns: 1fr; } }
+.toc {
+  background: var(--lightyellow);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 32px;
+}
+.toc-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.toc ol { padding-left: 20px; }
+.toc a { color: var(--blue); text-decoration: none; font-weight: 600; }
+.toc a:hover { text-decoration: underline; }
+.divider {
+  text-align: center;
+  margin: 24px 0 4px;
+  font-size: 18px;
+  color: #bbb;
+  letter-spacing: 6px;
+}
+.badge {
+  display: inline-block;
+  background: var(--blue);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-right: 4px;
+}
+.badge-green  { background: var(--green); }
+.badge-red    { background: var(--red); }
+.badge-purple { background: var(--purple); }
+.badge-orange { background: var(--orange); }
+.badge-teal   { background: var(--teal); }
+.badge-pink   { background: var(--pink); }
+.mega-table th { font-size: 1em; padding: 6px 10px; }
+.mega-table td { padding: 6px 10px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="notebook-page">
+
+<h1>☕ Java Collection Framework</h1>
+<p class="subtitle">Part 2 · LinkedList · Vector · Stack · Set · Queue · Map · Comparable · Comparator</p>
+
+<div class="toc">
+  <div class="toc-title">📋 Table of Contents – Part 2</div>
+  <ol>
+    <li><a href="#linkedlist">LinkedList</a></li>
+    <li><a href="#vector">Vector & Stack</a></li>
+    <li><a href="#set">Set Interface</a></li>
+    <li><a href="#hashset">HashSet</a></li>
+    <li><a href="#linkedhashset">LinkedHashSet</a></li>
+    <li><a href="#treeset">TreeSet</a></li>
+    <li><a href="#queue">Queue Interface</a></li>
+    <li><a href="#priorityqueue">PriorityQueue</a></li>
+    <li><a href="#deque">Deque & ArrayDeque</a></li>
+    <li><a href="#map">Map Interface</a></li>
+    <li><a href="#hashmap">HashMap</a></li>
+    <li><a href="#linkedhashmap">LinkedHashMap</a></li>
+    <li><a href="#treemap">TreeMap</a></li>
+    <li><a href="#hashtable">Hashtable vs HashMap</a></li>
+    <li><a href="#comparable">Comparable Interface</a></li>
+    <li><a href="#comparator">Comparator Interface</a></li>
+    <li><a href="#megatable">Mega Comparison Table</a></li>
+    <li><a href="#chooseguide">How to Choose?</a></li>
+    <li><a href="#finalrevision">Final Rapid Revision</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     1. LINKEDLIST
+══════════════════════════════════════════════════ -->
+<h2 id="linkedlist">1. 🔗 LinkedList</h2>
+
+<div class="box box-purple">
+  <div class="box-title">⭐ LinkedList = Doubly Linked List implementing List + Deque</div>
+  <ul>
+    <li>Implements both <code>List</code> and <code>Deque</code> interfaces</li>
+    <li>Best for <strong>frequent insertions/deletions at beginning or middle</strong></li>
+    <li>Duplicates ✅ | Null ✅ | Insertion order preserved ✅</li>
+    <li>No index-based O(1) access (must traverse)</li>
+  </ul>
+</div>
+
+<h3>Internal Structure</h3>
+<div class="diagram">
+  Doubly Linked List – each node has 3 parts:
+
+  null ← [ prev | data | next ] ↔ [ prev | data | next ] ↔ [ prev | data | next ] → null
+              Node 1                   Node 2                   Node 3
+
+  Head ↑                                                    Tail ↑
+
+  head points to first node, tail points to last node.</div>
+
+<h3>ArrayList vs LinkedList – When to use what?</h3>
+<table>
+  <tr><th>Operation</th><th>ArrayList</th><th>LinkedList</th><th>Winner</th></tr>
+  <tr><td>get(index)</td><td>O(1) ⚡</td><td>O(n)</td><td>ArrayList ✅</td></tr>
+  <tr><td>add at end</td><td>O(1) amortized</td><td>O(1)</td><td>Tie ~</td></tr>
+  <tr><td>add at start / middle</td><td>O(n) (shift)</td><td>O(1) (relink)</td><td>LinkedList ✅</td></tr>
+  <tr><td>remove at start / middle</td><td>O(n) (shift)</td><td>O(1) (relink)</td><td>LinkedList ✅</td></tr>
+  <tr><td>Memory</td><td>Less (contiguous)</td><td>More (node + 2 pointers)</td><td>ArrayList ✅</td></tr>
+  <tr><td>Iteration</td><td>Faster (cache-friendly)</td><td>Slower</td><td>ArrayList ✅</td></tr>
+</table>
+
+<div class="box box-orange">
+  <div class="box-title">⭐ Rule of Thumb</div>
+  <ul>
+    <li>Lots of <strong>get(index)</strong> → use <strong>ArrayList</strong></li>
+    <li>Lots of <strong>insert/delete at start/middle</strong> → use <strong>LinkedList</strong></li>
+    <li>Need it as a <strong>Queue or Stack</strong> → use <strong>LinkedList / ArrayDeque</strong></li>
+  </ul>
+</div>
+
+<h3>LinkedList as a Queue / Stack</h3>
+<pre><code>LinkedList&lt;String&gt; ll = new LinkedList&lt;&gt;();
+
+// Queue operations (FIFO)
+ll.offer("A");     // add to tail
+ll.offer("B");
+String head = ll.poll();   // remove from head → "A"
+String peek = ll.peek();   // look at head without removing → "B"
+
+// Stack operations (LIFO)
+ll.push("X");      // add to head
+ll.push("Y");
+String top = ll.pop();     // remove from head → "Y"</code></pre>
+
+<h3>LinkedList Extra Methods (beyond List)</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>addFirst(e)</code> / <code>offerFirst(e)</code></td><td>Insert at beginning</td></tr>
+  <tr><td><code>addLast(e)</code> / <code>offerLast(e)</code></td><td>Insert at end</td></tr>
+  <tr><td><code>getFirst()</code> / <code>peekFirst()</code></td><td>View first element</td></tr>
+  <tr><td><code>getLast()</code> / <code>peekLast()</code></td><td>View last element</td></tr>
+  <tr><td><code>removeFirst()</code> / <code>pollFirst()</code></td><td>Remove first</td></tr>
+  <tr><td><code>removeLast()</code> / <code>pollLast()</code></td><td>Remove last</td></tr>
+  <tr><td><code>push(e)</code></td><td>Push to head (Stack)</td></tr>
+  <tr><td><code>pop()</code></td><td>Pop from head (Stack)</td></tr>
+</table>
+
+<div class="sticky">❗ getFirst() throws NoSuchElementException if empty<br>
+peekFirst() returns null if empty → safer choice!</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     2. VECTOR & STACK
+══════════════════════════════════════════════════ -->
+<h2 id="vector">2. 🧱 Vector & Stack (Legacy Classes)</h2>
+
+<div class="box box-yellow">
+  <div class="box-title">⭐ Vector – Thread-safe ArrayList (Legacy)</div>
+  <ul>
+    <li>Introduced in <strong>Java 1.0</strong> (before Collection Framework!)</li>
+    <li>Implements <code>List</code> interface</li>
+    <li>Every method is <strong>synchronized</strong> → thread-safe ✅</li>
+    <li>Default capacity = <strong>10</strong></li>
+    <li>Growth: <strong>doubles capacity</strong> (× 2) unlike ArrayList (× 1.5)</li>
+    <li>Slower than ArrayList (synchronization overhead)</li>
+  </ul>
+</div>
+
+<div class="two-col">
+  <div class="box box-blue">
+    <div class="box-title">ArrayList vs Vector</div>
+    <table>
+      <tr><th>Feature</th><th>ArrayList</th><th>Vector</th></tr>
+      <tr><td>Sync</td><td>❌ No</td><td>✅ Yes</td></tr>
+      <tr><td>Speed</td><td>⚡ Faster</td><td>Slower</td></tr>
+      <tr><td>Growth</td><td>×1.5</td><td>×2</td></tr>
+      <tr><td>Introduced</td><td>Java 1.2</td><td>Java 1.0</td></tr>
+    </table>
+  </div>
+  <div class="box box-orange">
+    <div class="box-title">⚡ Modern Alternative</div>
+    Instead of Vector, use:<br><br>
+    <code>List&lt;T&gt; list = Collections.synchronizedList(new ArrayList&lt;&gt;());</code><br><br>
+    or<br><br>
+    <code>CopyOnWriteArrayList&lt;T&gt;</code> (java.util.concurrent)
+  </div>
+</div>
+
+<h3>Stack – LIFO Data Structure (Legacy)</h3>
+<div class="box box-pink">
+  <div class="box-title">⭐ Stack extends Vector</div>
+  LIFO = Last In, First Out<br>
+  Introduced in Java 1.0
+</div>
+
+<div class="diagram">
+  LIFO – Stack Visualization:
+
+  push("A") → push("B") → push("C")
+
+  ┌───┐  ← TOP (last pushed, first popped)
+  │ C │
+  ├───┤
+  │ B │
+  ├───┤
+  │ A │
+  └───┘  ← BOTTOM
+
+  pop() → C   (removes C)
+  peek() → B  (just looks, doesn't remove)</div>
+
+<h3>Stack Methods</h3>
+<table>
+  <tr><th>Method</th><th>Description</th><th>Throws if empty?</th></tr>
+  <tr><td><code>push(e)</code></td><td>Add to top</td><td>–</td></tr>
+  <tr><td><code>pop()</code></td><td>Remove & return top</td><td>✅ EmptyStackException</td></tr>
+  <tr><td><code>peek()</code></td><td>View top without removing</td><td>✅ EmptyStackException</td></tr>
+  <tr><td><code>isEmpty()</code></td><td>Is stack empty?</td><td>–</td></tr>
+  <tr><td><code>search(o)</code></td><td>1-based position from top</td><td>–1 if not found</td></tr>
+</table>
+
+<pre><code>Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+stack.push(10);
+stack.push(20);
+stack.push(30);
+
+System.out.println(stack.peek()); // 30 (top, not removed)
+System.out.println(stack.pop());  // 30 (removed)
+System.out.println(stack.pop());  // 20
+System.out.println(stack);        // [10]</code></pre>
+
+<div class="sticky">❗ Stack is a legacy class. Modern Java prefers:<br>
+<code>Deque&lt;T&gt; stack = new ArrayDeque&lt;&gt;();</code><br>
+(ArrayDeque is faster and not synchronized)</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     3. SET INTERFACE
+══════════════════════════════════════════════════ -->
+<h2 id="set">3. 🔵 Set Interface</h2>
+
+<div class="box box-teal">
+  <div class="box-title">⭐ Set = No Duplicates! Uniqueness guaranteed</div>
+  <ul>
+    <li>Child interface of <code>Collection</code></li>
+    <li><strong>No duplicate elements</strong> – if you add a duplicate, it's silently ignored</li>
+    <li><strong>No index-based access</strong> (no <code>get(index)</code>)</li>
+    <li>add() returns <code>false</code> if element already exists</li>
+  </ul>
+</div>
+
+<div class="diagram">
+  Set Implementations:
+
+                     Set (I)
+                   /    |    \
+                  /     |     \
+            HashSet  LinkedHashSet  TreeSet
+           (no order) (insertion  (sorted
+                        order)      order)</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     4. HASHSET
+══════════════════════════════════════════════════ -->
+<h2 id="hashset">4. 🟡 HashSet</h2>
+
+<div class="box box-yellow">
+  <div class="box-title">⭐ HashSet – Fastest Set Implementation</div>
+  <ul>
+    <li>Backed internally by a <strong>HashMap</strong></li>
+    <li>No duplicates ✅ | Null allowed ✅ (only one null)</li>
+    <li><strong>No guaranteed order</strong> – elements can appear in any order</li>
+    <li>All operations O(1) average: add, remove, contains</li>
+    <li>Default capacity = <strong>16</strong>, Load factor = <strong>0.75</strong></li>
+  </ul>
+</div>
+
+<h3>How HashSet ensures uniqueness?</h3>
+<div class="diagram">
+  When you add an object to HashSet:
+
+  1. Calculate hashCode() of the object
+  2. Find the bucket (index) in internal array
+  3. Check if any object in that bucket is equal via equals()
+  4. If equal → DUPLICATE → don't add (return false)
+  5. If not equal → add to bucket
+
+  hashCode() → finds bucket (fast!)
+  equals()   → confirms uniqueness</div>
+
+<div class="box box-red">
+  <div class="box-title">❗ Override hashCode() AND equals() for custom objects!</div>
+  If you want HashSet to detect duplicates in your own classes (like Student), you MUST override both <code>hashCode()</code> and <code>equals()</code> methods.<br><br>
+  Rule: If <code>a.equals(b)</code> is true → <code>a.hashCode() == b.hashCode()</code> must also be true.
+</div>
+
+<pre><code>HashSet&lt;String&gt; set = new HashSet&lt;&gt;();
+set.add("Apple");
+set.add("Banana");
+set.add("Apple");   // ← duplicate! silently ignored
+set.add(null);
+
+System.out.println(set);      // [null, Banana, Apple] (any order)
+System.out.println(set.size()); // 3 (not 4!)</code></pre>
+
+<h3>Iterating a HashSet</h3>
+<pre><code>// Using enhanced for loop
+for(String s : set) {
+    System.out.println(s);
+}
+
+// Using Iterator
+Iterator&lt;String&gt; itr = set.iterator();
+while(itr.hasNext()) {
+    System.out.println(itr.next());
+}
+
+// Using forEach (Java 8+)
+set.forEach(s -&gt; System.out.println(s));</code></pre>
+
+<div class="sticky">⭐ Load Factor 0.75 means: when 75% of capacity is filled → HashSet resizes (doubles bucket count)</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     5. LINKEDHASHSET
+══════════════════════════════════════════════════ -->
+<h2 id="linkedhashset">5. 🟢 LinkedHashSet</h2>
+
+<div class="box box-green">
+  <div class="box-title">⭐ LinkedHashSet = HashSet + Insertion Order Preserved</div>
+  <ul>
+    <li>Child class of <code>HashSet</code></li>
+    <li>Backed by <strong>LinkedHashMap</strong> internally</li>
+    <li>No duplicates ✅ | Null ✅ | <strong>Maintains insertion order</strong> ✅</li>
+    <li>Slightly slower than HashSet (extra linked list overhead)</li>
+    <li>Use when you need: <strong>uniqueness + insertion order</strong></li>
+  </ul>
+</div>
+
+<pre><code>LinkedHashSet&lt;String&gt; lhs = new LinkedHashSet&lt;&gt;();
+lhs.add("Banana");
+lhs.add("Apple");
+lhs.add("Mango");
+lhs.add("Apple");    // duplicate – ignored
+
+System.out.println(lhs); // [Banana, Apple, Mango] ← insertion order!
+// HashSet would print in any order</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     6. TREESET
+══════════════════════════════════════════════════ -->
+<h2 id="treeset">6. 🌳 TreeSet</h2>
+
+<div class="box box-teal">
+  <div class="box-title">⭐ TreeSet = Sorted Set (Natural or Custom order)</div>
+  <ul>
+    <li>Implements <code>NavigableSet</code> → <code>SortedSet</code> → <code>Set</code></li>
+    <li>Backed by a <strong>Red-Black Tree</strong> (self-balancing BST)</li>
+    <li>Elements stored in <strong>sorted ascending order</strong> by default</li>
+    <li>No duplicates ✅ | Null ❌ (NullPointerException!)</li>
+    <li>All operations: <strong>O(log n)</strong></li>
+    <li>Elements must be <strong>Comparable</strong> (or provide Comparator)</li>
+  </ul>
+</div>
+
+<pre><code>TreeSet&lt;Integer&gt; ts = new TreeSet&lt;&gt;();
+ts.add(50);
+ts.add(10);
+ts.add(30);
+ts.add(20);
+ts.add(10);   // duplicate – ignored
+
+System.out.println(ts); // [10, 20, 30, 50] ← always sorted!</code></pre>
+
+<h3>Extra Methods in TreeSet (NavigableSet)</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>first()</code></td><td>Smallest element</td></tr>
+  <tr><td><code>last()</code></td><td>Largest element</td></tr>
+  <tr><td><code>headSet(e)</code></td><td>Elements strictly less than e</td></tr>
+  <tr><td><code>tailSet(e)</code></td><td>Elements greater than or equal to e</td></tr>
+  <tr><td><code>subSet(from, to)</code></td><td>Elements from (inclusive) to (exclusive)</td></tr>
+  <tr><td><code>floor(e)</code></td><td>Largest element ≤ e</td></tr>
+  <tr><td><code>ceiling(e)</code></td><td>Smallest element ≥ e</td></tr>
+  <tr><td><code>higher(e)</code></td><td>Strictly greater than e</td></tr>
+  <tr><td><code>lower(e)</code></td><td>Strictly less than e</td></tr>
+  <tr><td><code>pollFirst()</code></td><td>Remove and return smallest</td></tr>
+  <tr><td><code>pollLast()</code></td><td>Remove and return largest</td></tr>
+</table>
+
+<pre><code>TreeSet&lt;Integer&gt; ts = new TreeSet&lt;&gt;(List.of(10, 20, 30, 40, 50));
+
+System.out.println(ts.first());          // 10
+System.out.println(ts.last());           // 50
+System.out.println(ts.headSet(30));      // [10, 20]
+System.out.println(ts.tailSet(30));      // [30, 40, 50]
+System.out.println(ts.subSet(20, 40));   // [20, 30]
+System.out.println(ts.floor(35));        // 30
+System.out.println(ts.ceiling(35));      // 40</code></pre>
+
+<h3>Set Implementations – Quick Compare</h3>
+<table>
+  <tr><th>Feature</th><th>HashSet</th><th>LinkedHashSet</th><th>TreeSet</th></tr>
+  <tr><td>Order</td><td>❌ None</td><td>✅ Insertion</td><td>✅ Sorted</td></tr>
+  <tr><td>Null</td><td>✅ One null</td><td>✅ One null</td><td>❌ No null</td></tr>
+  <tr><td>Speed</td><td>O(1) fastest⚡</td><td>O(1) slightly slower</td><td>O(log n)</td></tr>
+  <tr><td>Backed by</td><td>HashMap</td><td>LinkedHashMap</td><td>Red-Black Tree</td></tr>
+  <tr><td>Use when</td><td>Speed matters</td><td>Order + unique</td><td>Sorted + unique</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     7. QUEUE INTERFACE
+══════════════════════════════════════════════════ -->
+<h2 id="queue">7. 🚶 Queue Interface</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ Queue = FIFO (First In, First Out)</div>
+  Child of <code>Collection</code>. Process elements in order they were added.<br>
+  Real life: Bank queue, Printer queue, CPU scheduling
+</div>
+
+<div class="diagram">
+  FIFO – Queue Visualization:
+
+  Enqueue (add) →  [C][B][A] → Dequeue (remove)
+  new elements                  oldest element
+  join at rear                  leaves at front
+
+  add("A") → add("B") → add("C")
+  Front: A  →  remove() → Front: B → remove() → Front: C</div>
+
+<h3>Queue Methods – Two Styles!</h3>
+<table>
+  <tr><th>Operation</th><th>Throws Exception</th><th>Returns null/false (safe)</th></tr>
+  <tr><td>Add element</td><td><code>add(e)</code></td><td><code>offer(e)</code> ← preferred</td></tr>
+  <tr><td>Remove head</td><td><code>remove()</code></td><td><code>poll()</code> ← preferred</td></tr>
+  <tr><td>View head</td><td><code>element()</code></td><td><code>peek()</code> ← preferred</td></tr>
+</table>
+
+<div class="sticky">⭐ Always prefer offer(), poll(), peek() over add(), remove(), element() – safer (no exceptions on empty queue)!</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     8. PRIORITYQUEUE
+══════════════════════════════════════════════════ -->
+<h2 id="priorityqueue">8. 🏆 PriorityQueue</h2>
+
+<div class="box box-orange">
+  <div class="box-title">⭐ PriorityQueue = Elements served by PRIORITY, not FIFO</div>
+  <ul>
+    <li>Implements <code>Queue</code> interface</li>
+    <li>By default: <strong>Min-Heap</strong> (smallest element has highest priority)</li>
+    <li>Elements ordered by <strong>natural ordering</strong> (Comparable) or <strong>custom Comparator</strong></li>
+    <li>Null ❌ not allowed</li>
+    <li>Not sorted! Only the <strong>head (peek)</strong> is always the minimum</li>
+    <li>add/offer/remove: <strong>O(log n)</strong> | peek: <strong>O(1)</strong></li>
+  </ul>
+</div>
+
+<pre><code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(); // Min-Heap
+pq.offer(50);
+pq.offer(10);
+pq.offer(30);
+pq.offer(20);
+
+System.out.println(pq.peek());  // 10 (minimum always at head)
+System.out.println(pq.poll());  // 10 (removed)
+System.out.println(pq.poll());  // 20
+System.out.println(pq.poll());  // 30  ← always gives sorted order!</code></pre>
+
+<h3>Max-Heap (reverse order)</h3>
+<pre><code>PriorityQueue&lt;Integer&gt; maxPQ = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+maxPQ.offer(10); maxPQ.offer(50); maxPQ.offer(30);
+System.out.println(maxPQ.poll()); // 50 (maximum first)</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     9. DEQUE & ARRAYDEQUE
+══════════════════════════════════════════════════ -->
+<h2 id="deque">9. ↔️ Deque & ArrayDeque</h2>
+
+<div class="box box-purple">
+  <div class="box-title">⭐ Deque = Double-Ended Queue (insert/remove from BOTH ends)</div>
+  <ul>
+    <li>Extends <code>Queue</code> interface</li>
+    <li>Can be used as <strong>Queue (FIFO)</strong> or <strong>Stack (LIFO)</strong></li>
+    <li><code>ArrayDeque</code> = fastest implementation (no null allowed)</li>
+    <li>Preferred over both <code>Stack</code> class and <code>LinkedList</code> for stack/queue use</li>
+  </ul>
+</div>
+
+<div class="diagram">
+  Deque (Double-Ended Queue):
+
+  addFirst ←  [D][C][B][A]  → addLast
+  pollFirst →                ← pollLast
+
+  You can add/remove from BOTH front and back!</div>
+
+<table>
+  <tr><th>Operation</th><th>Front (First)</th><th>Back (Last)</th></tr>
+  <tr><td>Add</td><td><code>addFirst(e)</code> / <code>offerFirst(e)</code></td><td><code>addLast(e)</code> / <code>offerLast(e)</code></td></tr>
+  <tr><td>Remove</td><td><code>removeFirst()</code> / <code>pollFirst()</code></td><td><code>removeLast()</code> / <code>pollLast()</code></td></tr>
+  <tr><td>Peek</td><td><code>peekFirst()</code> / <code>getFirst()</code></td><td><code>peekLast()</code> / <code>getLast()</code></td></tr>
+  <tr><td>Stack: push/pop</td><td><code>push(e)</code> = addFirst</td><td><code>pop()</code> = removeFirst</td></tr>
+</table>
+
+<pre><code>Deque&lt;String&gt; dq = new ArrayDeque&lt;&gt;();
+
+// As Stack (LIFO):
+dq.push("A"); dq.push("B"); dq.push("C");
+System.out.println(dq.pop()); // C (last in, first out)
+
+// As Queue (FIFO):
+Deque&lt;String&gt; queue = new ArrayDeque&lt;&gt;();
+queue.offer("A"); queue.offer("B"); queue.offer("C");
+System.out.println(queue.poll()); // A (first in, first out)</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     10. MAP INTERFACE
+══════════════════════════════════════════════════ -->
+<h2 id="map">10. 🗺️ Map Interface</h2>
+
+<div class="box box-indigo">
+  <div class="box-title">⭐ Map = Key-Value Pairs (does NOT extend Collection!)</div>
+  <ul>
+    <li>Stores data as <strong>key → value</strong> pairs</li>
+    <li><strong>Keys must be unique</strong> (duplicate key overwrites old value)</li>
+    <li>Values can be duplicated</li>
+    <li>Belongs to <code>java.util</code> package</li>
+  </ul>
+</div>
+
+<div class="diagram">
+  Map Hierarchy:
+
+                    Map (I)
+                 /    |    \
+            HashMap TreeMap  LinkedHashMap
+               |
+         LinkedHashMap  (extends HashMap)
+
+  Also: Hashtable (legacy), ConcurrentHashMap (concurrent)</div>
+
+<h3>Key Methods of Map Interface</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>put(K key, V val)</code></td><td>Add key-value pair (returns old value if key existed)</td></tr>
+  <tr><td><code>get(K key)</code></td><td>Get value by key (null if not found)</td></tr>
+  <tr><td><code>remove(K key)</code></td><td>Remove entry by key</td></tr>
+  <tr><td><code>containsKey(K key)</code></td><td>Does key exist?</td></tr>
+  <tr><td><code>containsValue(V val)</code></td><td>Does value exist?</td></tr>
+  <tr><td><code>size()</code></td><td>Number of key-value pairs</td></tr>
+  <tr><td><code>isEmpty()</code></td><td>Empty?</td></tr>
+  <tr><td><code>keySet()</code></td><td>Returns <code>Set</code> of all keys</td></tr>
+  <tr><td><code>values()</code></td><td>Returns <code>Collection</code> of all values</td></tr>
+  <tr><td><code>entrySet()</code></td><td>Returns <code>Set&lt;Map.Entry&lt;K,V&gt;&gt;</code> (key+value pairs)</td></tr>
+  <tr><td><code>putIfAbsent(K,V)</code></td><td>Add only if key not already present (Java 8)</td></tr>
+  <tr><td><code>getOrDefault(K, def)</code></td><td>Get value or default if not found (Java 8)</td></tr>
+  <tr><td><code>forEach((k,v) -&gt; ...)</code></td><td>Iterate all entries (Java 8)</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     11. HASHMAP
+══════════════════════════════════════════════════ -->
+<h2 id="hashmap">11. 🟠 HashMap</h2>
+
+<div class="box box-orange">
+  <div class="box-title">⭐ HashMap – Fastest Map, No guaranteed order</div>
+  <ul>
+    <li>Key uniqueness ✅ | Null key ✅ (ONE null key) | Null values ✅ (multiple)</li>
+    <li>No order guarantee – elements appear in any order</li>
+    <li>Operations: O(1) average for put, get, remove</li>
+    <li>Default capacity = <strong>16</strong>, Load factor = <strong>0.75</strong></li>
+    <li>Internally uses array of <strong>buckets</strong> (LinkedList / Red-Black Tree per bucket)</li>
+    <li>Not thread-safe</li>
+  </ul>
+</div>
+
+<h3>How HashMap works internally</h3>
+<div class="diagram">
+  HashMap Internal Structure:
+
+  put("name", "Alice"):
+  1. hashCode("name") → hash value
+  2. index = hash % capacity  → finds bucket
+  3. If bucket empty → store entry directly
+  4. If bucket has entries → check equals() for key
+       - Key exists → UPDATE value
+       - Key doesn't exist → ADD to bucket (LinkedList/TreeNode)
+
+  ┌────┬─────────────────────┐
+  │ 0  │ null                │
+  │ 1  │ [age=25]            │
+  │ 2  │ [name=Alice]        │
+  │ 3  │ null                │
+  │ 4  │ [city=Delhi]-[country=India] ← collision (linked)
+  └────┴─────────────────────┘
+  (Java 8+: if bucket has 8+ entries → converts to Red-Black Tree)</div>
+
+<pre><code>HashMap&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("Alice", 90);
+map.put("Bob", 85);
+map.put("Charlie", 92);
+map.put("Alice", 95);   // key "Alice" already exists → UPDATES value
+
+System.out.println(map);              // {Bob=85, Charlie=92, Alice=95} (any order)
+System.out.println(map.get("Bob"));   // 85
+System.out.println(map.containsKey("Dave")); // false
+System.out.println(map.getOrDefault("Dave", 0)); // 0</code></pre>
+
+<h3>Iterating HashMap</h3>
+<pre><code>// Method 1: keySet() – get all keys, then get values
+for(String key : map.keySet()) {
+    System.out.println(key + " → " + map.get(key));
+}
+
+// Method 2: entrySet() – most efficient ⭐
+for(Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " → " + entry.getValue());
+}
+
+// Method 3: forEach (Java 8)
+map.forEach((k, v) -&gt; System.out.println(k + " → " + v));
+
+// Method 4: values() – just values
+for(Integer val : map.values()) {
+    System.out.println(val);
+}</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     12. LINKEDHASHMAP
+══════════════════════════════════════════════════ -->
+<h2 id="linkedhashmap">12. 🟢 LinkedHashMap</h2>
+
+<div class="box box-green">
+  <div class="box-title">⭐ LinkedHashMap = HashMap + Insertion Order Preserved</div>
+  <ul>
+    <li>Extends <code>HashMap</code></li>
+    <li>Maintains a <strong>doubly-linked list</strong> of entries → preserves insertion order</li>
+    <li>All HashMap features + ordered iteration</li>
+    <li>Slightly slower than HashMap (linked list overhead)</li>
+    <li>Can also be ordered by <strong>access order</strong> (LRU Cache!)</li>
+  </ul>
+</div>
+
+<pre><code>LinkedHashMap&lt;String, Integer&gt; lhm = new LinkedHashMap&lt;&gt;();
+lhm.put("Banana", 2);
+lhm.put("Apple", 5);
+lhm.put("Mango", 3);
+
+System.out.println(lhm); // {Banana=2, Apple=5, Mango=3} ← insertion order!</code></pre>
+
+<div class="box box-blue">
+  <div class="box-title">⚡ LRU Cache using LinkedHashMap</div>
+  <pre><code>// accessOrder=true: most recently accessed moves to end
+LinkedHashMap&lt;String, Integer&gt; lru = new LinkedHashMap&lt;&gt;(16, 0.75f, true);</code></pre>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     13. TREEMAP
+══════════════════════════════════════════════════ -->
+<h2 id="treemap">13. 🌳 TreeMap</h2>
+
+<div class="box box-teal">
+  <div class="box-title">⭐ TreeMap = Map with Keys sorted in Natural/Custom order</div>
+  <ul>
+    <li>Implements <code>NavigableMap</code> → <code>SortedMap</code> → <code>Map</code></li>
+    <li>Backed by <strong>Red-Black Tree</strong></li>
+    <li>Keys stored in <strong>sorted ascending order</strong></li>
+    <li>Null key ❌ | Null values ✅</li>
+    <li>All operations: O(log n)</li>
+    <li>Keys must be <strong>Comparable</strong> or provide a <strong>Comparator</strong></li>
+  </ul>
+</div>
+
+<pre><code>TreeMap&lt;String, Integer&gt; tm = new TreeMap&lt;&gt;();
+tm.put("Banana", 2);
+tm.put("Apple", 5);
+tm.put("Mango", 3);
+tm.put("Cherry", 7);
+
+System.out.println(tm); // {Apple=5, Banana=2, Cherry=7, Mango=3} ← key sorted!</code></pre>
+
+<h3>Extra Methods in TreeMap (NavigableMap)</h3>
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr><td><code>firstKey()</code></td><td>Smallest key</td></tr>
+  <tr><td><code>lastKey()</code></td><td>Largest key</td></tr>
+  <tr><td><code>headMap(key)</code></td><td>Keys strictly less than key</td></tr>
+  <tr><td><code>tailMap(key)</code></td><td>Keys greater than or equal to key</td></tr>
+  <tr><td><code>subMap(from, to)</code></td><td>Keys in range [from, to)</td></tr>
+  <tr><td><code>floorKey(k)</code></td><td>Largest key ≤ k</td></tr>
+  <tr><td><code>ceilingKey(k)</code></td><td>Smallest key ≥ k</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     14. HASHTABLE
+══════════════════════════════════════════════════ -->
+<h2 id="hashtable">14. 🧱 Hashtable vs HashMap (Legacy)</h2>
+
+<table>
+  <tr><th>Feature</th><th>HashMap</th><th>Hashtable</th></tr>
+  <tr><td>Introduced</td><td>Java 1.2</td><td>Java 1.0 (legacy)</td></tr>
+  <tr><td>Thread-safe</td><td>❌ No</td><td>✅ Yes (synchronized)</td></tr>
+  <tr><td>Speed</td><td>⚡ Faster</td><td>Slower</td></tr>
+  <tr><td>Null key</td><td>✅ One null key</td><td>❌ NullPointerException</td></tr>
+  <tr><td>Null value</td><td>✅ Allowed</td><td>❌ Not allowed</td></tr>
+  <tr><td>Iterator</td><td>Fail-fast</td><td>Enumerator (not fail-fast)</td></tr>
+</table>
+
+<div class="sticky">❗ Avoid Hashtable in new code. Use:<br>
+<code>ConcurrentHashMap</code> for thread-safe map (better performance than Hashtable)<br>
+<code>HashMap</code> for non-threaded scenarios</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     15. COMPARABLE
+══════════════════════════════════════════════════ -->
+<h2 id="comparable">15. ⚖️ Comparable Interface (Natural Sorting)</h2>
+
+<div class="box box-blue">
+  <div class="box-title">⭐ Comparable = "This class knows how to compare itself"</div>
+  <ul>
+    <li>Package: <code>java.lang</code></li>
+    <li>Contains ONE method: <code>int compareTo(T o)</code></li>
+    <li>Used for <strong>natural ordering</strong> (default sort behavior)</li>
+    <li>Already implemented by: String, Integer, Double, Date, etc.</li>
+    <li>You implement it in YOUR custom class</li>
+  </ul>
+</div>
+
+<h3>compareTo() Return Values</h3>
+<div class="diagram">
+  compareTo(o) returns:
+
+  Negative (< 0)  → this comes BEFORE o  (this is "smaller")
+  Zero    (= 0)   → this EQUALS o
+  Positive (> 0)  → this comes AFTER o   (this is "bigger")</div>
+
+<pre><code>class Student implements Comparable&lt;Student&gt; {
+    int roll;
+    String name;
+    double marks;
+
+    // Sort students by marks (ascending)
+    @Override
+    public int compareTo(Student other) {
+        // Positive → this after other | Negative → this before other
+        return Double.compare(this.marks, other.marks);
+        // Or: return (int)(this.marks - other.marks);
+    }
+}
+
+List&lt;Student&gt; list = new ArrayList&lt;&gt;();
+list.add(new Student(1, "Alice", 90));
+list.add(new Student(2, "Bob", 75));
+list.add(new Student(3, "Charlie", 85));
+
+Collections.sort(list);  // uses compareTo() ← natural order
+// Result: sorted by marks: Bob(75), Charlie(85), Alice(90)</code></pre>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     16. COMPARATOR
+══════════════════════════════════════════════════ -->
+<h2 id="comparator">16. 🔧 Comparator Interface (Custom Sorting)</h2>
+
+<div class="box box-purple">
+  <div class="box-title">⭐ Comparator = "External sorting logic – flexible and multiple!"</div>
+  <ul>
+    <li>Package: <code>java.util</code></li>
+    <li>Contains ONE method: <code>int compare(T o1, T o2)</code></li>
+    <li>Used for <strong>custom/multiple sort strategies</strong></li>
+    <li>Does NOT modify the class itself → can define many comparators</li>
+    <li>Pass to <code>Collections.sort(list, comparator)</code> or <code>list.sort(comparator)</code></li>
+  </ul>
+</div>
+
+<h3>compare() Return Values</h3>
+<div class="diagram">
+  compare(o1, o2) returns:
+
+  Negative → o1 comes BEFORE o2
+  Zero     → o1 EQUALS o2 (for ordering)
+  Positive → o1 comes AFTER o2</div>
+
+<pre><code>// Comparator 1: Sort by name (alphabetical)
+Comparator&lt;Student&gt; byName = new Comparator&lt;Student&gt;() {
+    @Override
+    public int compare(Student s1, Student s2) {
+        return s1.name.compareTo(s2.name);
+    }
+};
+
+// Comparator 2: Sort by marks descending
+Comparator&lt;Student&gt; byMarksDesc = (s1, s2) -&gt;
+    Double.compare(s2.marks, s1.marks);  // note: s2 first for descending!
+
+// Using comparators:
+Collections.sort(list, byName);       // sort by name
+Collections.sort(list, byMarksDesc);  // sort by marks desc
+
+// Java 8 style (Comparator.comparing):
+list.sort(Comparator.comparing(s -&gt; s.name));
+list.sort(Comparator.comparingDouble(s -&gt; s.marks));
+list.sort(Comparator.comparingDouble((Student s) -&gt; s.marks).reversed());</code></pre>
+
+<h3>Chaining Comparators (thenComparing)</h3>
+<pre><code>// Sort by marks DESC, then by name ASC (if marks equal)
+Comparator&lt;Student&gt; combined =
+    Comparator.comparingDouble((Student s) -&gt; s.marks)
+              .reversed()
+              .thenComparing(s -&gt; s.name);
+
+list.sort(combined);</code></pre>
+
+<h3>Comparable vs Comparator</h3>
+<table>
+  <tr><th>Aspect</th><th>Comparable</th><th>Comparator</th></tr>
+  <tr><td>Package</td><td><code>java.lang</code></td><td><code>java.util</code></td></tr>
+  <tr><td>Method</td><td><code>compareTo(T o)</code></td><td><code>compare(T o1, T o2)</code></td></tr>
+  <tr><td>Where defined</td><td>Inside the class itself</td><td>Separate class / lambda</td></tr>
+  <tr><td>Sort strategies</td><td>One (natural)</td><td>Many (flexible) ⭐</td></tr>
+  <tr><td>Modifies class?</td><td>✅ Yes</td><td>❌ No (external)</td></tr>
+  <tr><td>Used by</td><td><code>Collections.sort(list)</code></td><td><code>Collections.sort(list, comp)</code></td></tr>
+  <tr><td>Real analogy</td><td>Student knows own rank</td><td>Teacher ranks students by any criteria</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     17. MEGA COMPARISON TABLE
+══════════════════════════════════════════════════ -->
+<h2 id="megatable">17. 📊 Mega Comparison Table – All Collection Classes</h2>
+
+<table class="mega-table">
+  <tr>
+    <th>Class</th><th>Interface</th><th>Order</th><th>Duplicates</th><th>Null</th><th>Thread-Safe</th><th>Performance</th>
+  </tr>
+  <tr><td><strong>ArrayList</strong></td><td>List</td><td>Insertion ✅</td><td>✅ Yes</td><td>✅ Multi</td><td>❌</td><td>get O(1), add O(1)*</td></tr>
+  <tr><td><strong>LinkedList</strong></td><td>List+Deque</td><td>Insertion ✅</td><td>✅ Yes</td><td>✅ Multi</td><td>❌</td><td>add/remove front O(1)</td></tr>
+  <tr><td><strong>Vector</strong></td><td>List</td><td>Insertion ✅</td><td>✅ Yes</td><td>✅ Multi</td><td>✅</td><td>Slower (sync)</td></tr>
+  <tr><td><strong>Stack</strong></td><td>List(Vector)</td><td>LIFO</td><td>✅ Yes</td><td>✅</td><td>✅</td><td>push/pop O(1)</td></tr>
+  <tr><td><strong>HashSet</strong></td><td>Set</td><td>❌ None</td><td>❌ No</td><td>✅ One</td><td>❌</td><td>O(1) all ops ⚡</td></tr>
+  <tr><td><strong>LinkedHashSet</strong></td><td>Set</td><td>Insertion ✅</td><td>❌ No</td><td>✅ One</td><td>❌</td><td>O(1) slightly slower</td></tr>
+  <tr><td><strong>TreeSet</strong></td><td>SortedSet</td><td>Sorted ✅</td><td>❌ No</td><td>❌ No</td><td>❌</td><td>O(log n)</td></tr>
+  <tr><td><strong>PriorityQueue</strong></td><td>Queue</td><td>Priority</td><td>✅ Yes</td><td>❌ No</td><td>❌</td><td>offer/poll O(log n)</td></tr>
+  <tr><td><strong>ArrayDeque</strong></td><td>Deque</td><td>Insertion</td><td>✅ Yes</td><td>❌ No</td><td>❌</td><td>O(1) both ends ⚡</td></tr>
+  <tr><td><strong>HashMap</strong></td><td>Map</td><td>❌ None</td><td>Keys: ❌</td><td>✅ 1 key</td><td>❌</td><td>O(1) ⚡</td></tr>
+  <tr><td><strong>LinkedHashMap</strong></td><td>Map</td><td>Insertion ✅</td><td>Keys: ❌</td><td>✅ 1 key</td><td>❌</td><td>O(1) slight overhead</td></tr>
+  <tr><td><strong>TreeMap</strong></td><td>SortedMap</td><td>Key sorted ✅</td><td>Keys: ❌</td><td>❌ key</td><td>❌</td><td>O(log n)</td></tr>
+  <tr><td><strong>Hashtable</strong></td><td>Map</td><td>❌ None</td><td>Keys: ❌</td><td>❌ No</td><td>✅ (legacy)</td><td>Slower</td></tr>
+</table>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     18. HOW TO CHOOSE
+══════════════════════════════════════════════════ -->
+<h2 id="chooseguide">18. 🧭 How to Choose the Right Collection?</h2>
+
+<div class="diagram">
+  START: What do you need?
+  │
+  ├── KEY-VALUE pairs?
+  │       ├── Need sorted keys?       → TreeMap
+  │       ├── Need insertion order?   → LinkedHashMap
+  │       └── Just fast lookup?       → HashMap ⭐ (default)
+  │
+  ├── SINGLE objects (no key-value)?
+  │       │
+  │       ├── ALLOW DUPLICATES?
+  │       │       ├── Need index access / frequent get?  → ArrayList ⭐
+  │       │       ├── Frequent insert/delete at front?   → LinkedList
+  │       │       ├── Need FIFO?                         → ArrayDeque
+  │       │       ├── Need LIFO (Stack)?                 → ArrayDeque
+  │       │       └── Need priority order?               → PriorityQueue
+  │       │
+  │       └── NO DUPLICATES (unique only)?
+  │               ├── Need sorted order?    → TreeSet
+  │               ├── Need insertion order? → LinkedHashSet
+  │               └── Just fast unique?     → HashSet ⭐ (default)
+  │
+  └── THREAD-SAFE needed?
+          ├── List → Collections.synchronizedList() or CopyOnWriteArrayList
+          ├── Map  → ConcurrentHashMap (best!)
+          └── Set  → Collections.synchronizedSet()</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     PRACTICE
+══════════════════════════════════════════════════ -->
+<h2>📝 Practice Questions – Part 2</h2>
+
+<div class="practice">
+  <div class="practice-title">🎯 MCQs – Predict Output / Choose Correct</div>
+
+  <div class="qa">
+    <div class="q">Q1: What is the output?<br>
+    <code>HashSet&lt;String&gt; s = new HashSet&lt;&gt;(); s.add("A"); s.add("B"); s.add("A"); System.out.println(s.size());</code></div>
+    <div class="a">✅ Answer: <strong>2</strong> – "A" is duplicate, silently ignored. HashSet only stores unique elements.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q2: Which Set maintains insertion order?<br>
+    A) HashSet  B) TreeSet  C) LinkedHashSet  D) None</div>
+    <div class="a">✅ Answer: <strong>C – LinkedHashSet</strong></div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q3: TreeSet&lt;Integer&gt; ts = new TreeSet&lt;&gt;(); ts.add(null); → What happens?</div>
+    <div class="a">✅ Answer: <strong>NullPointerException at runtime</strong> – TreeSet cannot have null (needs to compare, can't compare null)</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q4: HashMap – can you have two entries with the same KEY?</div>
+    <div class="a">✅ Answer: <strong>No</strong> – duplicate key overwrites old value. map.put("a",1); map.put("a",2); → {"a"=2}</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q5: PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;(); pq.offer(5); pq.offer(1); pq.offer(3);<br>
+    System.out.println(pq.poll()); → Output?</div>
+    <div class="a">✅ Answer: <strong>1</strong> – PriorityQueue is a Min-Heap by default. Smallest = highest priority.</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q6: Which is preferred over Stack class in modern Java?<br>
+    A) LinkedList  B) Vector  C) ArrayDeque  D) PriorityQueue</div>
+    <div class="a">✅ Answer: <strong>C – ArrayDeque</strong> (faster, not synchronized, purpose-built)</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q7: In compareTo(), what does returning 0 mean?</div>
+    <div class="a">✅ Answer: <strong>The two objects are equal for sorting purposes</strong> (not necessarily .equals())</div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q8: How many null keys can a HashMap have?</div>
+    <div class="a">✅ Answer: <strong>Exactly ONE null key</strong> (stored at index 0 in the bucket array)</div>
+  </div>
+</div>
+
+<div class="practice">
+  <div class="practice-title">🏋️ Coding Tasks</div>
+  <ol>
+    <li style="margin-bottom:12px"><strong>Task 1: Frequency Counter</strong><br>
+    Given a list of words, count how many times each word appears using HashMap.</li>
+    <li style="margin-bottom:12px"><strong>Task 2: Remove Duplicates & Keep Order</strong><br>
+    Given an ArrayList with duplicates, remove all duplicates while preserving insertion order. (Hint: LinkedHashSet)</li>
+    <li style="margin-bottom:12px"><strong>Task 3: Student Sorting</strong><br>
+    Create Student class. Sort by marks ascending using Comparable, then sort by name alphabetically using Comparator.</li>
+    <li style="margin-bottom:12px"><strong>Task 4: Phone Book</strong><br>
+    Use TreeMap to create a phone book where contacts are always displayed in alphabetical order.</li>
+    <li style="margin-bottom:12px"><strong>Task 5: Stack using ArrayDeque</strong><br>
+    Implement a stack that reverses a string using Deque&lt;Character&gt;.</li>
+    <li style="margin-bottom:12px"><strong>Task 6: Top-K Scores</strong><br>
+    Given scores of 100 students, find the top 3 using PriorityQueue with max-heap.</li>
+  </ol>
+</div>
+
+<div class="divider">· · · · ·</div>
+
+<!-- ══════════════════════════════════════════════════
+     FINAL RAPID REVISION
+══════════════════════════════════════════════════ -->
+<h2 id="finalrevision">19. ⚡ Final Rapid Revision – Both Parts Combined</h2>
+
+<div class="box box-yellow">
+  <div class="box-title">🚀 One-Line Mnemonics</div>
+  <ul>
+    <li>🟢 <strong>ArrayList</strong> = Dynamic array. <em>Best for GET. Worst for INSERT middle.</em></li>
+    <li>🔗 <strong>LinkedList</strong> = Chain of nodes. <em>Best for INSERT/DELETE. Worst for GET.</em></li>
+    <li>🧱 <strong>Vector</strong> = Synchronized ArrayList. <em>Legacy. Use CopyOnWriteArrayList instead.</em></li>
+    <li>📦 <strong>Stack</strong> = Legacy LIFO. <em>Use ArrayDeque instead.</em></li>
+    <li>🟡 <strong>HashSet</strong> = Unique, No order. <em>Fastest. Uses hashCode + equals.</em></li>
+    <li>🟢 <strong>LinkedHashSet</strong> = Unique + Insertion order. <em>= HashSet + LinkedList.</em></li>
+    <li>🌳 <strong>TreeSet</strong> = Unique + Sorted. <em>No null. Uses Red-Black Tree.</em></li>
+    <li>🚶 <strong>PriorityQueue</strong> = Min-Heap. <em>Not sorted, but poll() always gives minimum.</em></li>
+    <li>↔️ <strong>ArrayDeque</strong> = Double-ended. <em>Best Stack AND Queue implementation.</em></li>
+    <li>🟠 <strong>HashMap</strong> = Key-Value, No order. <em>1 null key. Fastest map.</em></li>
+    <li>🟢 <strong>LinkedHashMap</strong> = HashMap + Insertion order. <em>LRU Cache use case.</em></li>
+    <li>🌳 <strong>TreeMap</strong> = Sorted keys. <em>No null key. O(log n).</em></li>
+    <li>⚖️ <strong>Comparable</strong> = Natural order. <em>Inside class. compareTo()</em></li>
+    <li>🔧 <strong>Comparator</strong> = Custom order. <em>Outside class. compare(). Multiple strategies!</em></li>
+    <li>🧬 <strong>Generics</strong> = Type safety at compile time. <em>Type erasure at runtime.</em></li>
+    <li>🃏 <strong>Wildcards:</strong> <code>extends</code>=read | <code>super</code>=write | <code>?</code>=any | PECS!</li>
+  </ul>
+</div>
+
+<div class="box box-red">
+  <div class="box-title">❗ Common Mistakes to Avoid</div>
+  <ul>
+    <li>❌ Using <code>==</code> to compare Strings in collections – always use <code>equals()</code></li>
+    <li>❌ Modifying collection inside for-each loop → ConcurrentModificationException</li>
+    <li>❌ Adding null to TreeSet/TreeMap key → NullPointerException</li>
+    <li>❌ Using primitives directly in generics → use wrapper classes</li>
+    <li>❌ Forgetting to override both <code>hashCode()</code> AND <code>equals()</code> for HashSet custom objects</li>
+    <li>❌ Using Stack class in new code → use ArrayDeque</li>
+    <li>❌ Using Hashtable in new code → use HashMap or ConcurrentHashMap</li>
+    <li>❌ Assuming HashMap iteration order is consistent → it is not!</li>
+  </ul>
+</div>
+
+<div style="text-align:center; margin-top:36px; font-family:'Caveat',cursive; font-size:1.4em; color:#888;">
+  ✏️ Part 2 Complete · Java Collections Fully Mastered! ☕🎓<br>
+  <span style="font-size:0.85em; color:#aaa;">ArrayList → LinkedList → Set → Queue → Map → Comparable → Comparator</span>
+</div>
+
+</div><!-- end notebook-page -->
+</body>
+</html>
