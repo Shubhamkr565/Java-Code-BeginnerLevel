@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Java IO Streams — Complete Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080B12;--surface:#101420;--surface2:#171C2C;--surface3:#1E2438;
+  --border:rgba(120,140,200,.12);--border2:rgba(120,140,200,.22);
+  --blue:#4F9EFF;--cyan:#3DDCF7;--amber:#FFBB55;--green:#52E09A;--pink:#F07BF0;--red:#FF6B6B;
+  --text:#DDE3F0;--muted:#7B87A0;--mono:'JetBrains Mono',monospace;
+  --sans:'Plus Jakarta Sans',sans-serif;--display:'Fraunces',serif;
+  --radius:12px;--radius-lg:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;min-height:100vh;overflow-x:hidden}
+
+/* ── NOISE TEXTURE overlay ─────────────────────────────── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;z-index:0}
+
+/* ── NAV ───────────────────────────────────────────────── */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,11,18,.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:2rem;height:58px}
+.nav-logo{font-family:var(--display);font-size:1.1rem;color:var(--cyan);white-space:nowrap;letter-spacing:-.02em}
+.nav-links{display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:.4rem .9rem;border-radius:8px;font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;white-space:nowrap;transition:.2s;cursor:pointer;border:none;background:none}
+.nav-link:hover,.nav-link.active{color:var(--text);background:var(--surface3)}
+.nav-link.active{color:var(--cyan)}
+
+/* ── HERO ──────────────────────────────────────────────── */
+.hero{padding:4rem 2rem 2rem;max-width:1100px;margin:0 auto;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(79,158,255,.1);
+  border:1px solid rgba(79,158,255,.25);border-radius:999px;padding:.3rem .9rem;
+  font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:1.2rem}
+.hero h1{font-family:var(--display);font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;line-height:1.1;
+  background:linear-gradient(135deg,#DDE3F0 0%,var(--cyan) 50%,var(--blue) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.7rem}
+.hero-sub{color:var(--muted);font-size:.95rem;max-width:600px;margin-bottom:2rem}
+.hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--cyan)}
+.stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+
+/* ── GLOW ORBS ─────────────────────────────────────────── */
+.orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(80px);opacity:.15;z-index:0}
+.orb1{width:500px;height:500px;background:var(--blue);top:-100px;right:-100px}
+.orb2{width:400px;height:400px;background:var(--cyan);bottom:100px;left:-150px}
+
+/* ── SECTION ───────────────────────────────────────────── */
+.section{max-width:1100px;margin:0 auto;padding:2.5rem 2rem;position:relative;z-index:1}
+.section-header{margin-bottom:2rem}
+.section-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:.4rem}
+.section-title{font-family:var(--display);font-size:1.9rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.section-desc{color:var(--muted);max-width:680px;font-size:.9rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:1rem 0 2rem}
+
+/* ── CARDS GRID ────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:2rem}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;position:relative;overflow:hidden;transition:.2s}
+.card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.card::before{content:'';position:absolute;inset:0;opacity:0;transition:.3s;
+  background:linear-gradient(135deg,rgba(79,158,255,.05),transparent);pointer-events:none}
+.card:hover::before{opacity:1}
+.card-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:1rem;flex-shrink:0}
+.card-title{font-size:1rem;font-weight:700;margin-bottom:.4rem;color:var(--text)}
+.card-body{font-size:.85rem;color:var(--muted);line-height:1.6}
+.accent-blue{background:rgba(79,158,255,.12);border-color:rgba(79,158,255,.2)}
+.accent-cyan{background:rgba(61,220,247,.08);border-color:rgba(61,220,247,.2)}
+.accent-amber{background:rgba(255,187,85,.08);border-color:rgba(255,187,85,.2)}
+.accent-green{background:rgba(82,224,154,.08);border-color:rgba(82,224,154,.2)}
+.accent-pink{background:rgba(240,123,240,.08);border-color:rgba(240,123,240,.2)}
+.icon-blue{background:rgba(79,158,255,.15);color:var(--blue)}
+.icon-cyan{background:rgba(61,220,247,.12);color:var(--cyan)}
+.icon-amber{background:rgba(255,187,85,.12);color:var(--amber)}
+.icon-green{background:rgba(82,224,154,.12);color:var(--green)}
+.icon-pink{background:rgba(240,123,240,.12);color:var(--pink)}
+
+/* ── CODE BLOCK ────────────────────────────────────────── */
+.code-wrap{background:#0D1117;border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);overflow:hidden;margin:1.2rem 0;font-size:.8rem}
+.code-head{background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);
+  padding:.55rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--cyan);background:rgba(61,220,247,.1);padding:.2rem .55rem;border-radius:6px}
+.code-dots{display:flex;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#FF6B6B}.dot-y{background:#FFD166}.dot-g{background:#52E09A}
+pre{padding:1.2rem 1.3rem;overflow-x:auto;line-height:1.75;color:#CDD5E4}
+pre code{font-family:var(--mono);font-size:.78rem}
+.kw{color:#C792EA}.cls{color:#82AAFF}.str{color:#C3E88D}.cmt{color:#546E7A;font-style:italic}
+.num{color:#F78C6C}.mth{color:#82AAFF}.ann{color:#FFCB6B}.var{color:#89DDF7}
+.typ{color:#FFCB6B}.op{color:#89DDF7}
+
+/* ── CALLOUT ───────────────────────────────────────────── */
+.callout{border-radius:var(--radius);padding:1rem 1.25rem;margin:1rem 0;border-left:3px solid;display:flex;gap:.9rem;align-items:flex-start}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+.callout-body{font-size:.85rem;line-height:1.6}
+.callout-body strong{display:block;font-size:.82rem;font-weight:700;margin-bottom:.2rem;text-transform:uppercase;letter-spacing:.06em}
+.note{background:rgba(79,158,255,.08);border-color:var(--blue);color:#A8C7FF}
+.note strong{color:var(--blue)}
+.tip{background:rgba(82,224,154,.08);border-color:var(--green);color:#A8EECA}
+.tip strong{color:var(--green)}
+.warn{background:rgba(255,187,85,.08);border-color:var(--amber);color:#FFD9A0}
+.warn strong{color:var(--amber)}
+.danger{background:rgba(255,107,107,.08);border-color:var(--red);color:#FFAFAF}
+.danger strong{color:var(--red)}
+
+/* ── TABLE ─────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);margin:1.2rem 0}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead{background:var(--surface2)}
+th{padding:.75rem 1rem;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+td{padding:.7rem 1rem;border-top:1px solid var(--border);color:var(--text)}
+tr:hover td{background:rgba(255,255,255,.02)}
+td code,th code{font-family:var(--mono);font-size:.78rem;color:var(--cyan);background:rgba(61,220,247,.08);
+  padding:.1rem .4rem;border-radius:4px}
+
+/* ── METHOD PILL ───────────────────────────────────────── */
+.methods{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}
+.method{font-family:var(--mono);font-size:.75rem;padding:.3rem .7rem;border-radius:8px;
+  background:var(--surface2);border:1px solid var(--border);color:var(--cyan);
+  cursor:default;transition:.15s}
+.method:hover{background:var(--surface3);border-color:rgba(61,220,247,.3)}
+
+/* ── BREADCRUMB / TAG ──────────────────────────────────── */
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:.2rem .6rem;border-radius:6px;margin:.15rem}
+.tag-b{background:rgba(79,158,255,.12);color:var(--blue);border:1px solid rgba(79,158,255,.2)}
+.tag-c{background:rgba(61,220,247,.1);color:var(--cyan);border:1px solid rgba(61,220,247,.2)}
+.tag-a{background:rgba(255,187,85,.1);color:var(--amber);border:1px solid rgba(255,187,85,.2)}
+.tag-g{background:rgba(82,224,154,.1);color:var(--green);border:1px solid rgba(82,224,154,.2)}
+
+/* ── ACCORDION ─────────────────────────────────────────── */
+.accordion{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:.75rem 0}
+.acc-head{padding:1rem 1.25rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  background:var(--surface);font-weight:600;font-size:.88rem;user-select:none;transition:.15s}
+.acc-head:hover{background:var(--surface2)}
+.acc-arrow{transition:.25s;color:var(--muted);font-size:.8rem}
+.acc-body{display:none;padding:1.25rem;background:rgba(0,0,0,.2);border-top:1px solid var(--border);font-size:.84rem}
+.acc-body.open{display:block}
+
+/* ── DIAGRAM ───────────────────────────────────────────── */
+.diagram-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:1.5rem;margin:1.5rem 0;overflow-x:auto}
+.diagram-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1.2rem;text-align:center}
+
+/* ── HIGHLIGHT ROW ─────────────────────────────────────── */
+.hl-row{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
+.hl{flex:1;min-width:160px;border-radius:10px;padding:.9rem 1.1rem;border:1px solid}
+.hl-blue{background:rgba(79,158,255,.07);border-color:rgba(79,158,255,.15)}
+.hl-green{background:rgba(82,224,154,.07);border-color:rgba(82,224,154,.15)}
+.hl .hl-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.3rem}
+.hl .hl-val{font-family:var(--mono);font-size:.85rem;font-weight:500;color:var(--text)}
+
+/* ── ANALOGY BOX ───────────────────────────────────────── */
+.analogy{background:linear-gradient(135deg,rgba(79,158,255,.06),rgba(61,220,247,.04));
+  border:1px solid rgba(61,220,247,.12);border-radius:var(--radius);padding:1.2rem;margin:1rem 0}
+.analogy-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);margin-bottom:.6rem}
+.analogy-body{font-size:.84rem;color:var(--muted);line-height:1.65}
+
+/* ── COMPARISON TABLE ──────────────────────────────────── */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.cmp-col{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.cmp-head{padding:.7rem 1rem;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;text-align:center}
+.cmp-head-b{background:rgba(79,158,255,.1);color:var(--blue);border-bottom:1px solid rgba(79,158,255,.15)}
+.cmp-head-g{background:rgba(82,224,154,.1);color:var(--green);border-bottom:1px solid rgba(82,224,154,.15)}
+.cmp-item{padding:.55rem 1rem;font-size:.82rem;border-top:1px solid var(--border);color:var(--muted)}
+.cmp-item:first-of-type{border-top:none}
+
+/* ── STEPS ─────────────────────────────────────────────── */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.step{display:flex;gap:1rem;align-items:flex-start;counter-increment:step}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(79,158,255,.15);border:1px solid rgba(79,158,255,.3);
+  color:var(--blue);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+.step-content{flex:1;font-size:.84rem;padding-top:.15rem}
+.step-content strong{color:var(--text);display:block;margin-bottom:.2rem;font-size:.86rem}
+
+/* ── PROCESS FLOW ──────────────────────────────────────── */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:.3rem;margin:1rem 0;padding:.75rem 1rem;
+  background:var(--surface2);border-radius:var(--radius);overflow-x:auto}
+.flow-box{font-family:var(--mono);font-size:.75rem;padding:.3rem .8rem;border-radius:7px;white-space:nowrap;font-weight:500}
+.flow-arrow{color:var(--muted);font-size:.9rem;flex-shrink:0}
+.fb-blue{background:rgba(79,158,255,.15);color:var(--blue);border:1px solid rgba(79,158,255,.2)}
+.fb-cyan{background:rgba(61,220,247,.1);color:var(--cyan);border:1px solid rgba(61,220,247,.2)}
+.fb-amber{background:rgba(255,187,85,.12);color:var(--amber);border:1px solid rgba(255,187,85,.2)}
+.fb-green{background:rgba(82,224,154,.1);color:var(--green);border:1px solid rgba(82,224,154,.2)}
+.fb-pink{background:rgba(240,123,240,.1);color:var(--pink);border:1px solid rgba(240,123,240,.2)}
+
+/* ── ANIMATIONS ────────────────────────────────────────── */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.section{animation:fadeInUp .5s ease both}
+
+/* ── SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
+
+h2{font-size:1.25rem;font-weight:700;color:var(--text);margin:1.5rem 0 .75rem}
+h3{font-size:1rem;font-weight:700;color:var(--cyan);margin:1.2rem 0 .5rem;letter-spacing:.01em}
+p{margin:.5rem 0;font-size:.88rem;color:var(--muted);line-height:1.7}
+ul,ol{padding-left:1.4rem;margin:.5rem 0}
+li{font-size:.85rem;color:var(--muted);margin:.25rem 0}
+li strong{color:var(--text)}
+code{font-family:var(--mono);font-size:.8em;color:var(--cyan);background:rgba(61,220,247,.08);padding:.1rem .35rem;border-radius:5px}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:3rem}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <span class="nav-logo">☕ Java IO</span>
+  <div class="nav-links">
+    <a class="nav-link active" href="#overview">Overview</a>
+    <a class="nav-link" href="#char-streams">Char Streams</a>
+    <a class="nav-link" href="#byte-streams">Byte Streams</a>
+    <a class="nav-link" href="#serialization">Serialization</a>
+    <a class="nav-link" href="#transient">transient &amp; UID</a>
+    <a class="nav-link" href="#inheritance">Inheritance</a>
+    <a class="nav-link" href="#tokenizer">StreamTokenizer</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-badge">📚 Java SE · java.io Package</div>
+  <h1>IO Streams &amp;<br/>Serialization</h1>
+  <p class="hero-sub">A complete visual guide to Java's I/O model — character streams, byte streams, object serialization, and token parsing — with code examples and diagrams.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Stream Types</div></div>
+    <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Core Classes</div></div>
+    <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Code Examples</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     §1  OVERVIEW
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="overview">
+  <div class="section-header">
+    <div class="section-tag">Section 01</div>
+    <div class="section-title">What is a Stream?</div>
+    <div class="section-desc">A stream is an abstraction representing a flow of data between a program and an external source or destination.</div>
+  </div>
+
+  <div class="grid3">
+    <div class="card accent-blue">
+      <div class="card-icon icon-blue">📁</div>
+      <div class="card-title">Program ↔ File</div>
+      <div class="card-body">Read from or write to files on disk using file-oriented stream classes.</div>
+    </div>
+    <div class="card accent-cyan">
+      <div class="card-icon icon-cyan">🧠</div>
+      <div class="card-title">Program ↔ Memory</div>
+      <div class="card-body">Transfer data in-memory using byte array or string streams.</div>
+    </div>
+    <div class="card accent-amber">
+      <div class="card-icon icon-amber">🌐</div>
+      <div class="card-title">Program ↔ Network</div>
+      <div class="card-body">Send and receive data across a network using socket streams.</div>
+    </div>
+    <div class="card accent-green">
+      <div class="card-icon icon-green">🖥️</div>
+      <div class="card-title">Program ↔ Device</div>
+      <div class="card-body">Interact with console, keyboard, printers, and other peripherals.</div>
+    </div>
+  </div>
+
+  <div class="callout note">
+    <div class="callout-icon">📦</div>
+    <div class="callout-body">
+      <strong>Package Location</strong>
+      All stream classes live in <code>java.io</code> and <code>java.nio</code>. Data must first be represented as either <strong>bytes (8-bit)</strong> or <strong>characters (16-bit Unicode)</strong> before transfer.
+    </div>
+  </div>
+
+  <!-- Class Hierarchy Diagram -->
+  <div class="diagram-wrap">
+    <div class="diagram-title">☕ Java IO Class Hierarchy</div>
+    <svg width="100%" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="font-family:'JetBrains Mono',monospace">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="rgba(120,140,200,.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- ── java.io Package label -->
+      <rect x="10" y="10" width="880" height="500" rx="14" fill="none" stroke="rgba(120,140,200,.1)" stroke-width="1" stroke-dasharray="6 4"/>
+      <text x="455" y="32" text-anchor="middle" font-size="11" fill="rgba(120,140,200,.35)" font-weight="700" letter-spacing="2">java.io  PACKAGE</text>
+
+      <!-- ── BYTE column header -->
+      <text x="225" y="60" text-anchor="middle" font-size="10" fill="#4F9EFF" font-weight="700" letter-spacing="1.5">BYTE STREAMS  (8-bit)</text>
+      <!-- ── CHAR column header -->
+      <text x="675" y="60" text-anchor="middle" font-size="10" fill="#52E09A" font-weight="700" letter-spacing="1.5">CHARACTER STREAMS  (16-bit)</text>
+
+      <!-- ══ BYTE SIDE ══ -->
+      <!-- InputStream -->
+      <rect x="90" y="80" width="140" height="42" rx="8" fill="rgba(79,158,255,.18)" stroke="rgba(79,158,255,.4)" stroke-width="1"/>
+      <text x="160" y="96" text-anchor="middle" font-size="11" fill="#89C4FF" font-weight="700">InputStream</text>
+      <text x="160" y="112" text-anchor="middle" font-size="9" fill="rgba(79,158,255,.6)">(abstract)</text>
+
+      <!-- OutputStream -->
+      <rect x="270" y="80" width="150" height="42" rx="8" fill="rgba(79,158,255,.18)" stroke="rgba(79,158,255,.4)" stroke-width="1"/>
+      <text x="345" y="96" text-anchor="middle" font-size="11" fill="#89C4FF" font-weight="700">OutputStream</text>
+      <text x="345" y="112" text-anchor="middle" font-size="9" fill="rgba(79,158,255,.6)">(abstract)</text>
+
+      <!-- FileInputStream -->
+      <rect x="20" y="180" width="148" height="38" rx="7" fill="rgba(79,158,255,.09)" stroke="rgba(79,158,255,.25)" stroke-width="1"/>
+      <text x="94" y="200" text-anchor="middle" font-size="10" fill="#4F9EFF">FileInputStream</text>
+      <text x="94" y="213" text-anchor="middle" font-size="8" fill="rgba(79,158,255,.5)">reads binary files</text>
+
+      <!-- BufferedInputStream -->
+      <rect x="178" y="180" width="168" height="38" rx="7" fill="rgba(79,158,255,.09)" stroke="rgba(79,158,255,.25)" stroke-width="1"/>
+      <text x="262" y="200" text-anchor="middle" font-size="10" fill="#4F9EFF">BufferedInputStream</text>
+      <text x="262" y="213" text-anchor="middle" font-size="8" fill="rgba(79,158,255,.5)">buffered reads</text>
+
+      <!-- FileOutputStream -->
+      <rect x="20" y="280" width="148" height="38" rx="7" fill="rgba(61,220,247,.08)" stroke="rgba(61,220,247,.22)" stroke-width="1"/>
+      <text x="94" y="300" text-anchor="middle" font-size="10" fill="#3DDCF7">FileOutputStream</text>
+      <text x="94" y="313" text-anchor="middle" font-size="8" fill="rgba(61,220,247,.5)">writes binary files</text>
+
+      <!-- BufferedOutputStream -->
+      <rect x="178" y="280" width="168" height="38" rx="7" fill="rgba(61,220,247,.08)" stroke="rgba(61,220,247,.22)" stroke-width="1"/>
+      <text x="262" y="300" text-anchor="middle" font-size="10" fill="#3DDCF7">BufferedOutputStream</text>
+      <text x="262" y="313" text-anchor="middle" font-size="8" fill="rgba(61,220,247,.5)">buffered writes</text>
+
+      <!-- PrintStream -->
+      <rect x="178" y="370" width="140" height="38" rx="7" fill="rgba(255,107,107,.09)" stroke="rgba(255,107,107,.25)" stroke-width="1"/>
+      <text x="248" y="390" text-anchor="middle" font-size="10" fill="#FF6B6B">PrintStream</text>
+      <text x="248" y="403" text-anchor="middle" font-size="8" fill="rgba(255,107,107,.5)">System.out</text>
+
+      <!-- ObjectOutputStream / ObjectInputStream -->
+      <rect x="20" y="370" width="148" height="38" rx="7" fill="rgba(240,123,240,.08)" stroke="rgba(240,123,240,.2)" stroke-width="1"/>
+      <text x="94" y="389" text-anchor="middle" font-size="9.5" fill="#F07BF0">ObjectIn/Out</text>
+      <text x="94" y="402" text-anchor="middle" font-size="8" fill="rgba(240,123,240,.5)">serialization</text>
+
+      <!-- ── BYTE connectors -->
+      <line x1="160" y1="122" x2="94" y2="178" stroke="rgba(79,158,255,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="160" y1="122" x2="262" y2="178" stroke="rgba(79,158,255,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="345" y1="122" x2="94" y2="278" stroke="rgba(61,220,247,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="345" y1="122" x2="262" y2="278" stroke="rgba(61,220,247,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="345" y1="122" x2="248" y2="368" stroke="rgba(255,107,107,.3)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+      <line x1="160" y1="122" x2="94" y2="368" stroke="rgba(240,123,240,.3)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+      <!-- ══ CHAR SIDE ══ -->
+      <!-- Reader -->
+      <rect x="540" y="80" width="130" height="42" rx="8" fill="rgba(82,224,154,.18)" stroke="rgba(82,224,154,.4)" stroke-width="1"/>
+      <text x="605" y="96" text-anchor="middle" font-size="11" fill="#86E8B8" font-weight="700">Reader</text>
+      <text x="605" y="112" text-anchor="middle" font-size="9" fill="rgba(82,224,154,.6)">(abstract)</text>
+
+      <!-- Writer -->
+      <rect x="690" y="80" width="130" height="42" rx="8" fill="rgba(82,224,154,.18)" stroke="rgba(82,224,154,.4)" stroke-width="1"/>
+      <text x="755" y="96" text-anchor="middle" font-size="11" fill="#86E8B8" font-weight="700">Writer</text>
+      <text x="755" y="112" text-anchor="middle" font-size="9" fill="rgba(82,224,154,.6)">(abstract)</text>
+
+      <!-- FileReader -->
+      <rect x="480" y="180" width="130" height="38" rx="7" fill="rgba(82,224,154,.09)" stroke="rgba(82,224,154,.22)" stroke-width="1"/>
+      <text x="545" y="200" text-anchor="middle" font-size="10" fill="#52E09A">FileReader</text>
+      <text x="545" y="213" text-anchor="middle" font-size="8" fill="rgba(82,224,154,.5)">reads text files</text>
+
+      <!-- BufferedReader -->
+      <rect x="625" y="180" width="150" height="38" rx="7" fill="rgba(82,224,154,.09)" stroke="rgba(82,224,154,.22)" stroke-width="1"/>
+      <text x="700" y="200" text-anchor="middle" font-size="10" fill="#52E09A">BufferedReader</text>
+      <text x="700" y="213" text-anchor="middle" font-size="8" fill="rgba(82,224,154,.5)">readLine() · fastest</text>
+
+      <!-- FileWriter -->
+      <rect x="480" y="280" width="130" height="38" rx="7" fill="rgba(255,187,85,.09)" stroke="rgba(255,187,85,.22)" stroke-width="1"/>
+      <text x="545" y="300" text-anchor="middle" font-size="10" fill="#FFBB55">FileWriter</text>
+      <text x="545" y="313" text-anchor="middle" font-size="8" fill="rgba(255,187,85,.5)">writes text files</text>
+
+      <!-- BufferedWriter -->
+      <rect x="625" y="280" width="150" height="38" rx="7" fill="rgba(255,187,85,.09)" stroke="rgba(255,187,85,.22)" stroke-width="1"/>
+      <text x="700" y="300" text-anchor="middle" font-size="10" fill="#FFBB55">BufferedWriter</text>
+      <text x="700" y="313" text-anchor="middle" font-size="8" fill="rgba(255,187,85,.5)">newLine() · buffered</text>
+
+      <!-- PrintWriter -->
+      <rect x="625" y="370" width="150" height="38" rx="7" fill="rgba(240,123,240,.09)" stroke="rgba(240,123,240,.22)" stroke-width="1"/>
+      <text x="700" y="390" text-anchor="middle" font-size="10" fill="#F07BF0">PrintWriter</text>
+      <text x="700" y="403" text-anchor="middle" font-size="8" fill="rgba(240,123,240,.5)">most enhanced writer</text>
+
+      <!-- InputStreamReader -->
+      <rect x="480" y="370" width="130" height="38" rx="7" fill="rgba(61,220,247,.08)" stroke="rgba(61,220,247,.2)" stroke-width="1"/>
+      <text x="545" y="389" text-anchor="middle" font-size="9.5" fill="#3DDCF7">InputStreamReader</text>
+      <text x="545" y="402" text-anchor="middle" font-size="8" fill="rgba(61,220,247,.5)">bridge class</text>
+
+      <!-- ── CHAR connectors -->
+      <line x1="605" y1="122" x2="545" y2="178" stroke="rgba(82,224,154,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="605" y1="122" x2="700" y2="178" stroke="rgba(82,224,154,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="755" y1="122" x2="545" y2="278" stroke="rgba(255,187,85,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="755" y1="122" x2="700" y2="278" stroke="rgba(255,187,85,.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="755" y1="122" x2="700" y2="368" stroke="rgba(240,123,240,.3)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+      <line x1="605" y1="122" x2="545" y2="368" stroke="rgba(61,220,247,.3)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+      <!-- ── Legend -->
+      <rect x="340" y="460" width="220" height="50" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <line x1="355" y1="478" x2="395" y2="478" stroke="rgba(120,140,200,.5)" stroke-width="1"/>
+      <text x="402" y="482" font-size="9" fill="rgba(120,140,200,.6)">extends</text>
+      <line x1="355" y1="495" x2="395" y2="495" stroke="rgba(120,140,200,.4)" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="402" y="499" font-size="9" fill="rgba(120,140,200,.6)">wraps / chains</text>
+    </svg>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <strong>Quick Rule</strong>
+      If the class name ends in <code>Stream</code> → Byte-oriented. Ends in <code>Reader</code>/<code>Writer</code> → Character-oriented.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §2  CHARACTER STREAMS
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="char-streams">
+  <div class="section-header">
+    <div class="section-tag">Section 02</div>
+    <div class="section-title">Character Streams</div>
+    <div class="section-desc">Used exclusively for <strong>text data</strong> — Strings, CSV, text files. Internally converts characters to bytes using an encoding like UTF-8.</div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ── FileWriter ── -->
+  <h2>✍️ FileWriter</h2>
+  <p>Writes character data directly to a file. Simple but lacks cross-platform line-separator support.</p>
+
+  <div class="hl-row">
+    <div class="hl hl-blue"><div class="hl-label">Constructor (overwrite)</div><div class="hl-val">new FileWriter("abc.txt")</div></div>
+    <div class="hl hl-blue"><div class="hl-label">Constructor (append)</div><div class="hl-val">new FileWriter("abc.txt", true)</div></div>
+  </div>
+
+  <h3>Methods</h3>
+  <div class="methods">
+    <span class="method">write(int ch)</span><span class="method">write(char[] ch)</span><span class="method">write(String s)</span>
+    <span class="method">flush()</span><span class="method">close()</span>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <strong>Limitation</strong>
+      FileWriter requires manual line-separator insertion (<code>"\n"</code> or <code>"\r\n"</code>), which varies by OS. Use <strong>BufferedWriter</strong> with <code>newLine()</code> instead.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><cmt>// ✅ Recommended: try-with-resources (auto flush + close)</cmt>
+<kw>try</kw> (<cls>FileWriter</cls> fw = <kw>new</kw> <cls>FileWriter</cls>(<str>"abc.txt"</str>, <kw>true</kw>)) {
+    fw.<mth>write</mth>(<num>100</num>);            <cmt>// writes char 'd' (ASCII 100)</cmt>
+    fw.<mth>write</mth>(<str>"Hello World\n"</str>); <cmt>// writes string + newline</cmt>
+    <kw>char</kw>[] ch = {<str>'a'</str>, <str>'b'</str>, <str>'c'</str>};
+    fw.<mth>write</mth>(ch);            <cmt>// writes char array</cmt>
+} <kw>catch</kw> (<cls>IOException</cls> e) {
+    e.<mth>printStackTrace</mth>();
+}
+<cmt>// close() auto-calls flush() — no explicit flush() needed!</cmt></code></pre>
+  </div>
+
+  <!-- ── FileReader ── -->
+  <h2>📖 FileReader</h2>
+  <p>Reads character data from a file, character by character. Handles Unicode natively.</p>
+  <div class="methods">
+    <span class="method">int read()</span><span class="method">int read(char[])</span><span class="method">void close()</span>
+  </div>
+  <div class="callout note">
+    <div class="callout-icon">ℹ️</div>
+    <div class="callout-body">
+      <strong>Return Value</strong>
+      <code>read()</code> returns the character as an <code>int</code> (Unicode value). Returns <code>-1</code> at End of File (EOF).
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Two Approaches</span></div>
+<pre><code><cmt>// Approach 1: char-by-char (safe for all sizes)</cmt>
+<kw>try</kw> (<cls>FileReader</cls> fr = <kw>new</kw> <cls>FileReader</cls>(<str>"abc.txt"</str>)) {
+    <kw>int</kw> i;
+    <kw>while</kw> ((i = fr.<mth>read</mth>()) != -<num>1</num>) {
+        <cls>System</cls>.out.<mth>print</mth>((<kw>char</kw>) i);
+    }
+}
+
+<cmt>// Approach 2: char[] bulk read (faster, not for huge files)</cmt>
+<kw>try</kw> (<cls>FileReader</cls> fr = <kw>new</kw> <cls>FileReader</cls>(f)) {
+    <kw>char</kw>[] buf = <kw>new</kw> <kw>char</kw>[(<kw>int</kw>) f.<mth>length</mth>()];
+    fr.<mth>read</mth>(buf);
+    <cls>System</cls>.out.<mth>println</mth>(<kw>new</kw> <cls>String</cls>(buf));
+}</code></pre>
+  </div>
+
+  <!-- ── BufferedWriter ── -->
+  <h2>📝 BufferedWriter</h2>
+  <p>Wraps a <code>Writer</code> object to add buffering and the cross-platform <code>newLine()</code> method. Never communicates with the file directly.</p>
+
+  <div class="flow">
+    <span class="flow-box fb-pink">BufferedWriter</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box fb-amber">FileWriter</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box fb-cyan">File on Disk</span>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><kw>try</kw> (<cls>BufferedWriter</cls> bw = <kw>new</kw> <cls>BufferedWriter</cls>(<kw>new</kw> <cls>FileWriter</cls>(<str>"a2.txt"</str>))) {
+    bw.<mth>write</mth>(<num>100</num>);                    <cmt>// 'd'</cmt>
+    bw.<mth>newLine</mth>();                    <cmt>// ✅ OS-independent newline!</cmt>
+    bw.<mth>write</mth>(<str>"Welcome to Java"</str>);
+    bw.<mth>newLine</mth>();
+    <kw>char</kw>[] ch = {<str>'a'</str>, <str>'b'</str>, <str>'c'</str>};
+    bw.<mth>write</mth>(ch);
+} <kw>catch</kw> (<cls>IOException</cls> e) { e.<mth>printStackTrace</mth>(); }</code></pre>
+  </div>
+  <div class="callout tip">
+    <div class="callout-icon">✅</div>
+    <div class="callout-body">
+      <strong>Auto Close Chain</strong>
+      Closing <code>BufferedWriter</code> automatically closes the underlying <code>FileWriter</code> too.
+    </div>
+  </div>
+
+  <!-- ── BufferedReader ── -->
+  <h2>📚 BufferedReader</h2>
+  <p>The most enhanced <strong>reader</strong> class. Reads data <strong>line by line</strong> (not char-by-char) for superior performance. Also works for keyboard input via <code>System.in</code>.</p>
+  <div class="methods">
+    <span class="method">int read()</span><span class="method">int read(char[])</span><span class="method">String readLine()</span><span class="method">void close()</span>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — File &amp; Keyboard Input</span></div>
+<pre><code><cmt>// Reading from a file line by line</cmt>
+<kw>try</kw> (<cls>BufferedReader</cls> br = <kw>new</kw> <cls>BufferedReader</cls>(<kw>new</kw> <cls>FileReader</cls>(<str>"abc.txt"</str>))) {
+    <cls>String</cls> line;
+    <kw>while</kw> ((line = br.<mth>readLine</mth>()) != <kw>null</kw>) {
+        <cls>System</cls>.out.<mth>println</mth>(line);  <cmt>// readLine() returns null at EOF</cmt>
+    }
+}
+
+<cmt>// Reading from keyboard (User Input)</cmt>
+<kw>try</kw> (<cls>BufferedReader</cls> br = <kw>new</kw> <cls>BufferedReader</cls>(<kw>new</kw> <cls>InputStreamReader</cls>(<cls>System</cls>.in))) {
+    <cls>System</cls>.out.<mth>print</mth>(<str>"Enter name: "</str>);
+    <cls>String</cls> name = br.<mth>readLine</mth>();
+    <cls>System</cls>.out.<mth>print</mth>(<str>"Enter salary: "</str>);
+    <kw>double</kw> sal = <cls>Double</cls>.<mth>parseDouble</mth>(br.<mth>readLine</mth>());
+    <cls>System</cls>.out.<mth>println</mth>(name + <str>" earns "</str> + (sal + <num>1000</num>));
+}</code></pre>
+  </div>
+
+  <!-- ── PrintWriter ── -->
+  <h2>🖨️ PrintWriter — Most Enhanced Writer</h2>
+  <p>Unlike <code>FileWriter</code> and <code>BufferedWriter</code>, <code>PrintWriter</code> can write <strong>any primitive type</strong> directly — int, boolean, double, char — without manual conversion.</p>
+
+  <div class="cmp-grid">
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-b">write(100)</div>
+      <div class="cmp-item">Writes the character <strong>'d'</strong> (ASCII 100)</div>
+      <div class="cmp-item">FileWriter / BufferedWriter behavior</div>
+    </div>
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-g">print(100)</div>
+      <div class="cmp-item">Writes the integer <strong>100</strong> as text</div>
+      <div class="cmp-item">PrintWriter behavior</div>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><cmt>// PrintWriter with append mode via FileWriter chain</cmt>
+<kw>try</kw> (<cls>PrintWriter</cls> pw = <kw>new</kw> <cls>PrintWriter</cls>(<kw>new</kw> <cls>FileWriter</cls>(<str>"a3.txt"</str>, <kw>true</kw>))) {
+    pw.<mth>write</mth>(<num>100</num>);          <cmt>// → 'd'</cmt>
+    pw.<mth>println</mth>(<num>100</num>);        <cmt>// → 100\n</cmt>
+    pw.<mth>println</mth>(<str>"Welcome!"</str>); <cmt>// → Welcome!\n</cmt>
+    pw.<mth>println</mth>(<kw>true</kw>);        <cmt>// → true\n</cmt>
+    pw.<mth>println</mth>(<str>'a'</str>);         <cmt>// → a\n</cmt>
+    pw.<mth>println</mth>(<num>50.55</num>);      <cmt>// → 50.55\n</cmt>
+}</code></pre>
+  </div>
+
+  <!-- Summary comparison -->
+  <h2>📊 Character Writer Comparison</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Class</th><th>Direct to File</th><th>Buffered</th><th>newLine()</th><th>Primitives</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td><code>FileWriter</code></td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>Simple writes</td></tr>
+        <tr><td><code>BufferedWriter</code></td><td>❌ (wraps Writer)</td><td>✅</td><td>✅</td><td>❌</td><td>Performance + newline</td></tr>
+        <tr><td><code>PrintWriter</code></td><td>✅ or via Writer</td><td>❌</td><td>❌</td><td>✅</td><td>All data types · <strong>⭐ Best</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §3  BYTE STREAMS
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="byte-streams">
+  <div class="section-header">
+    <div class="section-tag">Section 03</div>
+    <div class="section-title">Byte Streams</div>
+    <div class="section-desc">Handle raw binary data — images, videos, audio, serialized objects. Every single byte matters.</div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="analogy">
+    <div class="analogy-title">⚡ Real-Life Analogy</div>
+    <div class="analogy-body">Think of Byte Streams like electricity — you don't see meaning, it is a raw signal the machine understands. Images, videos, and audio are NOT readable text; they are binary data where every single bit matters.</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card accent-blue">
+      <div class="card-icon icon-blue">📥</div>
+      <div class="card-title">FileInputStream</div>
+      <div class="card-body">Reads bytes from a file. Used for images, videos, audio, binary files. <code>read()</code> returns <code>-1</code> at EOF.</div>
+    </div>
+    <div class="card accent-cyan">
+      <div class="card-icon icon-cyan">📤</div>
+      <div class="card-title">FileOutputStream</div>
+      <div class="card-body">Writes raw bytes to a file. Does NOT support <code>write(String)</code> or <code>newLine()</code> — bytes only.</div>
+    </div>
+    <div class="card accent-amber">
+      <div class="card-icon icon-amber">🚀</div>
+      <div class="card-title">BufferedInputStream</div>
+      <div class="card-body">Reads a large block into a memory buffer (8 KB default), drastically reducing disk access operations.</div>
+    </div>
+    <div class="card accent-green">
+      <div class="card-icon icon-green">💾</div>
+      <div class="card-title">BufferedOutputStream</div>
+      <div class="card-body">Stores writes in a buffer; flushes to disk only when buffer is full or <code>flush()</code> is called.</div>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <div class="analogy-title">🪣 Buffered Streams Analogy</div>
+    <div class="analogy-body">
+      <strong>Without buffer:</strong> You walk to the water tank every time you need one glass — very slow.<br/>
+      <strong>With buffer:</strong> You fill an 8-litre bucket once and use it repeatedly — much faster!<br/>
+      <code>BufferedInputStream</code> internally maintains a buffer of <strong>8 KB</strong>.
+    </div>
+  </div>
+
+  <h2>📋 Code: Copy an Image File</h2>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Optimized with Buffers</span></div>
+<pre><code><kw>try</kw> (
+    <cls>BufferedInputStream</cls>  bis = <kw>new</kw> <cls>BufferedInputStream</cls>(<kw>new</kw> <cls>FileInputStream</cls>(<str>"img.jpg"</str>));
+    <cls>BufferedOutputStream</cls> bos = <kw>new</kw> <cls>BufferedOutputStream</cls>(<kw>new</kw> <cls>FileOutputStream</cls>(<str>"img2.jpg"</str>))
+) {
+    <kw>int</kw> data;
+    <kw>while</kw> ((data = bis.<mth>read</mth>()) != -<num>1</num>) {
+        bos.<mth>write</mth>(data);
+    }
+    <cls>System</cls>.out.<mth>println</mth>(<str>"File copied successfully!"</str>);
+} <kw>catch</kw> (<cls>IOException</cls> e) { e.<mth>printStackTrace</mth>(); }
+<cmt>// BufferedInputStream reduces disk reads by buffering 8192 bytes at a time</cmt></code></pre>
+  </div>
+
+  <h2>🖨️ PrintStream vs PrintWriter</h2>
+  <div class="cmp-grid">
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-b">PrintStream</div>
+      <div class="cmp-item">Byte-Oriented</div>
+      <div class="cmp-item">Best for byte output</div>
+      <div class="cmp-item">Older approach</div>
+      <div class="cmp-item">Less Unicode support</div>
+      <div class="cmp-item">e.g. <code>System.out</code></div>
+    </div>
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-g">PrintWriter</div>
+      <div class="cmp-item">Character-Oriented</div>
+      <div class="cmp-item">Best for text output</div>
+      <div class="cmp-item">Modern approach</div>
+      <div class="cmp-item">Full Unicode support</div>
+      <div class="cmp-item">⭐ Recommended</div>
+    </div>
+  </div>
+
+  <!-- Student Tasks -->
+  <h2>🎯 Practice Tasks</h2>
+  <div class="accordion">
+    <div class="acc-head" onclick="toggle(this)">Task 1: Merge Two Files <span class="acc-arrow">▼</span></div>
+    <div class="acc-body">
+      <div class="code-wrap">
+        <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><kw>try</kw> (
+    <cls>BufferedReader</cls> br1 = <kw>new</kw> <cls>BufferedReader</cls>(<kw>new</kw> <cls>FileReader</cls>(<str>"file1.txt"</str>));
+    <cls>BufferedReader</cls> br2 = <kw>new</kw> <cls>BufferedReader</cls>(<kw>new</kw> <cls>FileReader</cls>(<str>"file2.txt"</str>));
+    <cls>PrintWriter</cls>   pw  = <kw>new</kw> <cls>PrintWriter</cls>(<str>"merged.txt"</str>)
+) {
+    <cls>String</cls> line;
+    <kw>while</kw> ((line = br1.<mth>readLine</mth>()) != <kw>null</kw>) pw.<mth>println</mth>(line);
+    <kw>while</kw> ((line = br2.<mth>readLine</mth>()) != <kw>null</kw>) pw.<mth>println</mth>(line);
+    <cls>System</cls>.out.<mth>println</mth>(<str>"Files merged!"</str>);
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-head" onclick="toggle(this)">Task 2: Find the Longest Line <span class="acc-arrow">▼</span></div>
+    <div class="acc-body">
+      <div class="code-wrap">
+        <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><cls>String</cls> longest = <str>""</str>;
+<kw>try</kw> (<cls>BufferedReader</cls> br = <kw>new</kw> <cls>BufferedReader</cls>(<kw>new</kw> <cls>FileReader</cls>(<str>"abc.txt"</str>))) {
+    <cls>String</cls> line;
+    <kw>while</kw> ((line = br.<mth>readLine</mth>()) != <kw>null</kw>) {
+        <kw>if</kw> (line.<mth>length</mth>() > longest.<mth>length</mth>()) longest = line;
+    }
+}
+<cls>System</cls>.out.<mth>println</mth>(<str>"Longest: "</str> + longest + <str>" (len="</str> + longest.<mth>length</mth>() + <str>")"</str>);</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-head" onclick="toggle(this)">Task 3: Replace "Java" with "JAVA" in a File <span class="acc-arrow">▼</span></div>
+    <div class="acc-body">
+      <div class="code-wrap">
+        <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><cls>StringBuilder</cls> sb = <kw>new</kw> <cls>StringBuilder</cls>();
+<kw>try</kw> (<cls>BufferedReader</cls> br = <kw>new</kw> <cls>BufferedReader</cls>(<kw>new</kw> <cls>FileReader</cls>(<str>"file1.txt"</str>))) {
+    <cls>String</cls> line;
+    <kw>while</kw> ((line = br.<mth>readLine</mth>()) != <kw>null</kw>)
+        sb.<mth>append</mth>(line.<mth>replace</mth>(<str>"Java"</str>, <str>"JAVA"</str>)).<mth>append</mth>(<str>"\n"</str>);
+}
+<kw>try</kw> (<cls>PrintWriter</cls> pw = <kw>new</kw> <cls>PrintWriter</cls>(<str>"file1.txt"</str>)) {
+    pw.<mth>print</mth>(sb.<mth>toString</mth>());
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §4  SERIALIZATION
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="serialization">
+  <div class="section-header">
+    <div class="section-tag">Section 04</div>
+    <div class="section-title">Serialization</div>
+    <div class="section-desc">Converting an object from RAM into a byte stream so it can be stored in a file or sent over a network.</div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- Visual diagram -->
+  <div class="diagram-wrap">
+    <div class="diagram-title">🔄 Serialization / Deserialization Flow</div>
+    <svg width="100%" viewBox="0 0 860 160" xmlns="http://www.w3.org/2000/svg" style="font-family:'JetBrains Mono',monospace">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="rgba(120,140,200,.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Object in RAM -->
+      <rect x="20" y="50" width="160" height="60" rx="10" fill="rgba(79,158,255,.15)" stroke="rgba(79,158,255,.4)" stroke-width="1"/>
+      <text x="100" y="74" text-anchor="middle" font-size="11" fill="#4F9EFF" font-weight="700">Object (RAM)</text>
+      <text x="100" y="91" text-anchor="middle" font-size="9" fill="rgba(79,158,255,.6)">int i = 22; name="Raj"</text>
+      <text x="100" y="134" text-anchor="middle" font-size="9" fill="rgba(79,158,255,.5)">implements Serializable</text>
+
+      <!-- Byte stream -->
+      <rect x="250" y="50" width="160" height="60" rx="10" fill="rgba(255,187,85,.12)" stroke="rgba(255,187,85,.3)" stroke-width="1"/>
+      <text x="330" y="74" text-anchor="middle" font-size="11" fill="#FFBB55" font-weight="700">Byte Stream</text>
+      <text x="330" y="91" text-anchor="middle" font-size="9" fill="rgba(255,187,85,.5)">‹ac ed 00 05 ... ›</text>
+      <text x="330" y="134" text-anchor="middle" font-size="9" fill="rgba(255,187,85,.5)">ObjectOutputStream</text>
+
+      <!-- File / Network -->
+      <rect x="480" y="50" width="160" height="60" rx="10" fill="rgba(82,224,154,.12)" stroke="rgba(82,224,154,.3)" stroke-width="1"/>
+      <text x="560" y="74" text-anchor="middle" font-size="11" fill="#52E09A" font-weight="700">File / Network</text>
+      <text x="560" y="91" text-anchor="middle" font-size="9" fill="rgba(82,224,154,.5)">data.ser</text>
+
+      <!-- Object restored -->
+      <rect x="710" y="50" width="130" height="60" rx="10" fill="rgba(240,123,240,.12)" stroke="rgba(240,123,240,.3)" stroke-width="1"/>
+      <text x="775" y="74" text-anchor="middle" font-size="11" fill="#F07BF0" font-weight="700">Object (RAM)</text>
+      <text x="775" y="91" text-anchor="middle" font-size="9" fill="rgba(240,123,240,.5)">restored state</text>
+      <text x="775" y="134" text-anchor="middle" font-size="9" fill="rgba(240,123,240,.5)">ObjectInputStream</text>
+
+      <!-- Arrows -->
+      <line x1="182" y1="80" x2="248" y2="80" stroke="rgba(255,187,85,.5)" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="412" y1="80" x2="478" y2="80" stroke="rgba(82,224,154,.5)" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="642" y1="80" x2="708" y2="80" stroke="rgba(240,123,240,.5)" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+      <!-- Labels -->
+      <text x="215" y="70" text-anchor="middle" font-size="9" fill="#FFBB55" font-weight="600">Serialize</text>
+      <text x="445" y="70" text-anchor="middle" font-size="9" fill="#52E09A" font-weight="600">Save / Send</text>
+      <text x="675" y="70" text-anchor="middle" font-size="9" fill="#F07BF0" font-weight="600">Deserialize</text>
+    </svg>
+  </div>
+
+  <div class="analogy">
+    <div class="analogy-title">🧳 Real-Life Analogy</div>
+    <div class="analogy-body">
+      <strong>Object = Clothes.</strong> <strong>Serialization = Packing into a suitcase.</strong> <strong>File = Suitcase.</strong><br/>
+      You convert the object into a portable form. Deserialization = Unpacking — restoring the original content.
+    </div>
+  </div>
+
+  <h2>🔑 The Serializable Interface</h2>
+  <ul>
+    <li>Lives in <code>java.io.Serializable</code></li>
+    <li>A <strong>marker interface</strong> — no methods to implement</li>
+    <li>Only objects of classes that implement <code>Serializable</code> can be serialized</li>
+    <li>Attempting to serialize a non-serializable object → <code>NotSerializableException</code></li>
+    <li><strong>String, all Wrapper classes, arrays, most Collection classes</strong> already implement it</li>
+  </ul>
+
+  <h2>📦 ObjectOutputStream — Serialization</h2>
+  <div class="methods">
+    <span class="method">void writeObject(Object o)</span>
+  </div>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — A.java + SerializeDemo</span></div>
+<pre><code><cmt>// A.java — must implement Serializable</cmt>
+<kw>public class</kw> <cls>A</cls> <kw>implements</kw> <cls>Serializable</cls> {
+    <kw>private static final long</kw> serialVersionUID = <num>1L</num>;
+    <kw>int</kw> i = <num>10</num>;
+    <kw>void</kw> <mth>funA</mth>() { <cls>System</cls>.out.<mth>println</mth>(i); }
+}
+
+<cmt>// Serialization</cmt>
+<cls>A</cls> a1 = <kw>new</kw> <cls>A</cls>();
+a1.i = <num>22</num>;  <cmt>// change state</cmt>
+<kw>try</kw> (<cls>ObjectOutputStream</cls> oos = <kw>new</kw> <cls>ObjectOutputStream</cls>(<kw>new</kw> <cls>FileOutputStream</cls>(<str>"abc.ser"</str>))) {
+    oos.<mth>writeObject</mth>(a1);         <cmt>// serialize object</cmt>
+    oos.<mth>writeObject</mth>(<str>"Chitkara"</str>); <cmt>// String is Serializable</cmt>
+    oos.<mth>writeObject</mth>(<num>10</num>);         <cmt>// autoboxed to Integer</cmt>
+}
+<cls>System</cls>.out.<mth>println</mth>(<str>"Serialized!"</str>);</code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <strong>Order Matters!</strong>
+      Serialize 3 objects → Deserialize in the <strong>same order</strong>. Wrong order = <code>ClassCastException</code>.
+    </div>
+  </div>
+
+  <h2>🔓 ObjectInputStream — Deserialization</h2>
+  <div class="methods">
+    <span class="method">Object readObject()</span>
+  </div>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Deserialization</span></div>
+<pre><code><kw>try</kw> (<cls>ObjectInputStream</cls> ois = <kw>new</kw> <cls>ObjectInputStream</cls>(<kw>new</kw> <cls>FileInputStream</cls>(<str>"abc.ser"</str>))) {
+    <cls>A</cls>      a1      = (<cls>A</cls>)      ois.<mth>readObject</mth>(); <cmt>// downcast required</cmt>
+    <cls>String</cls> msg     = (<cls>String</cls>) ois.<mth>readObject</mth>();
+    <kw>int</kw>    x       = (<cls>Integer</cls>)ois.<mth>readObject</mth>();
+    a1.<mth>funA</mth>(); <cmt>// works! state was restored</cmt>
+} <kw>catch</kw> (<cls>Exception</cls> e) { e.<mth>printStackTrace</mth>(); }
+<cmt>// Note: Constructor is NOT called during deserialization!</cmt></code></pre>
+  </div>
+
+  <h2>🏎️ Efficient Serialization with Collections</h2>
+  <p>Instead of writing objects one-by-one, group them in a <code>List</code> and call <code>writeObject()</code> once — far fewer file operations!</p>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Serialize a List&lt;Student&gt;</span></div>
+<pre><code><cls>List</cls>&lt;<cls>Student</cls>&gt; students = <kw>new</kw> <cls>ArrayList</cls>&lt;&gt;();
+students.<mth>add</mth>(<kw>new</kw> <cls>Student</cls>(<num>10</num>, <str>"Raj"</str>,  <num>780</num>));
+students.<mth>add</mth>(<kw>new</kw> <cls>Student</cls>(<num>11</num>, <str>"Aman"</str>, <num>680</num>));
+
+<cmt>// ONE write — much faster than 5 individual writeObject() calls</cmt>
+<kw>try</kw> (<cls>ObjectOutputStream</cls> oos = <kw>new</kw> <cls>ObjectOutputStream</cls>(<kw>new</kw> <cls>FileOutputStream</cls>(<str>"students.ser"</str>))) {
+    oos.<mth>writeObject</mth>(students);
+}
+
+<cmt>// ONE read</cmt>
+<kw>try</kw> (<cls>ObjectInputStream</cls> ois = <kw>new</kw> <cls>ObjectInputStream</cls>(<kw>new</kw> <cls>FileInputStream</cls>(<str>"students.ser"</str>))) {
+    <cls>List</cls>&lt;<cls>Student</cls>&gt; list = (<cls>ArrayList</cls>&lt;<cls>Student</cls>&gt;) ois.<mth>readObject</mth>();
+    <kw>for</kw> (<cls>Student</cls> s : list) <cls>System</cls>.out.<mth>println</mth>(s);
+}</code></pre>
+  </div>
+
+  <!-- Object Graph -->
+  <h2>🕸️ Object Graph</h2>
+  <p>When you serialize an object, <strong>all objects reachable from it are also serialized automatically</strong>. This set of connected objects is called the <em>Object Graph</em>.</p>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Object Graph Example</span></div>
+<pre><code><kw>class</kw> <cls>Dog</cls> <kw>implements</kw> <cls>Serializable</cls> { <cls>Cat</cls> c = <kw>new</kw> <cls>Cat</cls>(); }
+<kw>class</kw> <cls>Cat</cls> <kw>implements</kw> <cls>Serializable</cls> { <cls>Rat</cls> r = <kw>new</kw> <cls>Rat</cls>(); }
+<kw>class</kw> <cls>Rat</cls> <kw>implements</kw> <cls>Serializable</cls> { }
+
+<cmt>// Serializing Dog → also saves Cat AND Rat automatically</cmt>
+<cmt>// If ANY class in the graph is NOT Serializable → NotSerializableException</cmt>
+<cmt>// Fix: either implement Serializable, or mark field as transient</cmt></code></pre>
+  </div>
+  <div class="callout danger">
+    <div class="callout-icon">🚨</div>
+    <div class="callout-body">
+      <strong>Rule</strong>
+      Every class in the Object Graph MUST implement <code>Serializable</code>, or you must mark the reference as <code>transient</code> to exclude it from serialization.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §5  TRANSIENT & serialVersionUID
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="transient">
+  <div class="section-header">
+    <div class="section-tag">Section 05</div>
+    <div class="section-title">transient &amp; serialVersionUID</div>
+    <div class="section-desc">Control exactly what gets saved during serialization.</div>
+  </div>
+  <div class="divider"></div>
+
+  <h2>🔇 transient Keyword</h2>
+  <div class="analogy">
+    <div class="analogy-title">📝 Analogy — Filling a Form</div>
+    <div class="analogy-body">Name: saved ✅ | Address: saved ✅ | Password: NOT saved ❌<br/>
+    The <code>transient</code> keyword marks a field as "do not serialize this value."</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Field Type</th><th>Serialized?</th><th>Value after Deserialization</th></tr></thead>
+      <tbody>
+        <tr><td>Normal instance field <code>int i = 10;</code></td><td>✅ Yes</td><td>Saved value (10)</td></tr>
+        <tr><td><code>transient String pwd = "abc";</code></td><td>❌ No</td><td>Default value (<code>null</code>)</td></tr>
+        <tr><td><code>static int j = 20;</code></td><td>❌ No (class level)</td><td>Re-loaded at class load time (20)</td></tr>
+        <tr><td><code>static transient int x;</code></td><td>❌ No effect</td><td>static already not serialized</td></tr>
+        <tr><td><code>transient final int x = 10;</code></td><td>Technically excluded</td><td>Re-initialized at construction (10)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — transient Demo</span></div>
+<pre><code><kw>public class</kw> <cls>A</cls> <kw>implements</kw> <cls>Serializable</cls> {
+    <kw>private static final long</kw> serialVersionUID = <num>1L</num>;
+    <kw>int</kw>            i        = <num>10</num>;    <cmt>// → saved as-is</cmt>
+    <kw>static int</kw>     j        = <num>20</num>;    <cmt>// → not saved (class-level)</cmt>
+    <kw>transient</kw> <cls>String</cls> password = <str>"12345"</str>; <cmt>// → not saved → null after deserialization</cmt>
+}
+<cmt>// Output after deserialize:
+//   i = 10, j = 20 (reloaded), password = null</cmt></code></pre>
+  </div>
+
+  <h2>🔢 serialVersionUID</h2>
+  <p>A unique version ID stored with serialized data. JVM uses it during deserialization to verify the class structure hasn't changed incompatibly.</p>
+
+  <div class="flow">
+    <span class="flow-box fb-blue">Class v1 serialized</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box fb-amber">Class modified</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box fb-cyan">Deserialize attempt</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box fb-pink">UID mismatch?</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-box fb-green" style="background:rgba(255,107,107,.12);color:#FF6B6B;border-color:rgba(255,107,107,.2)">InvalidClassException ❌</span>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Best Practice</span></div>
+<pre><code><kw>class</kw> <cls>Student</cls> <kw>implements</kw> <cls>Serializable</cls> {
+    <kw>private static final long</kw> serialVersionUID = <num>1L</num>; <cmt>// Always define manually!</cmt>
+    <cmt>// Change to 2L when class structure changes incompatibly</cmt>
+}
+<cmt>// If you don't define it: JVM auto-generates based on class structure
+// → any code change regenerates it → old serialized files become invalid!</cmt></code></pre>
+  </div>
+
+  <div class="grid3">
+    <div class="card accent-blue"><div class="card-icon icon-blue">📌</div><div class="card-title">Must be</div><div class="card-body"><code>private static final long</code></div></div>
+    <div class="card accent-amber"><div class="card-icon icon-amber">🔄</div><div class="card-title">Change when</div><div class="card-body">Fields are added/removed in an incompatible way</div></div>
+    <div class="card accent-green"><div class="card-icon icon-green">✅</div><div class="card-title">Keep same when</div><div class="card-body">Adding new fields you want backward compatibility for</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §6  SERIALIZATION + INHERITANCE
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="inheritance">
+  <div class="section-header">
+    <div class="section-tag">Section 06</div>
+    <div class="section-title">Serialization &amp; Inheritance</div>
+    <div class="section-desc">How Serializable behavior is inherited and what happens when a parent class is NOT Serializable.</div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="cmp-grid">
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-b">Case 1: Parent IS Serializable</div>
+      <div class="cmp-item">Child is <strong>automatically Serializable</strong></div>
+      <div class="cmp-item">No need to implement it again</div>
+      <div class="cmp-item">Both parent &amp; child fields are saved</div>
+      <div class="cmp-item"><em>Like inheriting a VIP pass</em></div>
+    </div>
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-g">Case 2: Parent is NOT Serializable</div>
+      <div class="cmp-item">Child can still implement Serializable</div>
+      <div class="cmp-item">Only <strong>child fields</strong> are saved</div>
+      <div class="cmp-item">Parent fields restored via constructor</div>
+      <div class="cmp-item">Parent <strong>must have a no-arg constructor</strong></div>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Case 2: Non-Serializable Parent</span></div>
+<pre><code><kw>class</kw> <cls>Animal</cls> {          <cmt>// NOT Serializable — must have no-arg constructor</cmt>
+    <kw>int</kw> age = <num>2</num>;
+    <cls>Animal</cls>() {}         <cmt>// ← REQUIRED! else InvalidClassException</cmt>
+}
+
+<kw>class</kw> <cls>Dog</cls> <kw>extends</kw> <cls>Animal</cls> <kw>implements</kw> <cls>Serializable</cls> {
+    <kw>private static final long</kw> serialVersionUID = <num>1L</num>;
+    <cls>String</cls> name = <str>"tommy"</str>;
+}
+
+<cmt>// Serialize: d.age=4, d.name="Rocky"</cmt>
+<cmt>// After Deserialization:
+//   d.name = "Rocky"  ← saved from serialization
+//   d.age  = 2        ← re-initialized from Animal() constructor (not saved!)
+// </cmt></code></pre>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-icon">🚨</div>
+    <div class="callout-body">
+      <strong>Important Rule</strong>
+      If the parent is non-Serializable, it <strong>must have a zero-argument constructor</strong>. JVM calls it during deserialization to recreate the parent object. Missing it causes <code>java.io.InvalidClassException</code>.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §7  STREAM TOKENIZER
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="tokenizer">
+  <div class="section-header">
+    <div class="section-tag">Section 07</div>
+    <div class="section-title">StreamTokenizer</div>
+    <div class="section-desc">Automatically breaks a stream of text into typed tokens — words, numbers, and symbols — without manual string splitting.</div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="analogy">
+    <div class="analogy-title">👩‍🏫 Teacher Analogy</div>
+    <div class="analogy-body">
+      Sentence: <code>Java is easy 100 times</code><br/>
+      Tokens: <span class="tag tag-b">Java</span><span class="tag tag-b">is</span><span class="tag tag-b">easy</span>
+      <span class="tag tag-a">100</span><span class="tag tag-b">times</span><br/>
+      StreamTokenizer does this splitting automatically!
+    </div>
+  </div>
+
+  <h2>🔧 Constructor &amp; Key Fields</h2>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Setup</span></div>
+<pre><code><cls>StreamTokenizer</cls> st = <kw>new</kw> <cls>StreamTokenizer</cls>(<kw>new</kw> <cls>FileReader</cls>(<str>"data.txt"</str>));
+
+<cmt>// Key Fields:</cmt>
+<kw>int</kw>    st.ttype; <cmt>// type of current token</cmt>
+<cls>String</cls> st.sval;  <cmt>// value if token is a WORD</cmt>
+<kw>double</kw> st.nval;  <cmt>// value if token is a NUMBER</cmt>
+
+<cmt>// Constants:</cmt>
+<cls>StreamTokenizer</cls>.TT_EOF    <cmt>// -1  End Of File</cmt>
+<cls>StreamTokenizer</cls>.TT_EOL    <cmt>// '\n' End Of Line</cmt>
+<cls>StreamTokenizer</cls>.TT_NUMBER <cmt>// -2  numeric token</cmt>
+<cls>StreamTokenizer</cls>.TT_WORD   <cmt>// -3  word token</cmt></code></pre>
+  </div>
+
+  <h2>📊 Default Behavior</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Input</th><th>Token Type</th><th>Access Via</th></tr></thead>
+      <tbody>
+        <tr><td>Alphabetic characters</td><td><span class="tag tag-b">TT_WORD</span></td><td><code>st.sval</code></td></tr>
+        <tr><td>Digits</td><td><span class="tag tag-a">TT_NUMBER</span></td><td><code>st.nval</code></td></tr>
+        <tr><td>Spaces</td><td>Ignored</td><td>—</td></tr>
+        <tr><td>Newlines</td><td>Ignored (unless configured)</td><td>—</td></tr>
+        <tr><td>Symbols <code>+</code> <code>=</code> etc.</td><td>Returned directly (char value)</td><td><code>(char) st.ttype</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>📋 Basic Example</h2>
+  <div class="code-wrap">
+    <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java — Tokens: words, numbers, symbols</span></div>
+<pre><code><cmt>// File: "A + B = 100"</cmt>
+<kw>try</kw> (<cls>FileReader</cls> fr = <kw>new</kw> <cls>FileReader</cls>(<str>"data.txt"</str>)) {
+    <cls>StreamTokenizer</cls> st = <kw>new</kw> <cls>StreamTokenizer</cls>(fr);
+    <kw>while</kw> (st.<mth>nextToken</mth>() != <cls>StreamTokenizer</cls>.TT_EOF) {
+        <kw>if</kw>      (st.ttype == <cls>StreamTokenizer</cls>.TT_WORD)   <cls>System</cls>.out.<mth>println</mth>(<str>"WORD: "</str>   + st.sval);
+        <kw>else if</kw> (st.ttype == <cls>StreamTokenizer</cls>.TT_NUMBER) <cls>System</cls>.out.<mth>println</mth>(<str>"NUM:  "</str>   + st.nval);
+        <kw>else</kw>                                                <cls>System</cls>.out.<mth>println</mth>(<str>"SYM:  "</str>   + (<kw>char</kw>) st.ttype);
+    }
+}
+<cmt>// Output: WORD: A | SYM: + | WORD: B | SYM: = | NUM: 100.0</cmt></code></pre>
+  </div>
+
+  <h2>⚙️ Configuration Methods</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Method</th><th>Purpose</th><th>Example Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>eolIsSignificant(true)</code></td><td>Detect line endings as <code>TT_EOL</code></td><td>CSV line parsing</td></tr>
+        <tr><td><code>slashSlashComments(true)</code></td><td>Ignore <code>// comment</code> lines</td><td>Config file parsing</td></tr>
+        <tr><td><code>slashStarComments(true)</code></td><td>Ignore <code>/* ... */</code> blocks</td><td>Source code reading</td></tr>
+        <tr><td><code>whitespaceChars(',', ',')</code></td><td>Treat char as separator</td><td>CSV: ignore commas</td></tr>
+        <tr><td><code>wordChars('@', '@')</code></td><td>Include char inside words</td><td>Parse email addresses</td></tr>
+        <tr><td><code>quoteChar('"')</code></td><td>Treat quoted text as single token</td><td>Parse JSON-style strings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🎯 Practice Tasks</h2>
+  <div class="accordion">
+    <div class="acc-head" onclick="toggle(this)">Task: Shopping Cart Total <span class="acc-arrow">▼</span></div>
+    <div class="acc-body">
+      <p style="margin-bottom:.75rem">File: <code>pen 10  pencil 20  eraser 30  ink 50</code></p>
+      <div class="code-wrap">
+        <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><kw>try</kw> (<cls>FileReader</cls> fr = <kw>new</kw> <cls>FileReader</cls>(<str>"cart.txt"</str>)) {
+    <cls>StreamTokenizer</cls> st = <kw>new</kw> <cls>StreamTokenizer</cls>(fr);
+    <kw>double</kw> total = <num>0</num>;
+    <cls>String</cls> item  = <str>""</str>;
+    <kw>while</kw> (st.<mth>nextToken</mth>() != <cls>StreamTokenizer</cls>.TT_EOF) {
+        <kw>if</kw>      (st.ttype == <cls>StreamTokenizer</cls>.TT_WORD)   item  = st.sval;
+        <kw>else if</kw> (st.ttype == <cls>StreamTokenizer</cls>.TT_NUMBER) {
+            total += st.nval;
+            <cls>System</cls>.out.<mth>println</mth>(item + <str>" = "</str> + st.nval);
+        }
+    }
+    <cls>System</cls>.out.<mth>println</mth>(<str>"Total = "</str> + total);
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-head" onclick="toggle(this)">Task: Build ArrayList of Students from File <span class="acc-arrow">▼</span></div>
+    <div class="acc-body">
+      <p style="margin-bottom:.75rem">File: <code>101 Raj 850  102 Aman 900  103 Rohit 760</code></p>
+      <div class="code-wrap">
+        <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><cls>List</cls>&lt;<cls>Student</cls>&gt; students = <kw>new</kw> <cls>ArrayList</cls>&lt;&gt;();
+<kw>try</kw> (<cls>FileReader</cls> fr = <kw>new</kw> <cls>FileReader</cls>(<str>"studentsdata.txt"</str>)) {
+    <cls>StreamTokenizer</cls> st = <kw>new</kw> <cls>StreamTokenizer</cls>(fr);
+    <kw>while</kw> (st.<mth>nextToken</mth>() != <cls>StreamTokenizer</cls>.TT_EOF) {
+        <kw>int</kw>    roll  = (<kw>int</kw>) st.nval;          <cmt>// 101</cmt>
+        st.<mth>nextToken</mth>();
+        <cls>String</cls> name  = st.sval;                 <cmt>// "Raj"</cmt>
+        st.<mth>nextToken</mth>();
+        <kw>int</kw>    marks = (<kw>int</kw>) st.nval;          <cmt>// 850</cmt>
+        students.<mth>add</mth>(<kw>new</kw> <cls>Student</cls>(roll, name, marks));
+    }
+}
+students.<mth>forEach</mth>(<cls>System</cls>.out::<mth>println</mth>);</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-head" onclick="toggle(this)">Task: Find Topper from CSV-style File <span class="acc-arrow">▼</span></div>
+    <div class="acc-body">
+      <p style="margin-bottom:.75rem">File: <code>Rohit: 850, Aman: 900, Karan: 760</code></p>
+      <div class="code-wrap">
+        <div class="code-head"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">Java</span></div>
+<pre><code><kw>try</kw> (<cls>FileReader</cls> fr = <kw>new</kw> <cls>FileReader</cls>(<str>"data.txt"</str>)) {
+    <cls>StreamTokenizer</cls> st = <kw>new</kw> <cls>StreamTokenizer</cls>(fr);
+    st.<mth>whitespaceChars</mth>(<str>':'</str>, <str>':'</str>);  <cmt>// ignore colons</cmt>
+    st.<mth>whitespaceChars</mth>(<str>','</str>, <str>','</str>);  <cmt>// ignore commas</cmt>
+    <cls>String</cls> topper = <str>""</str>;
+    <kw>double</kw> highest = <cls>Double</cls>.MIN_VALUE;
+    <kw>while</kw> (st.<mth>nextToken</mth>() != <cls>StreamTokenizer</cls>.TT_EOF) {
+        <kw>if</kw> (st.ttype == <cls>StreamTokenizer</cls>.TT_WORD) {
+            <cls>String</cls> name = st.sval;
+            st.<mth>nextToken</mth>();
+            <kw>if</kw> (st.nval > highest) { highest = st.nval; topper = name; }
+        }
+    }
+    <cls>System</cls>.out.<mth>println</mth>(<str>"Topper: "</str> + topper + <str>" ("</str> + highest + <str>")"</str>);
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <h2>✅ StreamTokenizer — When to Use vs Avoid</h2>
+  <div class="cmp-grid">
+    <div class="cmp-col">
+      <div class="cmp-head cmp-head-g">✅ Use For</div>
+      <div class="cmp-item">Simple text file parsing</div>
+      <div class="cmp-item">Separating words and numbers</div>
+      <div class="cmp-item">Learning / basic parsing tasks</div>
+      <div class="cmp-item">Cart totals, student data files</div>
+    </div>
+    <div class="cmp-col">
+      <div class="cmp-head" style="background:rgba(255,107,107,.1);color:var(--red);border-bottom:1px solid rgba(255,107,107,.15)">❌ Avoid For</div>
+      <div class="cmp-item">Complex structured data (use JSON/XML parsers)</div>
+      <div class="cmp-item">Modern production code (use Scanner, Regex)</div>
+      <div class="cmp-item">Unicode-heavy content</div>
+      <div class="cmp-item">Large files needing performance</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.9rem;color:rgba(120,140,200,.4);margin-bottom:.5rem">java.io · java.nio</div>
+  <p>Java IO Streams &amp; Serialization — Complete Notes</p>
+  <p style="margin-top:.3rem;font-size:.75rem">✍️ Character Streams · 📦 Byte Streams · 🔄 Serialization · 🔢 serialVersionUID · 🕸️ Object Graph · 🪙 StreamTokenizer</p>
+</footer>
+
+<script>
+function toggle(head){
+  const body=head.nextElementSibling;
+  const arrow=head.querySelector('.acc-arrow');
+  const open=body.classList.toggle('open');
+  arrow.style.transform=open?'rotate(180deg)':'';
+}
+
+document.querySelectorAll('.nav-link').forEach(link=>{
+  link.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      document.querySelectorAll('.nav-link').forEach(l=>{
+        l.classList.toggle('active',l.getAttribute('href')==='#'+id);
+      });
+    }
+  });
+},{threshold:.25});
+document.querySelectorAll('section[id]').forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>
