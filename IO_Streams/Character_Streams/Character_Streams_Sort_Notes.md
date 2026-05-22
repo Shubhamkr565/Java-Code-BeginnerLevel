@@ -123,4 +123,31 @@ Overwrite                   Default behavior
 
 
 
+FileReader
+
+
+
+What is FileReader?
+FileReader is used to read text data from a file.
+
+it reads:
+    Characters, words, lines, text files
+
+Simple Definition
+    FileReader is a character stream class used to read data from a text file.
+
+Real life examples
+Imagine:
+        file= book
+        FileReader = your eyes
+        Reading Characters = reading letters one by one
+
+Basic Syntax
+        FileReader fr = new FileReader("abc.txt")
+
+        Open file abc.txt, Read data from it.
+
+
+
+
 
