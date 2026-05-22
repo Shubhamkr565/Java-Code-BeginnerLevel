@@ -1,3 +1,5 @@
+// Count total characters in file
+
 package IO_Streams.Character_Streams;
 
 import java.io.FileReader;
