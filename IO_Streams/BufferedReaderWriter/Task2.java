@@ -1,6 +1,6 @@
 // Task2 : Count total lines in file and also print only lines containig (java)
 
-package IO_Streams.BufferedReader;
+package IO_Streams.BufferedReaderWriter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

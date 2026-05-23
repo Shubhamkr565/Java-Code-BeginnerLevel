@@ -1,4 +1,4 @@
-package IO_Streams.BufferedReader;
+package IO_Streams.BufferedReaderWriter;
 
 import java.io.FileWriter;
 import java.io.IOException;
