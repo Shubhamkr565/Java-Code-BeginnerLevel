@@ -75,4 +75,19 @@ inner part
 new FileWriter("abc.txt) => Opens file for writing.
 
 
+Difference
+Method	    Work
+flush()	    Saves data but stream remains open 
+                (forces buffered data to write immediately into file.)
+close()	    Saves data + closes stream
+
+
+
+
+FileWriter      VS      BufferedWriter
+
+Slower                  Faster
+Direct write            Buffered write
+No newline()            Has newLine()
+less efficient          Moer efficient
 
